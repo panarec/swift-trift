@@ -11,6 +11,7 @@ import { type NodeElement } from './overpass'
 import _ from 'lodash'
 import { map } from '../lib/Map.svelte'
 import { menuState } from '../lib/stores'
+import { checkpoints } from './roadDetector'
 
 export async function generateRoute(
     startCoordinate: GeoJSON.Position[],
@@ -47,46 +48,47 @@ export function removeRoute(routeId: string) {
     }
 }
 export async function addCoordinatesToRoute(
-    routeCoordinates,
+    routeCoordinates: any,
     duration: number,
     sourceId: string,
     pathForMarkers: [number, number][],
     lastCoord?: NodeElement
 ) {
-    let startTime = performance.now()
-
-    const totalDistance = routeCoordinates.reduce((prev, current, index) => {
-        let distance = 0
-        if (index < routeCoordinates.length - 1) {
-            distance = new LngLat(current[0], current[1]).distanceTo(
-                new LngLat(
-                    routeCoordinates[index + 1][0],
-                    routeCoordinates[index + 1][1]
-                )
-            )
+    console.log({ routeCoordinates })
+    console.log({ pathForMarkers })
+    const totalDistance =
+        getTotalDistanceFromListOfCoordinates(routeCoordinates)
+    const keyframes: { lng: number; lat: number }[] = routeCoordinates.map(
+        (
+            coordinates: [number, number],
+            index: number,
+            arr: [number, number][]
+        ) => {
+            let frameDuration = 0
+            if (index > 0) {
+                const distance = new LngLat(
+                    coordinates[0],
+                    coordinates[1]
+                ).distanceTo(new LngLat(arr[index - 1][0], arr[index - 1][1]))
+                frameDuration = (distance / totalDistance) * duration
+            }
+            return {
+                lng: coordinates[0],
+                lat: coordinates[1],
+                duration: frameDuration,
+            }
         }
-        return prev + distance
-    }, 0)
-    let iterations = routeCoordinates.length - 1
-    let currentIteration = 0
+    )
 
-    function animate(currentTime) {
-        if (currentIteration < iterations) {
-            const elapsedTime = currentTime - startTime
-            const startLng = routeCoordinates[currentIteration][0]
-            const startLat = routeCoordinates[currentIteration][1]
-            const endLng = routeCoordinates[currentIteration + 1][0]
-            const endLat = routeCoordinates[currentIteration + 1][1]
-            const distance = new LngLat(startLng, startLat).distanceTo(
-                new LngLat(endLng, endLat)
-            )
-            const timePeriod = distance / totalDistance
-            const progress = Math.min(elapsedTime / (duration * timePeriod), 1)
-            const currentLng = startLng + (endLng - startLng) * progress
-            const currentLat = startLat + (endLat - startLat) * progress
-            pathForMarkers.push([currentLng, currentLat])
+    const route = keyframes[0]
+    anime({
+        targets: route,
+        keyframes: keyframes,
+        easing: 'linear',
+        update: () => {
+            pathForMarkers.push([route.lng, route.lat])
             if (sourceId === 'userRoute') {
-                carObj.setLngLat([currentLng, currentLat]).addTo(map)
+                carObj.setLngLat([route.lng, route.lat]).addTo(map)
             }
             const geometry: GeoJSON.LineString = {
                 type: 'LineString',
@@ -98,30 +100,21 @@ export async function addCoordinatesToRoute(
                 geometry: geometry,
                 id: sourceId,
             }
-            // @ts-ignore
+            //@ts-ignore
             map.getSource(sourceId).setData(geojson)
-            if (progress < 1) {
-                requestAnimationFrame(animate)
-                return
-            } else {
-                currentIteration += 1
-                requestAnimationFrame(animate)
-                startTime = performance.now()
-                return
-            }
-        }
+        },
+    }).finished.then(() => {
         anime({
             targets: '.carMarker',
             rotate: 0,
         })
-        if(sourceId === "userRoute"){pathForMarkers.push([lastCoord.lon, lastCoord.lat])}
-        if(sourceId === "correctRoute"){
+        if (sourceId === 'userRoute' && lastCoord) {
+            pathForMarkers.push([lastCoord.lon, lastCoord.lat])
+        }
+        if (sourceId === 'correctRoute') {
             menuState.set('levelCompleted')
         }
-        return
-    }
-
-    requestAnimationFrame(animate)
+    })
 }
 
 export async function removeCoordinatesFromRoute(
@@ -130,82 +123,58 @@ export async function removeCoordinatesFromRoute(
     pathForMarkers: [number, number][],
     toCoord?: [number, number]
 ) {
-    let startTime = performance.now()
-    const foundIndex = _.findLastIndex(
+    const indexOfReturningCoordinate = _.findLastIndex(
         pathForMarkers,
-        (marker) => marker[0] === toCoord[0] && marker[1] === toCoord[1]
-    )
-    function animate(currentTime) {
-        const lastActual = _.last(pathForMarkers)
-        const currentLng = lastActual[0]
-        const currentLat = lastActual[1]
-        if (toCoord[0] !== currentLat && toCoord[1] !== currentLng) {
-            const elapsedTime = currentTime - startTime
-            const progress = Math.min(elapsedTime / duration, 1)
-
-            pathForMarkers.pop()
-            if (sourceId === 'userRoute') {
-                carObj.setLngLat(lastActual).addTo(map)
-            }
-            const geometry: GeoJSON.LineString = {
-                type: 'LineString',
-                coordinates: pathForMarkers,
-            }
-            const geojson: GeoJSON.GeoJSON = {
-                type: 'Feature',
-                properties: {},
-                geometry: geometry,
-                id: sourceId,
-            }
-            // @ts-ignore
-            map.getSource(sourceId).setData(geojson)
-            if (progress < 1) {
-                requestAnimationFrame(animate)
-                return
-            }
-            const lastRemained = _.last(pathForMarkers)
-            if (
-                lastRemained[0] !== toCoord[0] &&
-                lastRemained[1] !== toCoord[1]
-            ) {
-                pathForMarkers = _.slice(pathForMarkers, 0, foundIndex + 1)
-                carObj.setLngLat(_.last(pathForMarkers)).addTo(map)
-                const geometry: GeoJSON.LineString = {
-                    type: 'LineString',
-                    coordinates: pathForMarkers,
-                }
-                const geojson: GeoJSON.GeoJSON = {
-                    type: 'Feature',
-                    properties: {},
-                    geometry: geometry,
-                    id: sourceId,
-                }
-                // @ts-ignore
-                map.getSource(sourceId).setData(geojson)
-            }
-        } else {
-            if (sourceId === 'userRoute') {
-                carObj.setLngLat(lastActual).addTo(map)
-            }
-            const geometry: GeoJSON.LineString = {
-                type: 'LineString',
-                coordinates: pathForMarkers,
-            }
-            const geojson: GeoJSON.GeoJSON = {
-                type: 'Feature',
-                properties: {},
-                geometry: geometry,
-                id: sourceId,
-            }
-            // @ts-ignore
-            map.getSource(sourceId).setData(geojson)
+        (coor) => {
+            return coor[0] === toCoord[0] && coor[1] === toCoord[1]
         }
-        anime({
-            targets: '.carMarker',
-            rotate: 0,
-        })
-        return
+    )
+    pathForMarkers = [...pathForMarkers.slice(0, indexOfReturningCoordinate + 1)]
+
+    if (sourceId === 'userRoute') {
+        carObj.setLngLat([toCoord[0], toCoord[1]]).addTo(map)
     }
 
-    requestAnimationFrame(animate)
+    anime({
+        targets: '#map',
+        keyframes: [{ filter: 'opacity(20%)' }, { filter: 'opacity(100%)' }],
+        easing: 'easeOutQuint',
+        duration: 200,
+        loop: 1,
+    })
+
+    anime({
+        targets: '.carMarker',
+        rotate: 0,
+    })
+    const geometry: GeoJSON.LineString = {
+        type: 'LineString',
+        coordinates: pathForMarkers,
+    }
+    const geojson: GeoJSON.GeoJSON = {
+        type: 'Feature',
+        properties: {},
+        geometry: geometry,
+        id: sourceId,
+    }
+    // @ts-ignore
+    map.getSource(sourceId).setData(geojson)
+    return pathForMarkers
+}
+
+const getTotalDistanceFromListOfCoordinates = (
+    listOfCoordinates: [number, number][]
+) => {
+    return listOfCoordinates.reduce((prev, current, index) => {
+        let distance = 0
+        if (index < listOfCoordinates.length - 1) {
+            distance = new LngLat(current[0], current[1]).distanceTo(
+                new LngLat(
+                    listOfCoordinates[index + 1][0],
+                    listOfCoordinates[index + 1][1]
+                )
+            )
+        }
+        return prev + distance
+    }, 0)
 }

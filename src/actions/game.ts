@@ -20,17 +20,17 @@ import {
     removeAllCheckpoint,
     removeAllMarkers,
 } from './roadDetector'
-export let preHeatedParams: any
+export let preHeatedParams: PreHeatedParams
 import { carMarker, finnishMarker, startMarker } from './marker'
 import { menuState } from '../lib/stores'
 import { getLevel } from './localStorage'
 
 export let markersForShortestPath: [number, number][] = []
 
-export let startMarkerPosition: any
-export let finnishMarkerPosition: any
-export let startMarkerNode: NodeElement
-export let finnishMarkerNode: NodeElement
+export let startMarkerPosition: LngLat = new LngLat(0, 0)
+export let finnishMarkerPosition: LngLat = new LngLat(0, 0)
+export let startMarkerNode: NodeElement | null
+export let finnishMarkerNode: NodeElement | null
 export let loadingNextGame: boolean = false
 
 export let carObj: mapboxgl.Marker
@@ -38,10 +38,17 @@ export let carObj: mapboxgl.Marker
 let startMarkerObj: Marker
 let finnishMarkerObj: Marker
 
+type PreHeatedParams = {
+    startMarkerPosition: LngLat
+    finnishMarkerPosition: LngLat
+    startMarkerNode: NodeElement
+    finnishMarkerNode: NodeElement
+}
+
 const getStartMarkerNode = async (
     node: NodeElement,
     bounds: LngLatBounds
-): Promise<NodeElement> => {
+): Promise<NodeElement | null> => {
     let loading: boolean = true
 
     const north = bounds.getNorth()
@@ -71,18 +78,25 @@ const getStartMarkerNode = async (
             return randomJunction
         }
     }
+    return null
 }
 
 const getFinnishMarkerNode = async (
     startMarkerPosition: LngLat,
     maxRadius: number
-): Promise<NodeElement | undefined> => {
+): Promise<NodeElement> => {
     let loading: boolean = true
     const currentLevel = getLevel()
     let minRadius = 0.002 + (currentLevel - 1) / 10000
     const minimumBounds = startMarkerPosition.toBounds(minRadius)
     let roads: OverpassResponse<NodeElement>
-    let finnishNode: NodeElement | undefined = undefined
+    let finnishNode: NodeElement = {
+        id: 0,
+        lat: 0,
+        lon: 0,
+        tags: undefined,
+        type: '',
+    }
     let points = []
     while (loading) {
         for (let i = 0; i < 360; i++) {
@@ -135,7 +149,7 @@ export async function preheatGame() {
         startMarkerPosition,
         maxRadius
     )
-    let finnishMarkerPosition
+    let finnishMarkerPosition: LngLat
     if (finnishMarkerNode) {
         finnishMarkerPosition = new LngLat(
             finnishMarkerNode.lon,
@@ -216,12 +230,12 @@ export async function generateGame() {
             .addTo(map)
         getAvailableDirections(startMarkerNode)
         markersForShortestPath.push([
-            startMarkerPosition.lng,
-            startMarkerPosition.lat,
+            +startMarkerPosition.lng.toFixed(6),
+            +startMarkerPosition.lat.toFixed(6),
         ])
         markersForShortestPath.push([
-            finnishMarkerPosition.lng,
-            finnishMarkerPosition.lat,
+            +finnishMarkerPosition.lng.toFixed(6),
+            +finnishMarkerPosition.lat.toFixed(6),
         ])
         await preheatGame()
     })

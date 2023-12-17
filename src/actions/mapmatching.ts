@@ -43,8 +43,9 @@ export async function getRouteCoordinates(
     routePath: number[][]
 ): Promise<MatchObject> {
     const reqCoordinates = routePath.join(';')
+    const radiuses = routePath.map((coor) => '1').join(';')
     const response = await fetch(
-        `https://api.mapbox.com/matching/v5/mapbox/driving/${reqCoordinates}?geometries=geojson&ignore=oneways,restrictions&access_token=pk.eyJ1IjoicGFuYXJlYyIsImEiOiJja3ZjZXBmMDAwNHlqMzBuM2lrZTQ4MDhmIn0.XLnuvSXKToRxsVNR0WHaKg`
+        `https://api.mapbox.com/matching/v5/mapbox/driving/${reqCoordinates}?geometries=geojson&ignore=oneways,restrictions&radiuses=${radiuses}&access_token=pk.eyJ1IjoicGFuYXJlYyIsImEiOiJja3ZjZXBmMDAwNHlqMzBuM2lrZTQ4MDhmIn0.XLnuvSXKToRxsVNR0WHaKg`
     )
     const coords: MappingObject = await response.json()
     return coords.matchings[0]

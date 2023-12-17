@@ -75,28 +75,27 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         })
     }
     const lastCheckpoint = checkpoints[checkpoints.length - 2]
-    console.log({checkpoints})
-    console.log({lastCheckpoint})
     if (
         lastCheckpoint &&
-        lastCheckpoint[0] === nodeElement.lon &&
-        lastCheckpoint[1] === nodeElement.lat
+        lastCheckpoint[0] === jumpPosition.lng &&
+        lastCheckpoint[1] === jumpPosition.lat
     ) {
         console.log('going back')
-        await removeCoordinatesFromRoute(
+
+        const newPathForMarkers = await removeCoordinatesFromRoute(
             300,
             'userRoute',
             pathForMarkers,
             lastCheckpoint
         )
+        pathForMarkers = newPathForMarkers
+        console.log({ pathForMarkers })
         checkpoints.pop()
         getAvailableDirections(nodeElement)
         return
     } else {
-        console.log([nodeElement.lon, nodeElement.lat])
         checkpoints.push([nodeElement.lon, nodeElement.lat])
     }
-
     const routeCoords = await getRouteCoordinates([
         lastCoordinateOfPath,
         [jumpPosition.lng, jumpPosition.lat],
@@ -111,10 +110,12 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
     if (nodeElement.id === finnishMarkerNode.id) {
         const markersBounds = new mapboxgl.LngLatBounds()
         removeAllMarkers()
+        console.log({ markersForShortestPath })
         const finalRouteCoords = await getRouteCoordinates([
             [markersForShortestPath[0][0], markersForShortestPath[0][1]],
             [markersForShortestPath[1][0], markersForShortestPath[1][1]],
         ])
+        console.log({ finalRouteCoords })
         const userRouteCoords = await getRouteCoordinates(checkpoints)
         finalRouteCoords.geometry.coordinates.forEach((coord) =>
             markersBounds.extend([coord[0], coord[1]])
