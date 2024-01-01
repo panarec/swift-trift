@@ -1,4 +1,16 @@
 import { level, totalScore } from '../lib/stores'
+import { v4 } from 'uuid'
+
+const DEFAULT_PLAYER_NAME = 'Guest'
+
+export const getAnonymUserId = () => {
+    let anonymUserId = localStorage.getItem('anonymUserId')
+    if (!anonymUserId) {
+        anonymUserId = v4()
+        localStorage.setItem('anonymUserId', anonymUserId)
+    }
+    return anonymUserId
+}
 
 export const addToTotalScore = (score: number) => {
     const totalScore = localStorage.getItem('totalScore')
@@ -54,4 +66,17 @@ export const getLevel = () => {
 export const resetLevel = () => {
     localStorage.setItem('level', '1')
     level.set(1)
+}
+
+export const setPlayerName = (name: string) => {
+    console.log(name)
+    if (name) {
+        localStorage.setItem('playerName', name)
+    } else {
+        localStorage.setItem('playerName', DEFAULT_PLAYER_NAME)
+    }
+}
+
+export const getPlayerName = () => {
+    return localStorage.getItem('playerName') || DEFAULT_PLAYER_NAME
 }

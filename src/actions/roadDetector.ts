@@ -1,16 +1,8 @@
 import mapboxgl, { LngLat, Marker } from 'mapbox-gl'
 import _ from 'lodash'
 import { directionMarker } from './marker'
-import { getRouteCoordinates } from './mapmatching'
-// @ts-ignore
 import { map } from '../lib/Map.svelte'
 import { addCoordinatesToRoute, removeCoordinatesFromRoute } from './routes'
-import {
-    type NodeElement,
-    type RoadElement,
-    getAllNodesOfWay,
-    getRoadsOfNode,
-} from './overpass'
 import anime from 'animejs/lib/anime.es.js'
 import { finnishMarkerNode, markersForShortestPath } from './game'
 import {
@@ -25,31 +17,13 @@ import {
     getTotalScore,
     saveBestScore,
 } from './localStorage'
+import { finnishGame, move } from './services'
+import type { NodeElement } from './types'
 
 export let markers: Marker[] = []
 export let directionMarkers: Marker[] = []
 export let pathForMarkers: [number, number][] = []
 export let checkpoints: [number, number][] = []
-
-export function removeAllMarkers() {
-    markers.forEach((marker) => {
-        marker.remove()
-    })
-    markers = []
-    directionMarkers.forEach((marker) => {
-        marker.remove()
-    })
-    directionMarkers = []
-    pathForMarkers = []
-}
-
-export function spawnDirectionMarker(nodeElement: NodeElement) {
-    const nodeCoordinates = new LngLat(nodeElement.lon, nodeElement.lat)
-    const directionMarkerObj = directionMarker(nodeElement)
-        .setLngLat(nodeCoordinates)
-        .addTo(map)
-    directionMarkers.push(directionMarkerObj)
-}
 
 export async function findNextCrossRoad(nodeElement: NodeElement) {
     let jumpPosition = new LngLat(nodeElement.lon, nodeElement.lat)
@@ -58,6 +32,8 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         // @ts-ignore
         map.getSource('userRoute')._data.geometry.coordinates
     ) || [0, 0]
+    const response = await move(lastCoordinateOfPath, nodeElement)
+
     const nextCoordPoint = map.project(jumpPosition)
     const currentCoordPoint = map.project(lastCoordinateOfPath)
     const distanceBetweenPoints = jumpPosition.distanceTo(
@@ -89,17 +65,15 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
             lastCheckpoint
         )
         pathForMarkers = newPathForMarkers
-        console.log({ pathForMarkers })
         checkpoints.pop()
-        getAvailableDirections(nodeElement)
+        response.availableDirections.forEach((junction) =>
+            spawnDirectionMarker(junction)
+        )
         return
     } else {
         checkpoints.push([nodeElement.lon, nodeElement.lat])
     }
-    const routeCoords = await getRouteCoordinates([
-        lastCoordinateOfPath,
-        [jumpPosition.lng, jumpPosition.lat],
-    ])
+    const routeCoords = response.routeCoordinates
     await addCoordinatesToRoute(
         routeCoords.geometry.coordinates,
         300,
@@ -110,25 +84,28 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
     if (nodeElement.id === finnishMarkerNode.id) {
         const markersBounds = new mapboxgl.LngLatBounds()
         removeAllMarkers()
-        console.log({ markersForShortestPath })
-        const finalRouteCoords = await getRouteCoordinates([
+
+        const finnishGameParams = await finnishGame(
             [markersForShortestPath[0][0], markersForShortestPath[0][1]],
             [markersForShortestPath[1][0], markersForShortestPath[1][1]],
-        ])
-        console.log({ finalRouteCoords })
-        const userRouteCoords = await getRouteCoordinates(checkpoints)
-        finalRouteCoords.geometry.coordinates.forEach((coord) =>
-            markersBounds.extend([coord[0], coord[1]])
+            checkpoints
+        )
+        console.log({finnishGameParams})
+
+        finnishGameParams.correctRoute.forEach((coord) =>
+        markersBounds.extend([coord[0], coord[1]])
+    )
+
+        userRouteDistance.set(Math.round(finnishGameParams.userRouteDistance))
+        correctRouteDistance.set(
+            Math.round(finnishGameParams.correctRouteDistance)
         )
 
-        userRouteDistance.set(Math.round(userRouteCoords.distance))
-        correctRouteDistance.set(Math.round(finalRouteCoords.distance))
-
         if (
-            Math.round(userRouteCoords.distance) ===
-            Math.round(finalRouteCoords.distance)
+            Math.round(finnishGameParams.userRouteDistance) ===
+            Math.round(finnishGameParams.correctRouteDistance)
         ) {
-            addToTotalScore(Math.round(finalRouteCoords.distance))
+            addToTotalScore(Math.round(finnishGameParams.correctRouteDistance))
             const savedTotalScore = getTotalScore()
             totalScore.set(savedTotalScore)
 
@@ -145,7 +122,7 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
             bearing: 0,
         }).once('zoomend', async () => {
             await addCoordinatesToRoute(
-                finalRouteCoords.geometry.coordinates,
+                finnishGameParams.correctRoute,
                 2000,
                 'correctRoute',
                 []
@@ -154,79 +131,10 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         })
         return
     }
-    getAvailableDirections(nodeElement)
+    response.availableDirections.forEach((junction) =>
+        spawnDirectionMarker(junction)
+    )
     return
-}
-
-export async function getAvailableDirections(currentJunctionNode: NodeElement) {
-    const roads = await getRoadsOfNode(currentJunctionNode)
-    const juctionNodes: NodeElement[] = roads.elements.filter(
-        (element) => element.type === 'node'
-    )
-    const ways: RoadElement[] = roads.elements.filter(
-        (element) => element.type === 'way'
-    )
-    let availableJunctions: NodeElement[] = []
-    for (const way of ways) {
-        const closestWayJunctions = await getClosesJunctionsOfWay(
-            way,
-            juctionNodes,
-            currentJunctionNode
-        )
-        availableJunctions.push(...closestWayJunctions)
-    }
-    availableJunctions = availableJunctions.filter(
-        (junction) => junction.id !== currentJunctionNode.id
-    )
-    availableJunctions.forEach((junction) => spawnDirectionMarker(junction))
-}
-
-async function getClosesJunctionsOfWay(
-    way: RoadElement,
-    juctionNodes: NodeElement[],
-    currentJunctionNode: NodeElement
-) {
-    let foundJunctionNodes: NodeElement[] = []
-    const currentJunctionIndex = way.nodes.findIndex(
-        (el) => el === currentJunctionNode.id
-    )
-    if (currentJunctionIndex > 0) {
-        let foundNode: NodeElement
-        for (let i = currentJunctionIndex; i > 0; i--) {
-            foundNode = juctionNodes.find(
-                (node) => node.id === way.nodes[i - 1]
-            )
-            if (foundNode) {
-                foundJunctionNodes.push(foundNode)
-                break
-            }
-        }
-        if (!foundNode) {
-            const nodes = await getAllNodesOfWay(way)
-
-            foundJunctionNodes.push(
-                nodes.elements.find((nd) => nd.id === way.nodes[0])
-            )
-        }
-    }
-    let foundNode: NodeElement
-    for (let i = currentJunctionIndex; i < way.nodes.length - 1; i++) {
-        foundNode = juctionNodes.find((node) => node.id === way.nodes[i + 1])
-        if (foundNode) {
-            foundJunctionNodes.push(foundNode)
-            break
-        }
-    }
-    if (!foundNode) {
-        const nodes = await getAllNodesOfWay(way)
-
-        foundJunctionNodes.push(
-            nodes.elements.find(
-                (nd) => nd.id === way.nodes[nodes.elements.length - 1]
-            )
-        )
-    }
-    return foundJunctionNodes
 }
 
 function removeDirectionMarkers() {
@@ -242,4 +150,24 @@ function removeDirectionMarkers() {
 
 export function removeAllCheckpoint() {
     checkpoints = []
+}
+
+export function removeAllMarkers() {
+    markers.forEach((marker) => {
+        marker.remove()
+    })
+    markers = []
+    directionMarkers.forEach((marker) => {
+        marker.remove()
+    })
+    directionMarkers = []
+    pathForMarkers = []
+}
+
+export function spawnDirectionMarker(nodeElement: NodeElement) {
+    const nodeCoordinates = new LngLat(nodeElement.lon, nodeElement.lat)
+    const directionMarkerObj = directionMarker(nodeElement)
+        .setLngLat(nodeCoordinates)
+        .addTo(map)
+    directionMarkers.push(directionMarkerObj)
 }

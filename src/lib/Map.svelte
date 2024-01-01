@@ -5,7 +5,6 @@
 <script lang="ts">
     import mapboxgl from 'mapbox-gl' // or "const mapboxgl = require('mapbox-gl');"
     import { onMount, onDestroy } from 'svelte'
-    import { preheatGame } from '../actions/game'
     let mapContainer
     let lng: number, lat: number, zoom: number, pitch: number, bearing: number
 
@@ -71,9 +70,6 @@
             spinGlobe()
         })
 
-        map.on('load', async () => {
-            await preheatGame()
-        })
         map.on('style.load', () => {
             // @ts-ignore
             map.setConfigProperty('basemap', 'showRoadLabels', false)

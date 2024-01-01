@@ -8,6 +8,7 @@
     import MenuContainer from './MenuContainer.svelte'
     import MenuHeader from './MenuHeader.svelte'
     import anime from 'animejs'
+    import BackButton from '../BackButton.svelte'
 
     let inAnimation: anime.AnimeInstance
 
@@ -15,8 +16,8 @@
         menuState.set('soloMenu')
     }
 
-    function setMultiGM() {
-        menuState.set('multiMenu')
+    function setDuelGM() {
+        menuState.set('duelMenu')
     }
 
     onMount(() => {
@@ -49,7 +50,7 @@
     <MenuCard
         inAnimationDelay={100}
         class={`col-span-3 flex-column flex-align-center`}
-        on:onClick={setMultiGM}
+        on:onClick={setDuelGM}
     >
         <header>
             <h3>Duel</h3>
@@ -66,6 +67,7 @@
             </div>
         </body>
     </MenuCard>
+    <BackButton state='login' class={`col-end-5 col-start-3 cursor-pointer`} />
 </MenuContainer>
 
 <style>

@@ -16,6 +16,9 @@
     import GameUi from '../GameUI.svelte'
     import { map } from 'lodash'
     import { onMount } from 'svelte'
+    import DuelMenu from './DuelMenu.svelte'
+    import DuelRoom from './DuelRoom.svelte'
+    import JoinRoom from './JoinRoom.svelte'
 
     let state: string
 
@@ -41,8 +44,12 @@
         <SoloMenu />
     {:else if state === 'loading'}
         <Loading />
-    {:else if state === 'multiMenu'}
-        <p>just right!</p>
+    {:else if state === 'duelMenu'}
+        <DuelMenu />
+    {:else if state === 'duelRoom'}
+    <DuelRoom />
+    {:else if state === 'joinRoom'}
+    <JoinRoom />
     {:else if state === 'howtoplay'}
         <HowToPlay />
     {:else if state === 'levelCompleted'}

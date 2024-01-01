@@ -10,20 +10,21 @@
     import { onMount } from 'svelte'
     import anime from 'animejs'
     import { resetLevel } from '../../../actions/localStorage'
+    import BackButton from '../BackButton.svelte'
     let inAnimation: anime.AnimeInstance
 
     function runGame() {
-        resetLevel()
-        menuState.set('loading')
-        function checkIfLoaded() {
-            if (loadingNextGame) {
-                return
-            }
+        // resetLevel()
+        // menuState.set('loading')
+        // function checkIfLoaded() {
+        //     if (loadingNextGame) {
+        //         return
+        //     }
             generateGame()
-            menuState.set('')
-            clearInterval(checkingInterval)
-        }
-        const checkingInterval = setInterval(checkIfLoaded, 1000)
+        //     menuState.set('')
+        //     clearInterval(checkingInterval)
+        // }
+        // const checkingInterval = setInterval(checkIfLoaded, 1000)
     }
 
     function showTutorial() {
@@ -103,6 +104,8 @@
         </section>
         <footer class="card-footer"></footer>
     </MenuCard>
+    <BackButton state='modesMenu' class={`col-end-5 col-start-3 cursor-pointer`} />
+
 </MenuContainer>
 
 <style>

@@ -14,7 +14,7 @@
 	export {clazz as class}; 
 </script>
 
-<button class={`btn btn-primary ${clazz}`} on:click={onClick}>
+<button class={`btn ${clazz}`} on:click={onClick}>
     <span>{text}</span>
     <slot />
 </button>
@@ -31,7 +31,12 @@
         width: 100%;
         transition: all 0.2s ease;
     }
-
+    .btn.btn-primary:before {
+        background: #ffcb13;
+    }
+    .btn.btn-secondary:before {
+        background: #FC5F3C;
+    }
     .btn:before {
         content: '';
         position: absolute;
@@ -40,8 +45,7 @@
         transform: translate(-50%, 0);
         display: block;
         border-radius: 28px;
-        background: #ffcb13;
-        width: 40px;
+        width: 50%;
         height: 40px;
         transition: all 0.3s ease;
     }
@@ -58,7 +62,6 @@
 
     .btn:hover:before {
         width: 100%;
-        background: #ffcb13;
     }
 
     .btn:active {

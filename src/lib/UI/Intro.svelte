@@ -220,7 +220,7 @@
         </body>
         <footer>
             <div class="button-wrapper">
-                <Button text="GO" on:onClick={setMainMenu}>
+                <Button text="GO" class='btn-primary' on:onClick={setMainMenu}>
                     <svg width="13px" height="10px" viewBox="0 0 13 10">
                         <path d="M1,5 L11,5"></path>
                         <polyline points="8 1 12 5 8 9"></polyline>

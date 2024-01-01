@@ -1,9 +1,14 @@
+<script lang="ts">
+    export let width: number = 120
+    export let height: number = 120
+</script>
+
 <svg
     xmlns="http://www.w3.org/2000/svg"
     x="0px"
     y="0px"
-    width="120"
-    height="120"
+    width={width}
+    height={height}
     viewBox="0,0,256,256"
     style="fill:#000000;"
 >

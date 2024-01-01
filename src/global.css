@@ -131,87 +131,87 @@ body {
 }
 
 .col-start-1 {
-    grid-column-start: 1;
+    grid-column-start: 1 !important;
 }
 .col-start-2 {
-    grid-column-start: 2;
+    grid-column-start: 2 !important;
 }
 .col-start-3 {
-    grid-column-start: 3;
+    grid-column-start: 3 !important;
 }
 .col-start-4 {
-    grid-column-start: 4;
+    grid-column-start: 4 !important;
 }
 .col-start-5 {
-    grid-column-start: 5;
+    grid-column-start: 5 !important;
 }
 .col-start-6 {
-    grid-column-start: 6;
+    grid-column-start: 6 !important;
 }
 .col-start-7 {
-    grid-column-start: 7;
+    grid-column-start: 7 !important;
 }
 .col-start-8 {
-    grid-column-start: 8;
+    grid-column-start: 8 !important;
 }
 .col-start-9 {
-    grid-column-start: 9;
+    grid-column-start: 9 !important;
 }
 .col-start-10 {
-    grid-column-start: 10;
+    grid-column-start: 10 !important;
 }
 .col-start-11 {
-    grid-column-start: 11;
+    grid-column-start: 11 !important;
 }
 .col-start-12 {
-    grid-column-start: 12;
+    grid-column-start: 12 !important;
 }
 
 .col-end-1 {
-    grid-column-end: 1;
+    grid-column-end: 1 !important;
 }
 .col-end-2 {
-    grid-column-end: 2;
+    grid-column-end: 2 !important;
 }
 .col-end-3 {
-    grid-column-end: 3;
+    grid-column-end: 3 !important;
 }
 .col-end-4 {
-    grid-column-end: 4;
+    grid-column-end: 4 !important;
 }
 .col-end-5 {
-    grid-column-end: 5;
+    grid-column-end: 5 !important;
 }
 .col-end-6 {
-    grid-column-end: 6;
+    grid-column-end: 6 !important;
 }
 .col-end-7 {
-    grid-column-end: 7;
+    grid-column-end: 7 !important;
 }
 .col-end-8 {
-    grid-column-end: 8;
+    grid-column-end: 8 !important;
 }
 .col-end-9 {
-    grid-column-end: 9;
+    grid-column-end: 9 !important;
 }
 .col-end-10 {
-    grid-column-end: 10;
+    grid-column-end: 10 !important;
 }
 .col-end-11 {
-    grid-column-end: 11;
+    grid-column-end: 11 !important;
 }
 .col-end-12 {
-    grid-column-end: 12;
+    grid-column-end: 12 !important;
 }
 .col-end-13 {
-    grid-column-end: 13;
+    grid-column-end: 13 !important;
 }
 
 .flex-column {
     display: flex;
     flex-direction: column;
 }
-.flex-row {
+.flex-row  {
     display: flex;
     flex-direction: row;
 }

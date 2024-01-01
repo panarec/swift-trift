@@ -163,15 +163,15 @@
         </body>
         <footer>
             <div class="button-wrapper">
-                <Button text="Menu" on:onClick={goToLogin}></Button>
+                <Button text="Menu" class='btn-primary' on:onClick={goToLogin}></Button>
             </div>
             {#if levelSuccessful}
                 <div class="button-wrapper">
-                    <Button text="Next" on:onClick={runNextGame}></Button>
+                    <Button text="Next" class='btn-primary' on:onClick={runNextGame}></Button>
                 </div>
             {:else}
                 <div class="button-wrapper">
-                    <Button text="New Game" on:onClick={runNewGame}></Button>
+                    <Button text="New Game" class='btn-primary' on:onClick={runNewGame}></Button>
                 </div>
             {/if}
         </footer>

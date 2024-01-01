@@ -1,6 +1,8 @@
 <script lang="ts">
     import anime from 'animejs'
     import { onMount } from 'svelte'
+    let clazz = ''
+    export { clazz as class }
 
     /**
      * @type {string}
@@ -20,11 +22,15 @@
     })
 </script>
 
-<div class="header card col-start-2 col-end-6">
+<div class={`header card ${clazz}`}>
     <h2>{heading}</h2>
 </div>
 
 <style>
+    .header {
+        grid-column-start: 2;
+        grid-column-end: 6;
+    }
     .header h2 {
         margin: 15px;
         padding: 0;

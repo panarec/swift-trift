@@ -1,11 +1,16 @@
-<script>
-    /**
-     * @type {any}
-     */
-    export let placeholder
+<script lang="ts">
+    import { createEventDispatcher } from "svelte"
+
+    export let placeholder: any
+    export let valueName: string = ''
+
+    const dispatch = createEventDispatcher()
+
+    const input = () => dispatch('input')
+
 </script>
 
-<input type="text" class="input" {placeholder} />
+<input type="text" class="input" {placeholder}  bind:value={valueName} on:input={input}/>
 
 <style>
     .input {

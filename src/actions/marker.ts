@@ -1,6 +1,7 @@
 import mapboxgl, { Marker } from 'mapbox-gl'
 import { findNextCrossRoad } from './roadDetector'
 import anime from 'animejs/lib/anime.es.js'
+import type { NodeElement } from './types'
 
 export const startMarker = (): Marker => {
     const el = document.createElement('div')
@@ -51,7 +52,7 @@ export const carMarker = (): Marker => {
         offset: [0, -250],
     })
 }
-export const directionMarker = (nodeElement): Marker => {
+export const directionMarker = (nodeElement: NodeElement): Marker => {
     const el = document.createElement('button')
     const circle = document.createElement('div')
     const ringring = document.createElement('div')

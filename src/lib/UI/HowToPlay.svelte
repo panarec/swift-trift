@@ -84,7 +84,7 @@
         </footer>
     </Card>
     <div class="col-start-3 col-end-5" bind:this={button}>
-        <Button text="OK" on:onClick={runGame} />
+        <Button text="OK" class='btn-primary' on:onClick={runGame} />
     </div>
 </MenuContainer>
 

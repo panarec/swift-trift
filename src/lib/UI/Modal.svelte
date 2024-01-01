@@ -5,6 +5,7 @@
     import Card from './Card.svelte'
     import { menuState, modalNoCallback, modalYesCallback } from '../stores'
     import { resetGame, resetView } from '../../actions/game'
+    import MenuContainer from './Menus/MenuContainer.svelte'
     menuState
     let inAnimation: anime.AnimeInstance
     let yesCallback: () => void
@@ -38,23 +39,25 @@
     })
 </script>
 
-<Card class="col-start-5 col-end-9">
+<MenuContainer class="col-start-4 col-end-10">
+<Card class="col-start-2 col-end-6">
     <body>
         <slot />
     </body>
     <footer>
         <Button
-            class="col-start-1 col-end-1"
+            class="col-start-1 col-end-1 btn-primary"
             text="Yes"
             on:onClick={yesCallback}
         />
         <Button
-            class="col-start-3 col-end-3"
+            class="col-start-3 col-end-3 btn-secondary"
             text="No"
             on:onClick={noCallback}
         />
     </footer>
 </Card>
+</MenuContainer>
 
 <style>
     footer {

@@ -7,11 +7,10 @@ import {
 } from 'mapbox-gl'
 import anime from 'animejs/lib/anime.es.js'
 import { carObj } from './game'
-import { type NodeElement } from './overpass'
 import _ from 'lodash'
 import { map } from '../lib/Map.svelte'
 import { menuState } from '../lib/stores'
-import { checkpoints } from './roadDetector'
+import type { NodeElement } from './types'
 
 export async function generateRoute(
     startCoordinate: GeoJSON.Position[],
@@ -55,7 +54,6 @@ export async function addCoordinatesToRoute(
     lastCoord?: NodeElement
 ) {
     console.log({ routeCoordinates })
-    console.log({ pathForMarkers })
     const totalDistance =
         getTotalDistanceFromListOfCoordinates(routeCoordinates)
     const keyframes: { lng: number; lat: number }[] = routeCoordinates.map(
@@ -121,7 +119,7 @@ export async function removeCoordinatesFromRoute(
     duration: number,
     sourceId: string,
     pathForMarkers: [number, number][],
-    toCoord?: [number, number]
+    toCoord: [number, number]
 ) {
     const indexOfReturningCoordinate = _.findLastIndex(
         pathForMarkers,
@@ -129,7 +127,9 @@ export async function removeCoordinatesFromRoute(
             return coor[0] === toCoord[0] && coor[1] === toCoord[1]
         }
     )
-    pathForMarkers = [...pathForMarkers.slice(0, indexOfReturningCoordinate + 1)]
+    pathForMarkers = [
+        ...pathForMarkers.slice(0, indexOfReturningCoordinate + 1),
+    ]
 
     if (sourceId === 'userRoute') {
         carObj.setLngLat([toCoord[0], toCoord[1]]).addTo(map)

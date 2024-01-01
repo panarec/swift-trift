@@ -7,9 +7,10 @@
     import Profile from './Profile.svelte'
     import { onMount } from 'svelte'
     import { fade, scale } from 'svelte/transition'
-    import { resetTotalScore } from '../../actions/localStorage'
+    import { getPlayerName, resetTotalScore, setPlayerName } from '../../actions/localStorage'
 
     let inAnimation: anime.AnimeInstance
+    let nickname: string
 
     const setModesMenu = () => {
         menuState.set('modesMenu')
@@ -26,7 +27,10 @@
         })
         inAnimation.play()
         resetTotalScore()
+        nickname = getPlayerName()
     })
+
+
 </script>
 
 <MenuContainer class="col-start-4 col-end-10">
@@ -36,11 +40,11 @@
         </header>
         <body>
             <aside class="profile">
-                <Profile />
+                <Profile nickname={nickname} />
             </aside>
             <div class="login-section">
-                <Input placeholder="Nickname" />
-                <Button text="Play" on:onClick={setModesMenu} />
+                <Input placeholder="Nickname" bind:valueName={nickname} on:input={() => setPlayerName(nickname)} />
+                <Button text="Play" class='btn-primary' on:onClick={setModesMenu} />
             </div>
         </body>
     </div>

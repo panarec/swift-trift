@@ -22,4 +22,3 @@
 <div class={`card ${clazz}`} bind:this={card}>
     <slot />
 </div>
-

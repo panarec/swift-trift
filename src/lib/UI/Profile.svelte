@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { getBestScore } from '../../actions/localStorage'
+    import { getPlayerName } from '../../actions/localStorage'
     import { bestScore } from '../stores'
 
     export let totalScore: number = 0
@@ -8,6 +8,10 @@
     bestScore.subscribe((bestScore) => {
         bestTotalScore = bestScore
     })
+
+    export let nickname: string = 'Guest'
+
+
 </script>
 
 <div class="profile-card">
@@ -21,7 +25,7 @@
             />
         </div>
         <div class="profile-name">
-            <h3>Guest</h3>
+            <h3>{nickname}</h3>
         </div>
     </div>
     <div class="profile-stats">
