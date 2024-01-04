@@ -3,24 +3,69 @@
     import Card from "./Card.svelte"
     import BluePersonIcon from "./Icons/BluePersonIcon.svelte"
     export let playerName: string
+    export let rankNumber: number
+    export let score: number = 0
+
 </script>
 
-<Card class={`col-span-3`} >
-    <header>
-        <div class="icon-container">
-            <BluePersonIcon width={120} height={120} />
+<Card class={``} >
+    <div class="player-card">
+        <div class="rank-number">
+            <h2>{`${rankNumber}.`}</h2>
+            <div class="icon-container">
+                <BluePersonIcon width={50} height={50} />
+            </div>
         </div>
-    </header>
-    <body>
-        <h3>{playerName}</h3>
-    </body>
+        <body class="description">
+            
+            <div>
+                <h5>Player:</h5>
+                <h2>{playerName}</h2>
+            </div>
+            <div>
+                <h5>Score:</h5>
+                <h2>{score}</h2>
+            </div>
+        </body>
+        
+    </div>
+ 
 </Card>
 
 <style>
+    .player-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-block: 1rem;
+        gap: 30px;
+    }
+    h2,h3,h5 {
+        margin: 0;
+    }
+    h5 {
+        opacity: 0.75;
+        font-weight: 400;
+    }
+    body{
+        text-align: start;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        align-items: stretch;
+        justify-content: start;
+        width: 100%;
+    }
     .icon-container {
         background-color: #d9d9d925;
         border-radius: 50%;
-        margin-top: 20px;
-        z-index: -10;
+    }
+
+    .rank-number {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
     }
 </style>

@@ -43,11 +43,12 @@
     })
 </script>
 
-<MenuContainer class="col-start-3 col-end-11">
+<MenuContainer class="">
     <MenuHeader heading="Game modes" />
-    <MenuCard
+    <body>
+        <MenuCard
         on:onClick={runGame}
-        class="col-span-2 flex-column flex-align-center"
+        class="flex-column flex-align-center"
     >
         <header class="card-header m-6">
             <h3 class="h2">Chill</h3>
@@ -67,7 +68,7 @@
     <MenuCard
         inAnimationDelay={100}
         on:onClick={showTutorial}
-        class="col-span-2 flex-column flex-align-center"
+        class="flex-column flex-align-center"
     >
         <header class="card-header m-6">
             <h3 class="h2">Pro</h3>
@@ -87,7 +88,7 @@
     <MenuCard
         on:onClick={runGame}
         inAnimationDelay={200}
-        class="col-span-2 flex-column flex-align-center"
+        class="flex-column flex-align-center"
     >
         <header class="card-header m-6">
             <h3 class="h2">Extreme</h3>
@@ -104,7 +105,10 @@
         </section>
         <footer class="card-footer"></footer>
     </MenuCard>
-    <BackButton state='modesMenu' class={`col-end-5 col-start-3 cursor-pointer`} />
+    </body>
+    <footer>
+        <BackButton state='modesMenu' class={`cursor-pointer`} />
+    </footer>
 
 </MenuContainer>
 
@@ -114,6 +118,17 @@
     }
     .card-header h3 {
         font-size: 2rem;
+    }
+    body {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+        gap: 20px 30px;
+        width: 100%;
+        max-width: max(800px, calc(100% - 500px));
+    }
+    footer{
+        width: 100%;
+        max-width: 100px;
     }
     .icon-container {
         background-color: #d9d9d920;

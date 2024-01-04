@@ -86,17 +86,22 @@ export async function generateGame() {
     checkpoints.push([startMarkerPosition.lng, startMarkerPosition.lat])
     pathForMarkers.push([startMarkerPosition.lng, startMarkerPosition.lat])
     const mapContainer = document.querySelector('#map') as HTMLElement
+    const container = document.querySelector('.container') as HTMLElement
 
     if (mapContainer) {
         mapContainer.style.pointerEvents = 'none'
+        container.style.minHeight = '0'
     }
     map.fitBounds(markersBounds, {
-        padding: 200,
+        padding: 100,
         pitch: 20,
         bearing: 0,
         speed: 2,
     }).once('zoomend', async () => {
         mapContainer.style.pointerEvents = 'auto'
+        container.style.minHeight = '0'
+
+        console.log(mapContainer)
         menuState.set('gameUI')
         startMarkerObj = startMarker().setLngLat(startMarkerPosition).addTo(map)
         finnishMarkerObj = finnishMarker()

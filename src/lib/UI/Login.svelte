@@ -17,6 +17,8 @@
     }
 
     onMount(() => {
+        const container = document.querySelector('.container') as HTMLElement
+        container.style.minHeight = '100vh'
         const card = document.querySelector('.card')
         inAnimation = anime({
             targets: [card],
@@ -33,7 +35,7 @@
 
 </script>
 
-<MenuContainer class="col-start-4 col-end-10">
+<MenuContainer>
     <div class="card">
         <header>
             <h1>Lorem Ipsum</h1>
@@ -52,25 +54,21 @@
 
 <style>
     .card {
-        grid-column: span 6;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        max-width: max(600px, calc(100% - 1200px));
+
     }
     body {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
         column-gap: 30px;
         margin-bottom: 45px;
     }
     .login-section {
-        grid-column-start: 2;
         padding-block: 20px;
     }
     .profile {
-        border-right: 2px solid #00000023;
-        margin-right: -15px;
-        padding-right: 15px;
         padding-block: 20px;
         padding-left: 5px;
     }

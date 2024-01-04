@@ -2,10 +2,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: transparent;
-    overflow: hidden;
     font-family: 'Inter', sans-serif;
     color: #2c2c2c;
 }
+
 .card {
     background-color: #fff;
     border-radius: 15px;
@@ -218,4 +218,8 @@ body {
 
 .flex-align-center {
     align-items: center;
+}
+
+.col-md-2 {
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
 }

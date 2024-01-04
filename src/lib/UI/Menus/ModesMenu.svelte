@@ -32,45 +32,60 @@
     })
 </script>
 
-<MenuContainer class="col-start-4 col-end-10">
+<MenuContainer class="">
     <MenuHeader heading="Game modes" />
-    <MenuCard
-        class={`col-span-3 flex-column flex-align-center`}
-        on:onClick={setSoloGM}
-    >
-        <header>
-            <h3>Solo</h3>
-        </header>
-        <body>
-            <div class="icon-container">
-                <BluePersonIcon />
-            </div>
-        </body>
-    </MenuCard>
-    <MenuCard
-        inAnimationDelay={100}
-        class={`col-span-3 flex-column flex-align-center`}
-        on:onClick={setDuelGM}
-    >
-        <header>
-            <h3>Duel</h3>
-        </header>
-        <body>
-            <div class="icon-container">
-                <div class="left">
-                    <RedPersonIcon />
+    <body class="col-md-2">
+            <MenuCard
+            class={`flex-column flex-align-center`}
+            on:onClick={setSoloGM}
+        >
+            <header>
+                <h3>Solo</h3>
+            </header>
+            <body>
+                <div class="icon-container">
+                    <BluePersonIcon />
                 </div>
-                <BluePersonIcon />
-                <div class="right">
-                    <GreenPersonIcon />
+            </body>
+        </MenuCard>
+        <MenuCard
+            inAnimationDelay={100}
+            class={`flex-column flex-align-center`}
+            on:onClick={setDuelGM}
+        >
+            <header>
+                <h3>Duel</h3>
+            </header>
+            <body>
+                <div class="icon-container">
+                    <div class="left">
+                        <RedPersonIcon />
+                    </div>
+                    <BluePersonIcon />
+                    <div class="right">
+                        <GreenPersonIcon />
+                    </div>
                 </div>
-            </div>
-        </body>
-    </MenuCard>
-    <BackButton state='login' class={`col-end-5 col-start-3 cursor-pointer`} />
+            </body>
+        </MenuCard>
+    </body>
+    <footer>
+        <BackButton state='login' class={`cursor-pointer`} />
+    </footer>
 </MenuContainer>
 
 <style>
+    body {
+        width: 100%;
+        max-width: max(600px, calc(100% - 1200px));
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+        gap: 20px 30px;
+    }
+    footer{
+        width: 100%;
+        max-width: 100px;
+    }
     h3 {
         font-size: 3em;
         margin-block: 20px;

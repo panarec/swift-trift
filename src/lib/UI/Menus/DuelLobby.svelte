@@ -1,19 +1,13 @@
 <script lang="ts">
-    import CreateIcon from '../Icons/CreateIcon.svelte'
-    import JoinIcon from '../Icons/JoinIcon.svelte'
-    import { generateGame } from '../../../actions/game'
-    import MenuCard from './MenuCard.svelte'
     import MenuContainer from './MenuContainer.svelte'
     import MenuHeader from './MenuHeader.svelte'
     import { lobbyPlayers, menuState } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import { resetLevel } from '../../../actions/localStorage'
-    import BackButton from '../BackButton.svelte'
-    import Card from '../Card.svelte'
     import PlayerCard from '../PlayerCard.svelte'
     import Button from '../Button.svelte'
     import { leaveLobby } from '../../../actions/socket'
+    import CardButton from '../CardButton.svelte'
     let inAnimation: anime.AnimeInstance
     let lobbyNumber: string | null
     let players: { socketId: string; playerName: string }[]
@@ -49,18 +43,38 @@
 
 </script>
 
-<MenuContainer class="col-start-5 col-end-9">
-    <MenuHeader heading={`Lobby #${lobbyNumber || ""}`} class="col-start-1 col-end-7"/>
-    {#if players}
-    {#each players as player}
-     <PlayerCard playerName={player.playerName} />
-    {/each}
-    <Button text="Leave" class='col-start-1 col-end-4 btn-secondary' on:onClick={leaveGame} />
-    <Button text="Play" class='col-start-4 col-end-7 btn-primary'on:onClick={startGame} />
-{/if}
-
+<MenuContainer class="">
+    <MenuHeader heading={`Lobby #${lobbyNumber || ""}`} class=""/>
+    <body>
+        {#if players}
+        {#each players as player, index}
+            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={0} />
+        {/each}
+        {/if}
+    </body>
+    <footer>
+        <CardButton class='btn-secondary' on:click={leaveGame}>
+            Leave
+        </CardButton>
+        <CardButton class='btn-primary' on:click={startGame}>
+            Ready
+        </CardButton>
+    </footer>
 </MenuContainer>
 
 <style>
+    body {
+        width: 100%;
+        max-width: max(500px, calc(100% - 1200px));
+        display: flex;
+        flex-direction: column;
+        gap: 20px 30px;
+    }
 
+    footer{
+        width: 100%;
+        max-width: 300px;
+        display: flex;
+        gap: 30px;
+    }
 </style>

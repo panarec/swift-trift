@@ -17,7 +17,7 @@
     import { map } from 'lodash'
     import { onMount } from 'svelte'
     import DuelMenu from './DuelMenu.svelte'
-    import DuelRoom from './DuelRoom.svelte'
+    import DuelLobby from './DuelLobby.svelte'
     import JoinRoom from './JoinRoom.svelte'
 
     let state: string
@@ -33,7 +33,7 @@
     })
 </script>
 
-<div class={`container grid grid-cols-6 gap-4`}>
+<div class={`container `}>
     {#if state === 'intro'}
         <Intro />
     {:else if state === 'login'}
@@ -47,7 +47,7 @@
     {:else if state === 'duelMenu'}
         <DuelMenu />
     {:else if state === 'duelRoom'}
-    <DuelRoom />
+    <DuelLobby />
     {:else if state === 'joinRoom'}
     <JoinRoom />
     {:else if state === 'howtoplay'}
@@ -64,18 +64,22 @@
             <h3>Do you really want to find new game?</h3>
             <p>Your progress will be lost.</p>
         </Modal>
-    {:else if state === 'gameUI'}
-        <GameUi />
     {/if}
 </div>
 
+{#if state === 'gameUI'}
+    <GameUi />
+{/if}
+
 <style>
     .container {
+        min-height: 100svh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
         margin: auto;
         width: 90%;
-        max-width: 1200px;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
     .peIgnore {
         pointer-events: none;

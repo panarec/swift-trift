@@ -29,8 +29,9 @@
     const setCreateRoom = async () => {
         lobbyNumber = v4().split('-')[0]
         const playerName = getPlayerName()
-        await joinLobby(lobbyNumber, playerName)
         menuState.set('loading')
+        await joinLobby(lobbyNumber, playerName)
+        menuState.set('duelRoom')
     }
 
     const setJoinRoom = () => {
@@ -40,8 +41,9 @@
 
 <MenuContainer class="col-start-4 col-end-10">
     <MenuHeader heading="Duel" />
-    <MenuCard
-        class={`col-span-3 flex-column flex-align-center`}
+    <body>
+        <MenuCard
+        class={`flex-column flex-align-center`}
         on:onClick={setCreateRoom}
     >
         <header>
@@ -55,7 +57,7 @@
     </MenuCard>
     <MenuCard
         inAnimationDelay={100}
-        class={`col-span-3 flex-column flex-align-center`}
+        class={`flex-column flex-align-center`}
         on:onClick={setJoinRoom}
     >
         <header>
@@ -66,12 +68,25 @@
                 <JoinIcon />
             </div>
         </body>
-    </MenuCard>
-    <BackButton state='modesMenu' class={`col-end-5 col-start-3 cursor-pointer`} />
+    </MenuCard>    
+    </body>
+    <footer>
+        <BackButton state='modesMenu' class={`cursor-pointer`} />
+    </footer>
 </MenuContainer>
 
 <style>
-
+    body {
+        width: 100%;
+        max-width: max(600px, calc(100% - 1200px));
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+        gap: 20px 30px;
+    }
+    footer{
+        width: 100%;
+        max-width: 100px;
+    }
     .icon-container {
         background-color: #d9d9d920;
         border-radius: 50%;

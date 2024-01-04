@@ -39,27 +39,32 @@
     })
 </script>
 
-<MenuContainer class="col-start-4 col-end-10">
-<Card class="col-start-2 col-end-6">
+<MenuContainer>
     <body>
-        <slot />
+        <Card class="col-start-2 col-end-6">
+            <body>
+                <slot />
+            </body>
+            <footer>
+                <Button
+                    class="col-start-1 col-end-1 btn-primary"
+                    text="Yes"
+                    on:onClick={yesCallback}
+                />
+                <Button
+                    class="col-start-3 col-end-3 btn-secondary"
+                    text="No"
+                    on:onClick={noCallback}
+                />
+            </footer>
+        </Card> 
     </body>
-    <footer>
-        <Button
-            class="col-start-1 col-end-1 btn-primary"
-            text="Yes"
-            on:onClick={yesCallback}
-        />
-        <Button
-            class="col-start-3 col-end-3 btn-secondary"
-            text="No"
-            on:onClick={noCallback}
-        />
-    </footer>
-</Card>
 </MenuContainer>
 
 <style>
+    body {
+        max-width: max(300px, calc(100% - 1200px));
+    }
     footer {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;

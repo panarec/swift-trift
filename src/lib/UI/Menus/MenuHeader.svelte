@@ -28,8 +28,8 @@
 
 <style>
     .header {
-        grid-column-start: 2;
-        grid-column-end: 6;
+        width: 100%;
+        max-width: 500px;
     }
     .header h2 {
         margin: 15px;

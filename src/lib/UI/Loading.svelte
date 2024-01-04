@@ -2,6 +2,7 @@
     import { onMount } from 'svelte'
     import SpinnerIcon from './Icons/SpinnerIcon.svelte'
     import anime from 'animejs'
+    import MenuContainer from './Menus/MenuContainer.svelte'
 
     let inAnimation: anime.AnimeInstance
 
@@ -17,15 +18,18 @@
     })
 </script>
 
-<div class="loading-container card col-start-5 col-end-9">
-    <SpinnerIcon />
-    <h2>Looking for deliveries...</h2>
-</div>
+<MenuContainer>
+    <div class="loading-container card col-start-5 col-end-9">
+        <SpinnerIcon />
+        <h2>Looking for deliveries...</h2>
+    </div>
+</MenuContainer>
+
 
 <style>
     .loading-container {
         padding: 30px;
-        margin-top: 10rem;
+        max-width: max(300px, calc(100% - 1200px));
 
     }
 </style>
