@@ -29,19 +29,9 @@ export let carObj: mapboxgl.Marker
 let startMarkerObj: Marker
 let finnishMarkerObj: Marker
 
-export async function generateGame() {
+export async function generateGame(gameParams: GameParams) {
+    menuState.set('')
     await resetGame()
-
-    let gameParams: GameParams
-    try {
-        menuState.set('loading')
-        const currentLevel = getLevel()
-        gameParams = await getGame(currentLevel)
-    } catch (e) {
-        throw new Error((e as Error).message)
-    } finally {
-        menuState.set('')
-    }
 
     startMarkerPosition = gameParams.startMarkerPosition
     finnishMarkerPosition = gameParams.finnishMarkerPosition
@@ -150,4 +140,18 @@ export async function resetView() {
         bearing: 0,
         speed: 5,
     })
+}
+
+export const getGameParams = async () => {
+    let gameParams: GameParams
+    try {
+        menuState.set('loading')
+        const currentLevel = getLevel()
+        gameParams = await getGame(currentLevel)
+        return gameParams
+    } catch (e) {
+        throw new Error((e as Error).message)
+    } finally {
+        menuState.set('')
+    }
 }

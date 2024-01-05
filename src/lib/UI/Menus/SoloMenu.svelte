@@ -2,7 +2,7 @@
     import ScooterIcon from '../Icons/ScooterIcon.svelte'
     import VanIcon from '../Icons/VanIcon.svelte'
     import TruckIcon from '../Icons/TruckIcon.svelte'
-    import { generateGame, loadingNextGame } from '../../../actions/game'
+    import { generateGame, getGameParams, loadingNextGame } from '../../../actions/game'
     import MenuCard from './MenuCard.svelte'
     import MenuContainer from './MenuContainer.svelte'
     import MenuHeader from './MenuHeader.svelte'
@@ -13,18 +13,9 @@
     import BackButton from '../BackButton.svelte'
     let inAnimation: anime.AnimeInstance
 
-    function runGame() {
-        // resetLevel()
-        // menuState.set('loading')
-        // function checkIfLoaded() {
-        //     if (loadingNextGame) {
-        //         return
-        //     }
-            generateGame()
-        //     menuState.set('')
-        //     clearInterval(checkingInterval)
-        // }
-        // const checkingInterval = setInterval(checkIfLoaded, 1000)
+    async function runGame() {
+        const gameParams = await getGameParams()
+        generateGame(gameParams)
     }
 
     function showTutorial() {

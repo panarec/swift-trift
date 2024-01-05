@@ -1,5 +1,6 @@
 import { writable, type Writable } from 'svelte/store'
 import { getBestScore, getLevel, getTotalScore } from '../actions/localStorage'
+import type { LobbyItem } from '../actions/types'
 
 export const menuState = writable('intro')
 
@@ -12,5 +13,4 @@ export const level = writable(getLevel())
 export const modalYesCallback = writable(() => {})
 export const modalNoCallback = writable(() => {})
 
-export const lobbyPlayers: Writable<{ socketId: string; playerName: string }[]> =
-    writable()
+export const lobby: Writable<LobbyItem> = writable()

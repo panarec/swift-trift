@@ -1,16 +1,18 @@
 <script lang="ts">
     import MenuContainer from './MenuContainer.svelte'
     import MenuHeader from './MenuHeader.svelte'
-    import { lobbyPlayers, menuState } from '../../stores'
+    import { lobby, menuState } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
     import PlayerCard from '../PlayerCard.svelte'
     import Button from '../Button.svelte'
-    import { leaveLobby } from '../../../actions/socket'
+    import { leaveLobby, readyUp } from '../../../actions/socket'
     import CardButton from '../CardButton.svelte'
+    import type { LobbyItem } from '../../../actions/types'
     let inAnimation: anime.AnimeInstance
     let lobbyNumber: string | null
-    let players: { socketId: string; playerName: string }[]
+    let lobbyItem: LobbyItem
+    let ready: boolean = false
 
     onMount(() => {
         const card = document.querySelector('.card')
@@ -23,32 +25,38 @@
         inAnimation.play()
         lobbyNumber = sessionStorage.getItem('lobbyNumber')
 
-        lobbyPlayers.subscribe((lobbyPlayers) => {
-            players = lobbyPlayers
+        lobby.subscribe((lobby) => {
+            lobbyItem = lobby
         })
-        console.log(players)
     })
 
     const leaveGame = async () => {
+        console.log("clicked")
         if(lobbyNumber){
             await leaveLobby(lobbyNumber)
         }
     }
 
-    const startGame = () => {
-
+    const changeReady = async () => {
+        await readyUp(!ready)
+        ready = !ready
     }
 
-    $: players
+    $: lobbyItem
 
 </script>
 
 <MenuContainer class="">
     <MenuHeader heading={`Lobby #${lobbyNumber || ""}`} class=""/>
     <body>
-        {#if players}
-        {#each players as player, index}
-            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={0} />
+        {#if lobbyItem}
+        {#each lobbyItem.players as player, index}
+            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} />
+            {#if player.ready}
+                <p>Ready</p>
+            {:else}
+                <p>Not Ready</p>
+            {/if}
         {/each}
         {/if}
     </body>
@@ -56,7 +64,7 @@
         <CardButton class='btn-secondary' on:click={leaveGame}>
             Leave
         </CardButton>
-        <CardButton class='btn-primary' on:click={startGame}>
+        <CardButton class='btn-primary' on:click={changeReady}>
             Ready
         </CardButton>
     </footer>

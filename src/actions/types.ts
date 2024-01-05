@@ -63,3 +63,14 @@ export type RoadElement = {
     tags: any
     type: string
 }
+export type PlayerItem = {
+    playerName: string
+    socketId: string
+    ready: boolean
+    score: number
+}
+
+export type LobbyItem = {
+    lobbyNumber: string
+    players: PlayerItem[]
+}

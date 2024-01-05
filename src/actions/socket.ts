@@ -1,14 +1,7 @@
-import io from 'socket.io-client'
-import type { Socket } from 'socket.io-client/debug'
-import { lobbyPlayers, menuState } from '../lib/stores'
-
-type LobbyItem = {
-    lobbyNumber: string
-    players: {
-        socketId: string
-        playerName: string
-    }[]
-}
+import io, { Socket } from 'socket.io-client'
+import { lobby, menuState } from '../lib/stores'
+import type { GameParams, LobbyItem, PlayerItem } from './types'
+import { generateGame } from './game'
 
 let socket: Socket
 
@@ -17,11 +10,11 @@ export const createSocketConnection = async () => {
     socket.onAny((event) => {
         console.log(event)
     })
-    socket.on('player-joined', (lobbyItem: LobbyItem) => {
-        lobbyPlayers.set(lobbyItem.players)
+    socket.on('lobby-change', (lobbyItem: LobbyItem) => {
+        lobby.set(lobbyItem)
     })
-    socket.on('player-left', (lobbyItem: LobbyItem) => {
-        lobbyPlayers.set(lobbyItem.players)
+    socket.on('game-start', (gameParams: string) => {
+        generateGame(JSON.parse(gameParams))
     })
 }
 
@@ -30,15 +23,12 @@ export const joinLobby = async (lobbyNumber: string, playerName: string) => {
 
     if (!socket) await createSocketConnection()
 
-    socket.emit(
-        'join-lobby',
-        lobbyNumber,
-        playerName,
-        (lobbyItem: LobbyItem) => {
-            menuState.set('duelRoom')
-            lobbyPlayers.set(lobbyItem.players)
-        }
-    )
+    const joinLobbyCallback = (lobbyItem: LobbyItem) => {
+        menuState.set('duelRoom')
+        lobby.set(lobbyItem)
+    }
+
+    socket.emit('join-lobby', lobbyNumber, playerName, joinLobbyCallback)
 }
 
 export const leaveLobby = async (lobbyNumber: string) => {
@@ -46,4 +36,14 @@ export const leaveLobby = async (lobbyNumber: string) => {
     socket.emit('leave-lobby', lobbyNumber, () => {
         menuState.set('duelMenu')
     })
+}
+
+export const readyUp = async (playerReady: boolean) => {
+    const gameReadyCallback = (lobbyItem: LobbyItem) => {
+        console.log('called')
+        lobby.set(lobbyItem)
+        return lobbyItem
+    }
+
+    socket.emit('game-ready', playerReady, gameReadyCallback)
 }

@@ -3,7 +3,7 @@
 
     const dispatch = createEventDispatcher()
     function onClick() {
-        dispatch('onClick', {})
+        dispatch('click', {})
     }
 
     let clazz = '';
