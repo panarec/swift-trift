@@ -100,7 +100,7 @@
         grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
         gap: 20px 30px;
         width: 100%;
-        max-width: max(1200px, calc(100% - 500px));
+        max-width: 1200px;
     }
     p {
         font-weight: 600;

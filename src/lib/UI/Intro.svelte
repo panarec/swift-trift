@@ -75,7 +75,7 @@
         display: flex;
         gap: 10px;
         flex-direction: column;
-        max-width: max(600px, calc(100% - 1200px));
+        max-width: 600px;
     }
     body {
         display: flex;

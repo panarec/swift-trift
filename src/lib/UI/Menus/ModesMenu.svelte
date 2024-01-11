@@ -13,10 +13,12 @@
     let inAnimation: anime.AnimeInstance
 
     function setSoloGM() {
+        sessionStorage.setItem('gameMode', 'solo')
         menuState.set('soloMenu')
     }
 
     function setDuelGM() {
+        sessionStorage.setItem('gameMode', 'duel')
         menuState.set('duelMenu')
     }
 
@@ -77,7 +79,7 @@
 <style>
     body {
         width: 100%;
-        max-width: max(600px, calc(100% - 1200px));
+        max-width: 600px;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
         gap: 20px 30px;

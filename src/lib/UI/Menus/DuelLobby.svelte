@@ -31,10 +31,7 @@
     })
 
     const leaveGame = async () => {
-        console.log("clicked")
-        if(lobbyNumber){
-            await leaveLobby(lobbyNumber)
-        }
+            await leaveLobby()
     }
 
     const changeReady = async () => {
@@ -42,7 +39,6 @@
         ready = !ready
     }
 
-    $: lobbyItem
 
 </script>
 
@@ -51,12 +47,7 @@
     <body>
         {#if lobbyItem}
         {#each lobbyItem.players as player, index}
-            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} />
-            {#if player.ready}
-                <p>Ready</p>
-            {:else}
-                <p>Not Ready</p>
-            {/if}
+            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} playerStatus={player.ready} />
         {/each}
         {/if}
     </body>
@@ -64,16 +55,22 @@
         <CardButton class='btn-secondary' on:click={leaveGame}>
             Leave
         </CardButton>
+        {#if ready}
+        <CardButton class='btn-disabled' on:click={changeReady}>
+            Not ready
+        </CardButton>
+        {:else}
         <CardButton class='btn-primary' on:click={changeReady}>
             Ready
         </CardButton>
+        {/if}
     </footer>
 </MenuContainer>
 
 <style>
     body {
         width: 100%;
-        max-width: max(500px, calc(100% - 1200px));
+        max-width: 600px;
         display: flex;
         flex-direction: column;
         gap: 20px 30px;
@@ -81,8 +78,9 @@
 
     footer{
         width: 100%;
-        max-width: 300px;
+        max-width: 400px;
         display: flex;
         gap: 30px;
+        margin-bottom: 4rem;
     }
 </style>

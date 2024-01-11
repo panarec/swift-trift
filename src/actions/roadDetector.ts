@@ -2,7 +2,12 @@ import mapboxgl, { LngLat, Marker } from 'mapbox-gl'
 import _ from 'lodash'
 import { directionMarker } from './marker'
 import { map } from '../lib/Map.svelte'
-import { addCoordinatesToRoute, removeCoordinatesFromRoute } from './routes'
+import {
+    addCoordinatesToRoute,
+    generateRoute,
+    removeAllRoutes,
+    removeCoordinatesFromRoute,
+} from './routes'
 import anime from 'animejs/lib/anime.es.js'
 import { finnishMarkerNode, markersForShortestPath } from './game'
 import {
@@ -10,6 +15,7 @@ import {
     correctRouteDistance,
     userRouteDistance,
     totalScore,
+    menuState,
 } from '../lib/stores'
 import {
     addToTotalScore,
@@ -19,6 +25,7 @@ import {
 } from './localStorage'
 import { finnishGame, move } from './services'
 import type { NodeElement } from './types'
+import { finnishLevel } from './socket'
 
 export let markers: Marker[] = []
 export let directionMarkers: Marker[] = []
@@ -56,8 +63,6 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         lastCheckpoint[0] === jumpPosition.lng &&
         lastCheckpoint[1] === jumpPosition.lat
     ) {
-        console.log('going back')
-
         const newPathForMarkers = await removeCoordinatesFromRoute(
             300,
             'userRoute',
@@ -82,54 +87,80 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         nodeElement
     )
     if (nodeElement.id === finnishMarkerNode.id) {
+        await generateRoute(
+            [checkpoints[0]],
+            'correctRoute',
+            {
+                'line-color': '#00B865',
+                'line-width': 20,
+                'line-opacity': 0.8,
+            },
+            {
+                'line-join': 'round',
+                'line-cap': 'round',
+                'line-sort-key': 0,
+            }
+        )
         const markersBounds = new mapboxgl.LngLatBounds()
         removeAllMarkers()
 
-        const finnishGameParams = await finnishGame(
-            [markersForShortestPath[0][0], markersForShortestPath[0][1]],
-            [markersForShortestPath[1][0], markersForShortestPath[1][1]],
-            checkpoints
-        )
-        console.log({finnishGameParams})
+        const gameMode = sessionStorage.getItem('gameMode')
 
-        finnishGameParams.correctRoute.forEach((coord) =>
-        markersBounds.extend([coord[0], coord[1]])
-    )
+        if (gameMode === 'solo') {
+            const finnishGameParams = await finnishGame(
+                [markersForShortestPath[0][0], markersForShortestPath[0][1]],
+                [markersForShortestPath[1][0], markersForShortestPath[1][1]],
+                checkpoints
+            )
 
-        userRouteDistance.set(Math.round(finnishGameParams.userRouteDistance))
-        correctRouteDistance.set(
-            Math.round(finnishGameParams.correctRouteDistance)
-        )
+            finnishGameParams.correctRoute.forEach((coord) =>
+                markersBounds.extend([coord[0], coord[1]])
+            )
 
-        if (
-            Math.round(finnishGameParams.userRouteDistance) ===
-            Math.round(finnishGameParams.correctRouteDistance)
-        ) {
-            addToTotalScore(Math.round(finnishGameParams.correctRouteDistance))
-            const savedTotalScore = getTotalScore()
-            totalScore.set(savedTotalScore)
+            userRouteDistance.set(
+                Math.round(finnishGameParams.userRouteDistance)
+            )
+            correctRouteDistance.set(
+                Math.round(finnishGameParams.correctRouteDistance)
+            )
 
-            const bestTotalScore = getBestScore()
-            if (!bestTotalScore || bestTotalScore < savedTotalScore) {
-                bestScore.set(savedTotalScore)
-                saveBestScore(savedTotalScore)
+            if (
+                Math.round(finnishGameParams.userRouteDistance) ===
+                Math.round(finnishGameParams.correctRouteDistance)
+            ) {
+                addToTotalScore(
+                    Math.round(finnishGameParams.correctRouteDistance)
+                )
+                const savedTotalScore = getTotalScore()
+                totalScore.set(savedTotalScore)
+
+                const bestTotalScore = getBestScore()
+                if (!bestTotalScore || bestTotalScore < savedTotalScore) {
+                    bestScore.set(savedTotalScore)
+                    saveBestScore(savedTotalScore)
+                }
             }
+
+            map.fitBounds(markersBounds, {
+                padding: 100,
+                pitch: 0,
+                bearing: 0,
+            }).once('zoomend', async () => {
+                await addCoordinatesToRoute(
+                    finnishGameParams.correctRoute,
+                    2000,
+                    'correctRoute',
+                    []
+                )
+                return
+            })
+            return
         }
 
-        map.fitBounds(markersBounds, {
-            padding: 100,
-            pitch: 0,
-            bearing: 0,
-        }).once('zoomend', async () => {
-            await addCoordinatesToRoute(
-                finnishGameParams.correctRoute,
-                2000,
-                'correctRoute',
-                []
-            )
-            return
-        })
-        return
+        if (gameMode === 'duel') {
+            menuState.set('waitingForPlayers')
+            finnishLevel(checkpoints)
+        }
     }
     response.availableDirections.forEach((junction) =>
         spawnDirectionMarker(junction)

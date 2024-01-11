@@ -5,7 +5,7 @@
     export let playerName: string
     export let rankNumber: number
     export let score: number = 0
-
+    export let playerStatus: boolean = false
 </script>
 
 <Card class={``} >
@@ -17,19 +17,24 @@
             </div>
         </div>
         <body class="description">
-            
-            <div>
+            <div class="player-name">
                 <h5>Player:</h5>
                 <h2>{playerName}</h2>
             </div>
-            <div>
-                <h5>Score:</h5>
-                <h2>{score}</h2>
-            </div>
+                <div class="player-score">
+                    <h5>Score:</h5>
+                    <h2>{score}</h2>
+                </div>
+                <div class="player-status">
+                    {#if playerStatus === true}
+                        <h2 class="positive">Ready</h2>
+                    {:else}
+                        <h2 class="negative">Not ready</h2>
+                    {/if}
+                </div>
         </body>
         
     </div>
- 
 </Card>
 
 <style>
@@ -53,19 +58,30 @@
         flex-wrap: wrap;
         gap: 30px;
         align-items: stretch;
-        justify-content: start;
+        justify-content: center;
         width: 100%;
     }
     .icon-container {
         background-color: #d9d9d925;
         border-radius: 50%;
     }
-
     .rank-number {
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         gap: 10px;
+    }
+    .player-status {
+        text-align: center;
+        margin: auto;
+    }
+    .player-name{
+        width: 6rem;
+        text-align: center;
+
+    }
+    .player-score{
+        text-align: center;
     }
 </style>

@@ -7,7 +7,7 @@
     import Profile from './Profile.svelte'
     import { onMount } from 'svelte'
     import { fade, scale } from 'svelte/transition'
-    import { getPlayerName, resetTotalScore, setPlayerName } from '../../actions/localStorage'
+    import { getPlayerName, resetLevel, resetTotalScore, setPlayerName } from '../../actions/localStorage'
 
     let inAnimation: anime.AnimeInstance
     let nickname: string
@@ -29,6 +29,7 @@
         })
         inAnimation.play()
         resetTotalScore()
+        resetLevel()
         nickname = getPlayerName()
     })
 
@@ -56,7 +57,7 @@
     .card {
         display: flex;
         flex-direction: column;
-        max-width: max(600px, calc(100% - 1200px));
+        max-width: 600px;
 
     }
     body {

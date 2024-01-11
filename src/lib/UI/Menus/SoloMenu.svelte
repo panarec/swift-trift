@@ -9,7 +9,6 @@
     import { menuState } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import { resetLevel } from '../../../actions/localStorage'
     import BackButton from '../BackButton.svelte'
     let inAnimation: anime.AnimeInstance
 
@@ -115,7 +114,7 @@
         grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
         gap: 20px 30px;
         width: 100%;
-        max-width: max(800px, calc(100% - 500px));
+        max-width: 800px;
     }
     footer{
         width: 100%;

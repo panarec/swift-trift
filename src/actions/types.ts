@@ -68,9 +68,28 @@ export type PlayerItem = {
     socketId: string
     ready: boolean
     score: number
+    color: string
 }
 
 export type LobbyItem = {
     lobbyNumber: string
-    players: PlayerItem[]
+    players: {
+        playerName: string
+        socketId: string
+        ready: boolean
+        score: number
+        color: string
+        finished: boolean
+        routeCoordinates: number[][]
+        distance: number
+    }[]
+    game: {
+        gameParams: GameParams | null
+        gameOptions: GameOptions
+    }
+}
+
+export type GameOptions = {
+    timeLimit: number
+    levelsPerGame: number
 }

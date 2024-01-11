@@ -19,6 +19,7 @@
     import DuelMenu from './DuelMenu.svelte'
     import DuelLobby from './DuelLobby.svelte'
     import JoinRoom from './JoinRoom.svelte'
+    import LevelCompletedDuel from '../LevelCompletedDuel.svelte'
 
     let state: string
 
@@ -33,6 +34,10 @@
     })
 </script>
 
+
+{#if state === 'gameUI'}
+    <GameUi />
+{:else}
 <div class={`container `}>
     {#if state === 'intro'}
         <Intro />
@@ -42,8 +47,10 @@
         <ModesMenu />
     {:else if state === 'soloMenu'}
         <SoloMenu />
-    {:else if state === 'loading'}
-        <Loading />
+    {:else if state === 'loadingGame'}
+        <Loading text='Looking for deliveries...' />
+    {:else if state === 'waitingForPlayers'}
+        <Loading text='Waiting for other players...' />
     {:else if state === 'duelMenu'}
         <DuelMenu />
     {:else if state === 'duelRoom'}
@@ -52,6 +59,8 @@
     <JoinRoom />
     {:else if state === 'howtoplay'}
         <HowToPlay />
+    {:else if state === 'levelCompletedDuel'}
+        <LevelCompletedDuel />
     {:else if state === 'levelCompleted'}
         <LevelCompleted />
     {:else if state === 'menuModal'}
@@ -67,8 +76,6 @@
     {/if}
 </div>
 
-{#if state === 'gameUI'}
-    <GameUi />
 {/if}
 
 <style>

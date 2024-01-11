@@ -30,6 +30,7 @@
     .header {
         width: 100%;
         max-width: 500px;
+        margin-top: 40px;
     }
     .header h2 {
         margin: 15px;

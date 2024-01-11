@@ -20,10 +20,15 @@
         totalScore,
         modalNoCallback,
         modalYesCallback,
+        lobby,
     } from '../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
     import { increaseLevel, resetLevel, resetTotalScore } from '../../actions/localStorage'
+    import CardButton from './CardButton.svelte'
+    import type { LobbyItem } from '../../actions/types'
+    import PlayerCard from './PlayerCard.svelte'
+    import { leaveLobby, readyUp } from '../../actions/socket'
     let inAnimation: anime.AnimeInstance
 
     let userDistance: number
@@ -31,6 +36,8 @@
     let levelSuccessful: boolean
     let totalScoreSaved: number
     let totalBestSaved: number
+    let lobbyItem: LobbyItem
+    let ready: boolean = false
 
     const goToLogin = async () => {
         if (levelSuccessful) {
@@ -50,25 +57,21 @@
         await Promise.allSettled(promises)
     }
 
-    function runNextGame() {
-        increaseLevel()
-        getGame()
+    const leaveGame = async () => {
+            await leaveLobby()
     }
 
-    function runNewGame() {
-        resetLevel()
-        resetTotalScore()
-        getGame()
-    }
-
-    async function getGame() {
-        const gameParams = await getGameParams()
-        generateGame(gameParams)
+    const changeReady = async () => {
+        await readyUp(!ready)
+        ready = !ready
     }
 
     onMount(() => {
         const card = document.querySelector('.card')
         const scoreValue = document.querySelector('.score-value')
+        const container = document.querySelector('.container') as HTMLElement
+
+        container.style.minHeight = '100vh'
 
         anime({
             targets: [card],
@@ -76,7 +79,12 @@
             easing: 'easeOutQuint',
             duration: 500,
         })
-    
+        anime({
+            targets: [container],
+            minHeight: ['0', '100vh'],
+            easing: 'easeOutQuint',
+            duration: 500,
+        })
         userRouteDistance.subscribe((userRouteDistance) => {
             userDistance = userRouteDistance
         })
@@ -91,7 +99,13 @@
             totalBestSaved = bestScore
         })
         levelSuccessful = userDistance === correctDistance
+
+        lobby.subscribe((lobby) => {
+            lobbyItem = lobby
+        })
+        console.log({lobbyItem})
     })
+
 </script>
 
 <MenuContainer>
@@ -99,24 +113,9 @@
         <div class="card">
             <header>
                 {#if levelSuccessful}
-                    <h2>Level completed</h2>
-    
-                    <img
-                        width="50"
-                        height="50"
-                        src="https://img.icons8.com/fluency/50/ok--v1.png"
-                        alt="ok--v1"
-                    />
+                    <h2>Level passed</h2>
                 {:else}
                     <h2>Level failed</h2>
-    
-                    <img
-                        class="result-icon"
-                        width="50"
-                        height="50"
-                        src="https://img.icons8.com/fluency/50/cancel.png"
-                        alt="cancel"
-                    />
                 {/if}
             </header>
             <body>
@@ -134,7 +133,7 @@
                     </div>
                     <div class="result-item">
                         <div>Your route distance:</div>
-                        <div class="result-number">
+                        <div class={`result-number ${levelSuccessful ? "positive" : "negative"}`}>
                             <strong>{userDistance}</strong>
                         </div>
                     </div>
@@ -155,21 +154,29 @@
                     </section>
                 </div>
             </body>
-            <footer>
-                <div class="button-wrapper">
-                    <Button text="Menu" class='btn-primary' on:onClick={goToLogin}></Button>
-                </div>
-                {#if levelSuccessful}
-                    <div class="button-wrapper">
-                        <Button text="Next" class='btn-primary' on:onClick={runNextGame}></Button>
-                    </div>
-                {:else}
-                    <div class="button-wrapper">
-                        <Button text="New Game" class='btn-primary' on:onClick={runNewGame}></Button>
-                    </div>
-                {/if}
-            </footer>
         </div>
+        <div class="results-table">
+            {#if lobbyItem}
+            {#each lobbyItem.players as player, index}
+                <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} playerStatus={player.ready}/>
+            {/each}
+            {/if}
+        </div>
+        <footer>
+            <CardButton 
+             class='btn-secondary' on:click={leaveGame}>
+                Leave
+            </CardButton>
+            {#if ready}
+            <CardButton class='btn-disabled' on:click={changeReady}>
+                Not ready
+            </CardButton>
+            {:else}
+            <CardButton class='btn-primary' on:click={changeReady}>
+                Ready
+            </CardButton>
+            {/if}
+        </footer>
     </body>
 </MenuContainer>
 
@@ -177,6 +184,7 @@
     .outer-body {
         max-width: max(500px, calc(100% - 1200px));
         width: 90%;
+        margin-top: 2rem;
     }
     .card {
         grid-column: span 6;
@@ -193,6 +201,12 @@
     max-width: 85%;
     margin: auto;
     }
+    .results-table {
+       margin-block: 2rem;
+         display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
     h2 {
         font-size: clamp(1rem, 10vw, 3rem);
         margin: 20px;
@@ -206,10 +220,11 @@
         text-align: center;
     }
     footer {
+        width: 100%;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 20px;
+        gap: 30px;
+        margin: auto;
+        margin-bottom: 4rem;
     }
     .button-wrapper {
         width: 130px;
@@ -229,6 +244,7 @@
     .result-number {
         margin-top: 5px;
     }
+
     header {
         display: flex;
         align-items: center;

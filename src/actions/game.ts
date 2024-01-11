@@ -1,7 +1,12 @@
 import mapboxgl, { LngLat, Marker } from 'mapbox-gl'
 import { map } from '../lib/Map.svelte'
 import _ from 'lodash'
-import { generateRoute, removeRoute } from './routes'
+import {
+    addCoordinatesToRoute,
+    generateRoute,
+    removeAllRoutes,
+    removeRoute,
+} from './routes'
 import {
     checkpoints,
     markers,
@@ -11,10 +16,24 @@ import {
     spawnDirectionMarker,
 } from './roadDetector'
 import { carMarker, finnishMarker, startMarker } from './marker'
-import { menuState } from '../lib/stores'
-import { getLevel } from './localStorage'
+import {
+    bestScore,
+    correctRouteDistance,
+    lobby,
+    menuState,
+    totalScore,
+    userRouteDistance,
+} from '../lib/stores'
+import {
+    addToTotalScore,
+    getBestScore,
+    getLevel,
+    getPlayerName,
+    getTotalScore,
+    saveBestScore,
+} from './localStorage'
 import { getGame } from './services'
-import type { GameParams, NodeElement } from './types'
+import type { GameParams, LobbyItem, MatchObject, NodeElement } from './types'
 
 export let markersForShortestPath: [number, number][] = []
 
@@ -29,7 +48,10 @@ export let carObj: mapboxgl.Marker
 let startMarkerObj: Marker
 let finnishMarkerObj: Marker
 
-export async function generateGame(gameParams: GameParams) {
+export async function generateGame(
+    gameParams: GameParams,
+    playerColor?: string
+) {
     menuState.set('')
     await resetGame()
 
@@ -49,38 +71,22 @@ export async function generateGame(gameParams: GameParams) {
         [[startMarkerPosition.lng, startMarkerPosition.lat]],
         'userRoute',
         {
-            'line-color': '#FF9F1C',
-            'line-width': 10,
+            'line-color': playerColor ? `#${playerColor}` : '#FF9F1C',
+            'line-width': 15,
             'line-opacity': 0.8,
         },
         {
-            'line-join': 'round',
-            'line-cap': 'round',
             'line-sort-key': 0,
-        }
-    )
-    await generateRoute(
-        [[startMarkerPosition.lng, startMarkerPosition.lat]],
-        'correctRoute',
-        {
-            'line-color': '#00B865',
-            'line-width': 10,
-            'line-opacity': 0.8,
-        },
-        {
-            'line-join': 'round',
             'line-cap': 'round',
-            'line-sort-key': 1,
+            'line-join': 'round',
         }
     )
     checkpoints.push([startMarkerPosition.lng, startMarkerPosition.lat])
     pathForMarkers.push([startMarkerPosition.lng, startMarkerPosition.lat])
     const mapContainer = document.querySelector('#map') as HTMLElement
-    const container = document.querySelector('.container') as HTMLElement
 
     if (mapContainer) {
         mapContainer.style.pointerEvents = 'none'
-        container.style.minHeight = '0'
     }
     map.fitBounds(markersBounds, {
         padding: 100,
@@ -89,9 +95,7 @@ export async function generateGame(gameParams: GameParams) {
         speed: 2,
     }).once('zoomend', async () => {
         mapContainer.style.pointerEvents = 'auto'
-        container.style.minHeight = '0'
 
-        console.log(mapContainer)
         menuState.set('gameUI')
         startMarkerObj = startMarker().setLngLat(startMarkerPosition).addTo(map)
         finnishMarkerObj = finnishMarker()
@@ -113,8 +117,7 @@ export async function generateGame(gameParams: GameParams) {
 }
 
 export async function resetGame() {
-    removeRoute('userRoute')
-    removeRoute('correctRoute')
+    removeAllRoutes()
     if (startMarkerObj !== undefined) {
         startMarkerObj.remove()
     }
@@ -145,7 +148,7 @@ export async function resetView() {
 export const getGameParams = async () => {
     let gameParams: GameParams
     try {
-        menuState.set('loading')
+        menuState.set('loadingGame')
         const currentLevel = getLevel()
         gameParams = await getGame(currentLevel)
         return gameParams
@@ -154,4 +157,90 @@ export const getGameParams = async () => {
     } finally {
         menuState.set('')
     }
+}
+
+export const duelGameFinnished = async (
+    finalRoute: MatchObject,
+    currentLobby: LobbyItem
+) => {
+    lobby.set(currentLobby)
+    const player = currentLobby.players.find(
+        (player) => player.playerName === getPlayerName()
+    )
+
+    const playerDistance = Math.round(player?.distance ?? 0)
+    const finalRouteDistance = Math.round(finalRoute.distance)
+
+    userRouteDistance.set(playerDistance)
+    correctRouteDistance.set(finalRouteDistance)
+
+    if (playerDistance === finalRouteDistance) {
+        addToTotalScore(finalRouteDistance)
+        const savedTotalScore = getTotalScore()
+        totalScore.set(savedTotalScore)
+
+        const bestTotalScore = getBestScore()
+        if (!bestTotalScore || bestTotalScore < savedTotalScore) {
+            bestScore.set(savedTotalScore)
+            saveBestScore(savedTotalScore)
+        }
+    }
+
+    removeAllRoutes()
+    menuState.set('')
+    await generateRoute(
+        [finalRoute.geometry.coordinates[0]],
+        'correctRoute',
+        {
+            'line-color': '#00B865',
+            'line-width': 20,
+            'line-opacity': 1,
+        },
+        {
+            'line-join': 'round',
+            'line-cap': 'round',
+            'line-sort-key': 0,
+        }
+    )
+
+    currentLobby.players.forEach((player, index) => {
+        console.log([1 - index, currentLobby.players.length - 1, index])
+        generateRoute(
+            player.routeCoordinates,
+            index.toString(),
+            {
+                'line-color': `#${player.color}`,
+                'line-width': 15,
+                'line-dasharray': [
+                    1 - index,
+                    currentLobby.players.length - 1,
+                    index,
+                ],
+                'line-opacity': 0.8,
+            },
+            {
+                'line-sort-key': 1,
+            }
+        )
+    })
+
+    const routesIDs = map.getStyle().layers.map((layer) => layer.id)
+
+    await addCoordinatesToRoute(
+        finalRoute.geometry.coordinates,
+        2000,
+        'correctRoute',
+        []
+    )
+
+    await Promise.all(
+        currentLobby.players.map(async (player, index) => {
+            await addCoordinatesToRoute(
+                player.routeCoordinates,
+                2000,
+                index.toString(),
+                []
+            )
+        })
+    )
 }

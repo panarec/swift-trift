@@ -27,4 +27,7 @@
     .btn-secondary {
         background: #FC5F3C;
     }
+    .btn-disabled {
+        background: #e0e0e0;
+    }
 </style>

@@ -223,3 +223,10 @@ body {
 .col-md-2 {
     grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
 }
+
+.positive {
+    color: #29b529;
+}
+.negative {
+    color: #ca3c3c;
+}

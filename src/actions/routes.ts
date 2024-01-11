@@ -46,6 +46,14 @@ export function removeRoute(routeId: string) {
         map.removeSource(routeId)
     }
 }
+
+export const removeAllRoutes = () => {
+    const routesIDs = map.getStyle().layers.map((layer) => layer.id)
+    routesIDs.forEach((id) => {
+        removeRoute(id)
+    })
+}
+
 export async function addCoordinatesToRoute(
     routeCoordinates: any,
     duration: number,
@@ -102,6 +110,7 @@ export async function addCoordinatesToRoute(
             map.getSource(sourceId).setData(geojson)
         },
     }).finished.then(() => {
+        const gameMode = sessionStorage.getItem('gameMode')
         anime({
             targets: '.carMarker',
             rotate: 0,
@@ -109,8 +118,11 @@ export async function addCoordinatesToRoute(
         if (sourceId === 'userRoute' && lastCoord) {
             pathForMarkers.push([lastCoord.lon, lastCoord.lat])
         }
-        if (sourceId === 'correctRoute') {
+        if (sourceId === 'correctRoute' && gameMode === 'solo') {
             menuState.set('levelCompleted')
+        }
+        if (sourceId === 'correctRoute' && gameMode === 'duel') {
+            menuState.set('levelCompletedDuel')
         }
     })
 }

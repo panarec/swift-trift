@@ -35,7 +35,7 @@
 <style>
     body {
         width: 100%;
-        max-width: max(300px, calc(100% - 1200px));
+        max-width: 300px;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
         gap: 20px 30px;

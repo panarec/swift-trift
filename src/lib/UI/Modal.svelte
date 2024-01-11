@@ -63,7 +63,7 @@
 
 <style>
     body {
-        max-width: max(300px, calc(100% - 1200px));
+        max-width: 300px;
     }
     footer {
         display: grid;

@@ -15,6 +15,7 @@
     } from '../../actions/localStorage'
     import {
         generateGame,
+        getGameParams,
         loadingNextGame,
         resetGame,
         resetView,
@@ -41,19 +42,13 @@
         menuState.set('newGameModal')
     }
 
-    function getNewGame() {
+    async function getNewGame() {
         resetTotalScore()
         resetLevel()
-        menuState.set('loading')
-        function checkIfLoaded() {
-            if (loadingNextGame) {
-                return
-            }
-            generateGame()
-            menuState.set('')
-            clearInterval(checkingInterval)
-        }
-        const checkingInterval = setInterval(checkIfLoaded, 1000)
+        menuState.set('loadingGame')
+        const gameParams = await getGameParams()
+        generateGame(gameParams)
+        menuState.set('')
     }
 
     function toggleGameMenu() {

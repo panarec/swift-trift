@@ -1,7 +1,7 @@
 import io, { Socket } from 'socket.io-client'
 import { lobby, menuState } from '../lib/stores'
-import type { GameParams, LobbyItem, PlayerItem } from './types'
-import { generateGame } from './game'
+import type { GameParams, LobbyItem, MatchObject, PlayerItem } from './types'
+import { duelGameFinnished, generateGame } from './game'
 
 let socket: Socket
 
@@ -13,8 +13,32 @@ export const createSocketConnection = async () => {
     socket.on('lobby-change', (lobbyItem: LobbyItem) => {
         lobby.set(lobbyItem)
     })
-    socket.on('game-start', (gameParams: string) => {
-        generateGame(JSON.parse(gameParams))
+    socket.on('game-start', (gameParams: GameParams) => {
+        let playerColor: string | undefined
+        lobby.subscribe((lobbyItem) => {
+            if (lobbyItem) {
+                playerColor = lobbyItem.players.find(
+                    (player) => player.socketId === socket.id
+                )?.color
+            }
+        })
+
+        generateGame(gameParams, playerColor as string)
+    })
+    socket.on(
+        'game-finnished',
+        ({
+            finalRoute,
+            currentLobby,
+        }: {
+            finalRoute: MatchObject
+            currentLobby: LobbyItem
+        }) => {
+            duelGameFinnished(finalRoute, currentLobby)
+        }
+    )
+    socket.on('all-ready', () => {
+        menuState.set('loadingGame')
     })
 }
 
@@ -26,24 +50,33 @@ export const joinLobby = async (lobbyNumber: string, playerName: string) => {
     const joinLobbyCallback = (lobbyItem: LobbyItem) => {
         menuState.set('duelRoom')
         lobby.set(lobbyItem)
+        console.log({ lobbyItem })
     }
 
     socket.emit('join-lobby', lobbyNumber, playerName, joinLobbyCallback)
 }
 
-export const leaveLobby = async (lobbyNumber: string) => {
-    sessionStorage.removeItem('lobbyNumber')
-    socket.emit('leave-lobby', lobbyNumber, () => {
+export const leaveLobby = async () => {
+    socket.emit('leave-lobby', () => {
         menuState.set('duelMenu')
     })
 }
 
-export const readyUp = async (playerReady: boolean) => {
+export const readyUp = async (playerStatus: boolean) => {
+    const options = {
+        levelsPerGame: 2,
+        timeLimit: 60,
+    }
+
     const gameReadyCallback = (lobbyItem: LobbyItem) => {
         console.log('called')
         lobby.set(lobbyItem)
         return lobbyItem
     }
 
-    socket.emit('game-ready', playerReady, gameReadyCallback)
+    socket.emit('game-ready', playerStatus, options, gameReadyCallback)
+}
+
+export const finnishLevel = async (routeCoordinates: [number, number][]) => {
+    socket.emit('finnish-level', routeCoordinates)
 }
