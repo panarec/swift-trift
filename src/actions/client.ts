@@ -1,4 +1,4 @@
-const BASE_URL = '18.198.187.25:3000/' // TODO
+const BASE_URL = 'http://18.198.187.25:3000/' // TODO
 
 export const sendPostRequest = async (body: object, uri: string) => {
     const headers = {
