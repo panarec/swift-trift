@@ -160,6 +160,7 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         if (gameMode === 'duel') {
             menuState.set('waitingForPlayers')
             finnishLevel(checkpoints)
+            return
         }
     }
     response.availableDirections.forEach((junction) =>

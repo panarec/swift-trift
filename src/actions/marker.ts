@@ -7,7 +7,7 @@ export const startMarker = (): Marker => {
     const el = document.createElement('div')
     const marker = document.createElement('img')
     el.appendChild(marker)
-    marker.src = '../../public/imgs/start.svg'
+    marker.src = '../../imgs/start.svg'
     marker.classList.add('startMarker', 'customMarker')
     anime({
         targets: marker,
@@ -25,7 +25,7 @@ export const finnishMarker = (): Marker => {
     const el = document.createElement('div')
     const marker = document.createElement('img')
     el.appendChild(marker)
-    marker.src = '../../public/imgs/end.svg'
+    marker.src = '../../imgs/end.svg'
     marker.classList.add('finnishMarker', 'customMarker')
     anime({
         targets: marker,
@@ -43,7 +43,7 @@ export const carMarker = (): Marker => {
     const el = document.createElement('div')
     const marker = document.createElement('img')
     el.appendChild(marker)
-    marker.src = '../../public/imgs/car.svg'
+    marker.src = '../../imgs/car.svg'
     marker.classList.add('carMarker', 'customMarker')
     return new mapboxgl.Marker({
         color: '#ff0000',

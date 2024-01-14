@@ -61,7 +61,6 @@ export async function addCoordinatesToRoute(
     pathForMarkers: [number, number][],
     lastCoord?: NodeElement
 ) {
-    console.log({ routeCoordinates })
     const totalDistance =
         getTotalDistanceFromListOfCoordinates(routeCoordinates)
     const keyframes: { lng: number; lat: number }[] = routeCoordinates.map(

@@ -8,7 +8,7 @@ export const getGame = async (currentLevel: number) => {
         currentLevel,
     }
 
-    const responseData = await sendPostRequest(body, 'getGame')
+    const responseData = await sendPostRequest(body, '/getGame')
     return responseData as GameParams
 }
 
@@ -21,7 +21,7 @@ export const move = async (
         nextNode,
     }
 
-    const responseData = await sendPostRequest(body, 'move')
+    const responseData = await sendPostRequest(body, '/move')
     return responseData as MoveResponse
 }
 
@@ -36,6 +36,6 @@ export const finnishGame = async (
         userRouteCoordinates,
     }
 
-    const responseData = await sendPostRequest(body, 'finnishGame')
+    const responseData = await sendPostRequest(body, '/finnishGame')
     return responseData as FinnishResponse
 }

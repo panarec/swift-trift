@@ -204,7 +204,6 @@ export const duelGameFinnished = async (
     )
 
     currentLobby.players.forEach((player, index) => {
-        console.log([1 - index, currentLobby.players.length - 1, index])
         generateRoute(
             player.routeCoordinates,
             index.toString(),
@@ -225,13 +224,22 @@ export const duelGameFinnished = async (
     })
 
     const routesIDs = map.getStyle().layers.map((layer) => layer.id)
-
-    await addCoordinatesToRoute(
-        finalRoute.geometry.coordinates,
-        2000,
-        'correctRoute',
-        []
+    const markersBounds = new mapboxgl.LngLatBounds()
+    finalRoute.geometry.coordinates.forEach((coord) =>
+        markersBounds.extend([coord[0], coord[1]])
     )
+    map.fitBounds(markersBounds, {
+        padding: 100,
+        pitch: 0,
+        bearing: 0,
+    }).once('zoomend', async () => {
+        await addCoordinatesToRoute(
+            finalRoute.geometry.coordinates,
+            2000,
+            'correctRoute',
+            []
+        )
+    })
 
     await Promise.all(
         currentLobby.players.map(async (player, index) => {

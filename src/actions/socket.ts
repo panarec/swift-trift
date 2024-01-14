@@ -6,7 +6,7 @@ import { duelGameFinnished, generateGame } from './game'
 let socket: Socket
 
 export const createSocketConnection = async () => {
-    socket = io('http://localhost:3001/')
+    socket = io(import.meta.env.VITE_SERVER_WS_URL as string)
     socket.onAny((event) => {
         console.log(event)
     })
@@ -50,7 +50,6 @@ export const joinLobby = async (lobbyNumber: string, playerName: string) => {
     const joinLobbyCallback = (lobbyItem: LobbyItem) => {
         menuState.set('duelRoom')
         lobby.set(lobbyItem)
-        console.log({ lobbyItem })
     }
 
     socket.emit('join-lobby', lobbyNumber, playerName, joinLobbyCallback)
@@ -69,7 +68,6 @@ export const readyUp = async (playerStatus: boolean) => {
     }
 
     const gameReadyCallback = (lobbyItem: LobbyItem) => {
-        console.log('called')
         lobby.set(lobbyItem)
         return lobbyItem
     }

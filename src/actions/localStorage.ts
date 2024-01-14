@@ -69,7 +69,6 @@ export const resetLevel = () => {
 }
 
 export const setPlayerName = (name: string) => {
-    console.log(name)
     if (name) {
         localStorage.setItem('playerName', name)
     } else {

@@ -75,7 +75,9 @@
         </Modal>
     {/if}
 </div>
-
+<div class="menu-pull">
+    <span></span>
+</div>
 {/if}
 
 <style>
@@ -90,5 +92,30 @@
     }
     .peIgnore {
         pointer-events: none;
+    }
+    .menu-pull{
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: 500px;
+        height: 50px;
+        background-color: #fff;
+        border-radius: 15px 15px 0 0;
+        z-index: 10;
+        box-shadow: 0px 6px 19px -4px rgba(0, 0, 0, 0.75);
+        display: none;
+        cursor: pointer;
+    }
+
+    .menu-pull span {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 5px;
+        background-color: #0000006a;
+        border-radius: 5px;
     }
 </style>

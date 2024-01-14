@@ -68,8 +68,70 @@
 
     onMount(() => {
         const card = document.querySelector('.card')
-        const scoreValue = document.querySelector('.score-value')
+        const menuContainer = document.querySelector('.menu-container') as HTMLElement
+        const backdrop = document.querySelector('.backdrop') as HTMLElement
+        const mapContainer = document.querySelector('#map') as HTMLElement
         const container = document.querySelector('.container') as HTMLElement
+        const menuPull = document.querySelector('.menu-pull') as HTMLElement
+        const appBody = document.querySelector('#app-body') as HTMLElement
+
+        backdrop.addEventListener('click', () => {
+            mapContainer.style.pointerEvents = 'auto'
+                menuContainer.style.position = 'absolute'
+                menuPull.style.display = 'block'
+                appBody.style.overflow = 'hidden'
+                anime({
+                targets: [menuContainer],
+                bottom: "-100%",
+                easing: 'easeOutQuint',
+                duration: 500,
+            }).finished.then(() => {
+                container.style.display = 'none'
+            })
+            anime({
+                targets: [menuPull],
+                bottom: "-20px",
+                delay: 100,
+                duration: 500,
+               })
+        })
+
+        menuPull.addEventListener('mouseenter', () => {
+            anime({
+                targets: [menuPull],
+                bottom: "0px",
+                duration: 500,
+            })
+        })
+
+        menuPull.addEventListener('mouseleave', () => {
+            anime({
+                targets: [menuPull],
+                bottom: "-20px",
+                duration: 500,
+            })
+        })
+
+        menuPull.addEventListener('click', () => {
+            container.style.display = 'flex'
+            mapContainer.style.pointerEvents = 'none'
+            menuPull.style.display = 'none'
+            anime({
+                targets: [menuPull],
+                bottom: "-20px",
+                duration: 500,
+            })
+            anime({
+                targets: [menuContainer],
+                bottom: "0%",
+                easing: 'easeOutQuint',
+                duration: 500,
+            }).finished.then(() => {
+                menuContainer.style.position = 'relative'
+                appBody.style.overflow = 'auto'
+            })
+        })
+    
 
         container.style.minHeight = '100vh'
 
@@ -103,7 +165,6 @@
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
         })
-        console.log({lobbyItem})
     })
 
 </script>
@@ -179,8 +240,17 @@
         </footer>
     </body>
 </MenuContainer>
+<div class="backdrop"></div>
 
 <style>
+        .backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9;
+    }
     .outer-body {
         max-width: max(500px, calc(100% - 1200px));
         width: 90%;

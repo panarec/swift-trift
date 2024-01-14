@@ -9,7 +9,6 @@
 
     let valName = ''
     const joinGame = () => {
-        console.log({valName})
         joinLobby(valName, getPlayerName())
     }
 
