@@ -255,6 +255,7 @@
         max-width: max(500px, calc(100% - 1200px));
         width: 90%;
         margin-top: 2rem;
+        z-index: 10;
     }
     .card {
         grid-column: span 6;
