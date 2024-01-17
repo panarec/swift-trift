@@ -10,23 +10,22 @@
 
 </script>
 
-<input type="text" class="input" {placeholder}  bind:value={valueName} on:input={input}/>
+<input type="text" class="input" {placeholder}  bind:value={valueName} on:input={input} maxlength="25"/>
 
 <style>
     .input {
         border-radius: 20px;
-        padding: 10px 20px;
+        padding: min(10px, 2vw) 20px;
         box-sizing: border-box;
         border: solid 1px #7b7b7b;
         width: 100%;
         background-color: #86868610;
-        margin-block: 20px;
         line-height: 10px;
         font-size: 1rem;
         font-weight: 500;
+        text-align: center;
     }
     .input::placeholder {
-        margin-left: 20px;
         font-weight: 500;
         font-size: 1rem;
     }

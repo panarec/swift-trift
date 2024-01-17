@@ -6,6 +6,9 @@
     export let rankNumber: number
     export let score: number = 0
     export let playerStatus: boolean = false
+    export let playerColor: string 
+
+    console.log(playerColor)
 </script>
 
 <Card class={``} >

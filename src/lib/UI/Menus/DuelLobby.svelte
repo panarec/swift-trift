@@ -47,8 +47,8 @@
     <body>
         {#if lobbyItem}
         {#each lobbyItem.players as player, index}
-            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} playerStatus={player.ready} />
-        {/each}
+            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} playerStatus={player.ready} playerColor={player.color} />
+        {/each} 
         {/if}
     </body>
     <footer>

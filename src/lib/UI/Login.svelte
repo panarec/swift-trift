@@ -57,20 +57,24 @@
     .card {
         display: flex;
         flex-direction: column;
-        max-width: 600px;
-
+        max-width: 500px;
+        padding-inline: min(2rem, 5vw);
+    }
+    header h1{
+        margin-block: min(1rem, 5vw);
     }
     body {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-        column-gap: 30px;
-        margin-bottom: 45px;
+        display: flex;
+        flex-direction: column;
     }
     .login-section {
-        padding-block: 20px;
+        padding: 20px min(70px, 15vw);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: min(1rem, 5vw);
     }
     .profile {
-        padding-block: 20px;
         padding-left: 5px;
     }
 </style>

@@ -27,7 +27,7 @@
         cursor: pointer;
         position: relative;
         margin: auto;
-        padding-block: 10px;
+        padding-block: min(10px, 2vw);
         width: 100%;
         transition: all 0.2s ease;
     }
@@ -46,7 +46,7 @@
         display: block;
         border-radius: 28px;
         width: 50%;
-        height: 40px;
+        height: min(40px, 11vw);
         transition: all 0.3s ease;
     }
     .btn span {
