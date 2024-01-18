@@ -2,7 +2,7 @@
     import { onMount } from 'svelte'
 
     import Card from './Card.svelte'
-    import BluePersonIcon from './Icons/BluePersonIcon.svelte'
+    import anime from 'animejs'
     export let playerName: string
     export let rankNumber: number
     export let score: number = 0
@@ -11,12 +11,41 @@
     export let playersCount: number = 0
 
     let name: HTMLElement
+    let readyAnimation: anime.AnimeInstance
+    let unReadyAnimation: anime.AnimeInstance
+
+    let playerStatusBar: HTMLElement
+    onMount(() => {
+        playerStatusBar.style.display = 'flex'
+        readyAnimation = anime({
+            targets: [playerStatusBar],
+            height: ['0%', '40px'],
+            autoplay: false,
+            duration: 200,
+        })
+        unReadyAnimation = anime({
+            targets: [playerStatusBar],
+            height: ['40px', '0%'],
+            autoplay: false,
+            duration: 200,
+        })
+    })
 
     $: {
         playersCount = playersCount
+        playerStatus = playerStatus
         let nameFontSize = 2
         let nameFontMultiplier = 40
         const card = document.querySelector('.player-card') as HTMLElement
+
+        if(playerStatus) {
+            console.log('playerStatus', playerStatus)
+            if(readyAnimation)
+                readyAnimation.play()
+        } else {
+            if(unReadyAnimation)
+                unReadyAnimation.play()
+        }
         
         if(card){
             console.log(card.getBoundingClientRect().width)
@@ -71,6 +100,10 @@
                 </div>
             </div>
         </body>
+
+    </div>
+    <div class="player-status" bind:this={playerStatusBar}>
+        READY
     </div>
 </Card>
 
@@ -165,6 +198,26 @@
         font-size: 1.5rem;
         font-weight: 900;
         color: #363131;
+    }
+    .player-status {
+        display: none;
+        position: absolute;
+        top: 90%;
+        left: 0;
+        width: 100%;
+        height: 0px;
+        background-color: #0dc031;
+        border-radius: 0 0 15px 15px;
+        z-index: -1;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        font-size: 1.2rem;
+        font-weight: 900;
+        color: #ffffff;
+        padding-bottom: 5px;
+        box-shadow: 1px 1px 8px 0px rgba(0,0,0,0.5) inset;
+        letter-spacing: 1px;
     }
     @media only screen and (max-width: 554px) {
         .stat-item-header {

@@ -13,7 +13,7 @@
     let lobbyNumber: string | null
     let lobbyItem: LobbyItem
     let ready: boolean = false
-
+    let body: HTMLElement
     onMount(() => {
         const card = document.querySelector('.card')
         inAnimation = anime({
@@ -38,11 +38,26 @@
         await readyUp(!ready)
         ready = !ready
     }
+
+    $: {
+        if(body && lobbyItem) {
+            if(lobbyItem.players.length >= 4){
+            body.style.maxWidth = "100%"
+        } else if(lobbyItem.players.length === 3) {
+            body.style.maxWidth = "939px"
+        } else if(lobbyItem.players.length === 2) {
+            body.style.maxWidth = "700px"
+        } else if(lobbyItem.players.length === 1) {
+            body.style.maxWidth = "400px"
+        }
+        }
+     
+    }
 </script>
 
 <MenuContainer class="">
     <MenuHeader heading={`Lobby #${lobbyNumber || ''}`} class="" />
-    <body>
+    <body bind:this={body}>
         {#if lobbyItem}
             {#each lobbyItem.players as player, index}
                 <PlayerCard
@@ -77,7 +92,7 @@
         width: 100%;
         max-width: 800px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px 30px;
     }
 
@@ -86,6 +101,7 @@
         max-width: 400px;
         display: flex;
         gap: 30px;
+        margin-top: 1rem;
         margin-bottom: 4rem;
     }
 

@@ -27,4 +27,7 @@
     .padding-1 {
         padding-inline: min(1rem, 5vw);
     }
+    .card {
+        position: relative;
+    }
 </style>
