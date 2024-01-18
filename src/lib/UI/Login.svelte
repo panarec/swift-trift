@@ -7,7 +7,12 @@
     import Profile from './Profile.svelte'
     import { onMount } from 'svelte'
     import { fade, scale } from 'svelte/transition'
-    import { getPlayerName, resetLevel, resetTotalScore, setPlayerName } from '../../actions/localStorage'
+    import {
+        getPlayerName,
+        resetLevel,
+        resetTotalScore,
+        setPlayerName,
+    } from '../../actions/localStorage'
 
     let inAnimation: anime.AnimeInstance
     let nickname: string
@@ -32,8 +37,6 @@
         resetLevel()
         nickname = getPlayerName()
     })
-
-
 </script>
 
 <MenuContainer>
@@ -43,11 +46,19 @@
         </header>
         <body>
             <aside class="profile">
-                <Profile nickname={nickname} />
+                <Profile {nickname} />
             </aside>
             <div class="login-section">
-                <Input placeholder="Nickname" bind:valueName={nickname} on:input={() => setPlayerName(nickname)} />
-                <Button text="Play" class='btn-primary' on:onClick={setModesMenu} />
+                <Input
+                    placeholder="Nickname"
+                    bind:valueName={nickname}
+                    on:input={() => setPlayerName(nickname)}
+                />
+                <Button
+                    text="Play"
+                    class="btn-primary"
+                    on:onClick={setModesMenu}
+                />
             </div>
         </body>
     </div>
@@ -60,7 +71,7 @@
         max-width: 500px;
         padding-inline: min(2rem, 5vw);
     }
-    header h1{
+    header h1 {
         margin-block: min(1rem, 5vw);
     }
     body {
@@ -71,7 +82,7 @@
         padding: 20px min(70px, 15vw);
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 20px;
         margin-top: min(1rem, 5vw);
     }
     .profile {

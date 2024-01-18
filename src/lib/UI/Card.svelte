@@ -24,7 +24,7 @@
 </div>
 
 <style>
- 
-
- 
+    .padding-1 {
+        padding-inline: min(1rem, 5vw);
+    }
 </style>

@@ -11,7 +11,8 @@
     import BackButton from '../BackButton.svelte'
 
     let inAnimation: anime.AnimeInstance
-
+    let clientWidth: number = document.body.clientWidth
+    let iconsWidth: number = 120
     function setSoloGM() {
         sessionStorage.setItem('gameMode', 'solo')
         menuState.set('soloMenu')
@@ -23,6 +24,7 @@
     }
 
     onMount(() => {
+        clientWidth = document.body.clientWidth
         const card = document.querySelector('.card')
         inAnimation = anime({
             targets: [card],
@@ -32,12 +34,24 @@
         })
         inAnimation.play()
     })
+
+    $: {
+        if (clientWidth < 627) {
+            iconsWidth = 100
+        }
+        if (clientWidth < 527) {
+            iconsWidth = 80
+        }
+        if (clientWidth < 400) {
+            iconsWidth = 65
+        }
+    }
 </script>
 
 <MenuContainer class="">
     <MenuHeader heading="Game modes" />
     <body class="col-md-2">
-            <MenuCard
+        <MenuCard
             class={`flex-column flex-align-center`}
             on:onClick={setSoloGM}
         >
@@ -46,7 +60,7 @@
             </header>
             <body>
                 <div class="icon-container">
-                    <BluePersonIcon />
+                    <BluePersonIcon width={iconsWidth} height={iconsWidth} />
                 </div>
             </body>
         </MenuCard>
@@ -61,18 +75,24 @@
             <body>
                 <div class="icon-container">
                     <div class="left">
-                        <RedPersonIcon />
+                        <RedPersonIcon
+                            width={iconsWidth - 20}
+                            height={iconsWidth - 20}
+                        />
                     </div>
-                    <BluePersonIcon />
+                    <BluePersonIcon width={iconsWidth} height={iconsWidth} />
                     <div class="right">
-                        <GreenPersonIcon />
+                        <GreenPersonIcon
+                            width={iconsWidth - 20}
+                            height={iconsWidth - 20}
+                        />
                     </div>
                 </div>
             </body>
         </MenuCard>
     </body>
     <footer>
-        <BackButton state='login' class={`cursor-pointer`} />
+        <BackButton state="login" class={`cursor-pointer`} />
     </footer>
 </MenuContainer>
 
@@ -81,21 +101,21 @@
         width: 100%;
         max-width: 600px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(7rem, 100%), 1fr));
         gap: 20px 30px;
     }
-    footer{
+    footer {
         width: 100%;
         max-width: 100px;
     }
     h3 {
-        font-size: 3em;
+        font-size: min(3em, 10vw);
         margin-block: 20px;
     }
     .icon-container {
         background-color: #d9d9d925;
         border-radius: 50%;
-        padding: 30px;
+        padding: min(30px, 3vw);
         margin-bottom: 30px;
         z-index: -10;
     }

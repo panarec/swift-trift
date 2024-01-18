@@ -1,3 +1,3 @@
-export function randFunci(){
-    alert("hello")
+export function randFunci() {
+    alert('hello')
 }

@@ -35,6 +35,6 @@
     .header h2 {
         margin: 15px;
         padding: 0;
-        font-size: 2rem;
+        font-size: min(7vw, 40px);
     }
 </style>

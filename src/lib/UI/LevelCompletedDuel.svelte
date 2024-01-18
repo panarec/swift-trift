@@ -24,7 +24,11 @@
     } from '../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import { increaseLevel, resetLevel, resetTotalScore } from '../../actions/localStorage'
+    import {
+        increaseLevel,
+        resetLevel,
+        resetTotalScore,
+    } from '../../actions/localStorage'
     import CardButton from './CardButton.svelte'
     import type { LobbyItem } from '../../actions/types'
     import PlayerCard from './PlayerCard.svelte'
@@ -38,6 +42,8 @@
     let totalBestSaved: number
     let lobbyItem: LobbyItem
     let ready: boolean = false
+    let clientWidth: number
+    let iconSize: number 
 
     const goToLogin = async () => {
         if (levelSuccessful) {
@@ -58,7 +64,7 @@
     }
 
     const leaveGame = async () => {
-            await leaveLobby()
+        await leaveLobby()
     }
 
     const changeReady = async () => {
@@ -67,8 +73,31 @@
     }
 
     onMount(() => {
+        clientWidth = document.body.clientWidth
+        if(clientWidth < 425){
+            iconSize = 25
+        } else if (clientWidth < 554) {
+            iconSize = 30
+        } else if (clientWidth < 768) {
+            iconSize = 40
+        } else {
+            iconSize = 50
+        }
+
+        if(clientWidth < 1000) {
+            const resultsTable = document.querySelector('.results-table') as HTMLElement
+            resultsTable.style.position = 'relative'
+            resultsTable.style.left = '0'
+            resultsTable.style.top = '0'
+            resultsTable.style.maxWidth = '100%'
+
+        }
+
+
         const card = document.querySelector('.card')
-        const menuContainer = document.querySelector('.menu-container') as HTMLElement
+        const menuContainer = document.querySelector(
+            '.menu-container'
+        ) as HTMLElement
         const backdrop = document.querySelector('.backdrop') as HTMLElement
         const mapContainer = document.querySelector('#map') as HTMLElement
         const container = document.querySelector('.container') as HTMLElement
@@ -77,12 +106,12 @@
 
         backdrop.addEventListener('click', () => {
             mapContainer.style.pointerEvents = 'auto'
-                menuContainer.style.position = 'absolute'
-                menuPull.style.display = 'block'
-                appBody.style.overflow = 'hidden'
-                anime({
+            menuContainer.style.position = 'absolute'
+            menuPull.style.display = 'block'
+            appBody.style.overflow = 'hidden'
+            anime({
                 targets: [menuContainer],
-                bottom: "-100%",
+                bottom: '-100%',
                 easing: 'easeOutQuint',
                 duration: 500,
             }).finished.then(() => {
@@ -90,16 +119,16 @@
             })
             anime({
                 targets: [menuPull],
-                bottom: "-20px",
+                bottom: '-20px',
                 delay: 100,
                 duration: 500,
-               })
+            })
         })
 
         menuPull.addEventListener('mouseenter', () => {
             anime({
                 targets: [menuPull],
-                bottom: "0px",
+                bottom: '0px',
                 duration: 500,
             })
         })
@@ -107,7 +136,7 @@
         menuPull.addEventListener('mouseleave', () => {
             anime({
                 targets: [menuPull],
-                bottom: "-20px",
+                bottom: '-20px',
                 duration: 500,
             })
         })
@@ -118,12 +147,12 @@
             menuPull.style.display = 'none'
             anime({
                 targets: [menuPull],
-                bottom: "-20px",
+                bottom: '-20px',
                 duration: 500,
             })
             anime({
                 targets: [menuContainer],
-                bottom: "0%",
+                bottom: '0%',
                 easing: 'easeOutQuint',
                 duration: 500,
             }).finished.then(() => {
@@ -131,7 +160,6 @@
                 appBody.style.overflow = 'auto'
             })
         })
-    
 
         container.style.minHeight = '100vh'
 
@@ -165,11 +193,20 @@
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
         })
-    })
 
+        const resultsTable = document.querySelector('.results-table') as HTMLElement
+
+        if(lobbyItem.players.length >= 4){
+            resultsTable.style.maxWidth = "100%"
+        } else if(lobbyItem.players.length >= 3) {
+            resultsTable.style.maxWidth = "939px"
+        } else if(lobbyItem.players.length >= 2) {
+            resultsTable.style.maxWidth = "660px"
+        }
+    })
 </script>
 
-<MenuContainer>
+<MenuContainer class="gap-0">
     <body class="outer-body">
         <div class="card">
             <header>
@@ -182,19 +219,23 @@
             <body>
                 <div class="results">
                     <div class="result-item">
-                        <div>Goal distance:</div>
+                        <div class="result-item-header">Goal distance:</div>
                         <div class="result-number">
                             <strong>{correctDistance}</strong>
                         </div>
                     </div>
                     <div class="result-icons">
-                        <GreenMarkerIcon />
+                        <GreenMarkerIcon width={iconSize} height={iconSize} />
                         <span class="dashed-line"></span>
-                        <RedMarkerIcon />
+                        <RedMarkerIcon width={iconSize} height={iconSize} />
                     </div>
                     <div class="result-item">
-                        <div>Your route distance:</div>
-                        <div class={`result-number ${levelSuccessful ? "positive" : "negative"}`}>
+                        <div class="result-item-header">Your route distance:</div>
+                        <div
+                            class={`result-number ${
+                                levelSuccessful ? 'positive' : 'negative'
+                            }`}
+                        >
                             <strong>{userDistance}</strong>
                         </div>
                     </div>
@@ -216,34 +257,40 @@
                 </div>
             </body>
         </div>
-        <div class="results-table">
-            {#if lobbyItem}
-            {#each lobbyItem.players as player, index}
-                <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} playerStatus={player.ready}/>
-            {/each}
-            {/if}
-        </div>
         <footer>
-            <CardButton 
-             class='btn-secondary' on:click={leaveGame}>
+            <CardButton class="btn-secondary" on:click={leaveGame}>
                 Leave
             </CardButton>
             {#if ready}
-            <CardButton class='btn-disabled' on:click={changeReady}>
-                Not ready
-            </CardButton>
+                <CardButton class="btn-disabled" on:click={changeReady}>
+                    Not ready
+                </CardButton>
             {:else}
-            <CardButton class='btn-primary' on:click={changeReady}>
-                Ready
-            </CardButton>
+                <CardButton class="btn-primary" on:click={changeReady}>
+                    Ready
+                </CardButton>
             {/if}
         </footer>
     </body>
+    <div class="results-table">
+        <!-- <div class="card leaderboard">Leaderboard</div> -->
+        {#if lobbyItem}
+            {#each lobbyItem.players as player, index}
+                <PlayerCard
+                    playerName={player.playerName}
+                    rankNumber={index + 1}
+                    score={player.score}
+                    playerStatus={player.ready}
+                    playerColor={player.color}
+                />
+            {/each}
+        {/if}
+</div>
 </MenuContainer>
 <div class="backdrop"></div>
 
 <style>
-        .backdrop {
+    .backdrop {
         position: absolute;
         top: 0;
         left: 0;
@@ -256,6 +303,7 @@
         width: 90%;
         margin-top: 2rem;
         z-index: 10;
+        position: relative;
     }
     .card {
         grid-column: span 6;
@@ -266,28 +314,40 @@
     }
     .result-icons {
         align-items: center;
-    display: flex;
-    flex-wrap: nowrap;
-    width: 100%;
-    max-width: 85%;
-    margin: auto;
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 85%;
+        margin: auto;
+    }
+    .leaderboard{
+        font-size: clamp(0.75rem, 4vw, 1.5rem);
+        text-align: center;
+        font-weight: 900;
+        padding-block: 10px;
     }
     .results-table {
-       margin-block: 2rem;
-         display: flex;
-        flex-direction: column;
+        position: relative;
+        /* left: calc(100% + 20px); */
+        /* top: 0; */
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px;
+        margin: auto;
+        margin-bottom: 50px;
+        max-width: 660px;
     }
     h2 {
-        font-size: clamp(1rem, 10vw, 3rem);
+        font-size: clamp(1rem, 7vw, 3rem);
         margin: 20px;
     }
     .dashed-line {
         flex-grow: 1;
-        border-top: 6px dashed rgba(0, 0, 0, 0.093);
+        border-top: min(6px, 1vw) dashed rgba(0, 0, 0, 0.093);
     }
     .total-score {
-        font-size: 1.5rem;
+        font-size: clamp(0.75rem, 4vw, 1.5rem);
         text-align: center;
     }
     footer {
@@ -295,7 +355,7 @@
         display: flex;
         gap: 30px;
         margin: auto;
-        margin-bottom: 4rem;
+        margin-block: 2rem;
     }
     .button-wrapper {
         width: 130px;
@@ -306,16 +366,18 @@
         align-items: center;
         justify-content: space-evenly;
         grid-template-columns: 1fr auto 1fr;
-
-        margin-block: 30px;
+        margin-block: min(20px, 4vw);
     }
     .result-item {
         position: relative;
     }
+    .result-item-header {
+        font-size: clamp(0.5rem, 3vw, 1rem);
+    }
     .result-number {
         margin-top: 5px;
+        font-size: clamp(0.5rem, 3vw, 1rem);
     }
-
     header {
         display: flex;
         align-items: center;
@@ -325,7 +387,7 @@
     .separator {
         width: 2px;
         background-color: #00000015;
-        height: 100px;
+        height: min(100px, 13vw);
     }
     .score-value {
         font-weight: 900;

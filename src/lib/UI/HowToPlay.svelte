@@ -34,7 +34,6 @@
         })
         inAnimation.play()
     })
-
 </script>
 
 <MenuContainer>
@@ -47,31 +46,25 @@
             </section>
             <footer class="card-footer">
                 <p>
-                    Even though using "lorem ipsum" often arouses curiosity due to
-                    its resemblance to classical Latin, it is not intended to have
-                    meaning.
+                    Even though using "lorem ipsum" often arouses curiosity due
+                    to its resemblance to classical Latin, it is not intended to
+                    have meaning.
                 </p>
             </footer>
         </Card>
-        <Card
-            class="flex-column flex-align-center"
-            inAnimationDelay={100}
-        >
+        <Card class="flex-column flex-align-center" inAnimationDelay={100}>
             <header class="card-header m-6"></header>
             <section class="p-4 text-center">
                 <div class="placeholder"></div>
             </section>
             <footer class="card-footer">
                 <p>
-                    Where text is visible in a document, people tend to focus on the
-                    textual content rather than upon overall presentation.
+                    Where text is visible in a document, people tend to focus on
+                    the textual content rather than upon overall presentation.
                 </p>
             </footer>
         </Card>
-        <Card
-            class="flex-column flex-align-center"
-            inAnimationDelay={200}
-        >
+        <Card class="flex-column flex-align-center" inAnimationDelay={200}>
             <header class="card-header m-6"></header>
             <section class="p-4 text-center">
                 <div class="placeholder"></div>
@@ -80,22 +73,20 @@
                 <p>
                     So publishers use lorem ipsum when displaying a typeface or
                     design in order to direct the focus to presentation. "Lorem
-                    ipsum" also approximates a typical distribution of letters in
-                    English.
+                    ipsum" also approximates a typical distribution of letters
+                    in English.
                 </p>
             </footer>
         </Card>
     </body>
-    
+
     <div class="col-start-3 col-end-5" bind:this={button}>
-        <CardButton class='btn-primary' on:onClick={runGame} >
-            OK
-        </CardButton>
+        <CardButton class="btn-primary" on:onClick={runGame}>OK</CardButton>
     </div>
 </MenuContainer>
 
 <style>
-     body {
+    body {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
         gap: 20px 30px;

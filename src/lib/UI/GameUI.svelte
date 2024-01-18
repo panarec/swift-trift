@@ -123,10 +123,12 @@
     </body>
     <footer>
         <div class="button-wrapper">
-            <Button text="Menu" class='btn-primary' on:onClick={goToLogin}></Button>
+            <Button text="Menu" class="btn-primary" on:onClick={goToLogin}
+            ></Button>
         </div>
         <div class="button-wrapper">
-            <Button text="New Game" class='btn-primary' on:onClick={runNewGame}></Button>
+            <Button text="New Game" class="btn-primary" on:onClick={runNewGame}
+            ></Button>
         </div>
     </footer>
 </div>

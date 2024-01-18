@@ -9,7 +9,7 @@ body {
 .card {
     background-color: #fff;
     border-radius: 15px;
-    padding-inline: 2rem;
+    padding-inline: min(2rem, 5vw);
     box-sizing: border-box;
     text-align: center;
     width: 100%;
@@ -229,4 +229,8 @@ body {
 }
 .negative {
     color: #ca3c3c;
+}
+
+.gap-0{
+    gap: 0px!important;
 }

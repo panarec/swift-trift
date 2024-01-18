@@ -31,38 +31,43 @@
     })
 
     const leaveGame = async () => {
-            await leaveLobby()
+        await leaveLobby()
     }
 
     const changeReady = async () => {
         await readyUp(!ready)
         ready = !ready
     }
-
-
 </script>
 
 <MenuContainer class="">
-    <MenuHeader heading={`Lobby #${lobbyNumber || ""}`} class=""/>
+    <MenuHeader heading={`Lobby #${lobbyNumber || ''}`} class="" />
     <body>
         {#if lobbyItem}
-        {#each lobbyItem.players as player, index}
-            <PlayerCard playerName={player.playerName} rankNumber={index + 1} score={player.score} playerStatus={player.ready} playerColor={player.color} />
-        {/each} 
+            {#each lobbyItem.players as player, index}
+                <PlayerCard
+                    playerName={player.playerName}
+                    rankNumber={index + 1}
+                    score={player.score}
+                    playerStatus={player.ready}
+                    playerColor={player.color}
+                    playersCount={lobbyItem.players.length}
+                />
+            {/each}
         {/if}
     </body>
     <footer>
-        <CardButton class='btn-secondary' on:click={leaveGame}>
+        <CardButton class="btn-secondary" on:click={leaveGame}>
             Leave
         </CardButton>
         {#if ready}
-        <CardButton class='btn-disabled' on:click={changeReady}>
-            Not ready
-        </CardButton>
+            <CardButton class="btn-disabled" on:click={changeReady}>
+                Not ready
+            </CardButton>
         {:else}
-        <CardButton class='btn-primary' on:click={changeReady}>
-            Ready
-        </CardButton>
+            <CardButton class="btn-primary" on:click={changeReady}>
+                Ready
+            </CardButton>
         {/if}
     </footer>
 </MenuContainer>
@@ -70,17 +75,23 @@
 <style>
     body {
         width: 100%;
-        max-width: 600px;
-        display: flex;
-        flex-direction: column;
+        max-width: 800px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
         gap: 20px 30px;
     }
 
-    footer{
+    footer {
         width: 100%;
         max-width: 400px;
         display: flex;
         gap: 30px;
         margin-bottom: 4rem;
+    }
+
+    @media only screen and (max-width: 400px) {
+        body {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
     }
 </style>

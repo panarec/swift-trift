@@ -14,6 +14,7 @@
         align-items: center;
         flex-direction: column;
         width: 100%;
-        gap: 40px;
+        gap: min(40px, 5vw);
+        position: relative;
     }
 </style>

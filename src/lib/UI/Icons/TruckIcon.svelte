@@ -1,9 +1,14 @@
+<script lang="ts">
+    export let width: number = 70
+    export let height: number = 70
+</script>
+
 <svg
     xmlns="http://www.w3.org/2000/svg"
     x="0px"
     y="0px"
-    width="70"
-    height="70"
+    {width}
+    {height}
     viewBox="0 0 48 48"
 >
     <linearGradient

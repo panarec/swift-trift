@@ -47,17 +47,17 @@
             </body>
             <footer>
                 <Button
-                    class="col-start-1 col-end-1 btn-primary"
+                    class="col-start-1 col-end-1 btn-secondary"
                     text="Yes"
                     on:onClick={yesCallback}
                 />
                 <Button
-                    class="col-start-3 col-end-3 btn-secondary"
+                    class="col-start-3 col-end-3 btn-primary"
                     text="No"
                     on:onClick={noCallback}
                 />
             </footer>
-        </Card> 
+        </Card>
     </body>
 </MenuContainer>
 

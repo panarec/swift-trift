@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { onMount } from "svelte"
-    import BackArrowIcon from "./Icons/BackArrowIcon.svelte"
+    import { onMount } from 'svelte'
+    import BackArrowIcon from './Icons/BackArrowIcon.svelte'
     import { menuState } from '../stores'
-    import anime from "animejs"
+    import anime from 'animejs'
     let inAnimation: anime.AnimeInstance
 
     /**
@@ -13,9 +13,8 @@
         menuState.set(state)
     }
 
-    let clazz = '';
-	export {clazz as class}; 
-
+    let clazz = ''
+    export { clazz as class }
 
     onMount(() => {
         const backButton = document.querySelector('#backButton')

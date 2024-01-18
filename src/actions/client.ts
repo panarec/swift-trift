@@ -1,4 +1,3 @@
-
 export const sendPostRequest = async (body: object, uri: string) => {
     const headers = {
         'Content-Type': 'application/json',

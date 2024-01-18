@@ -34,50 +34,49 @@
     })
 </script>
 
-
 {#if state === 'gameUI'}
     <GameUi />
 {:else}
-<div class={`container `}>
-    {#if state === 'intro'}
-        <Intro />
-    {:else if state === 'login'}
-        <Login />
-    {:else if state === 'modesMenu'}
-        <ModesMenu />
-    {:else if state === 'soloMenu'}
-        <SoloMenu />
-    {:else if state === 'loadingGame'}
-        <Loading text='Looking for deliveries...' />
-    {:else if state === 'waitingForPlayers'}
-        <Loading text='Waiting for other players...' />
-    {:else if state === 'duelMenu'}
-        <DuelMenu />
-    {:else if state === 'duelRoom'}
-    <DuelLobby />
-    {:else if state === 'joinRoom'}
-    <JoinRoom />
-    {:else if state === 'howtoplay'}
-        <HowToPlay />
-    {:else if state === 'levelCompletedDuel'}
-        <LevelCompletedDuel />
-    {:else if state === 'levelCompleted'}
-        <LevelCompleted />
-    {:else if state === 'menuModal'}
-        <Modal>
-            <h3>Do you really want to go back to menu?</h3>
-            <p>Your progress will be lost.</p>
-        </Modal>
-    {:else if state === 'newGameModal'}
-        <Modal>
-            <h3>Do you really want to find new game?</h3>
-            <p>Your progress will be lost.</p>
-        </Modal>
-    {/if}
-</div>
-<div class="menu-pull">
-    <span></span>
-</div>
+    <div class={`container `}>
+        {#if state === 'intro'}
+            <Intro />
+        {:else if state === 'login'}
+            <Login />
+        {:else if state === 'modesMenu'}
+            <ModesMenu />
+        {:else if state === 'soloMenu'}
+            <SoloMenu />
+        {:else if state === 'loadingGame'}
+            <Loading text="Looking for deliveries..." />
+        {:else if state === 'waitingForPlayers'}
+            <Loading text="Waiting for other players..." />
+        {:else if state === 'duelMenu'}
+            <DuelMenu />
+        {:else if state === 'duelRoom'}
+            <DuelLobby />
+        {:else if state === 'joinRoom'}
+            <JoinRoom />
+        {:else if state === 'howtoplay'}
+            <HowToPlay />
+        {:else if state === 'levelCompletedDuel'}
+            <LevelCompletedDuel />
+        {:else if state === 'levelCompleted'}
+            <LevelCompleted />
+        {:else if state === 'menuModal'}
+            <Modal>
+                <h3>Do you really want to go back to menu?</h3>
+                <p>Your progress will be lost.</p>
+            </Modal>
+        {:else if state === 'newGameModal'}
+            <Modal>
+                <h3>Do you really want to find new game?</h3>
+                <p>Your progress will be lost.</p>
+            </Modal>
+        {/if}
+    </div>
+    <div class="menu-pull">
+        <span></span>
+    </div>
 {/if}
 
 <style>
@@ -93,7 +92,7 @@
     .peIgnore {
         pointer-events: none;
     }
-    .menu-pull{
+    .menu-pull {
         position: absolute;
         bottom: -30px;
         left: 50%;

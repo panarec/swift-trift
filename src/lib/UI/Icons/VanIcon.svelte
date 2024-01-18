@@ -1,9 +1,14 @@
+<script lang="ts">
+    export let width: number = 70
+    export let height: number = 70
+</script>
+
 <svg
     xmlns="http://www.w3.org/2000/svg"
     x="0px"
     y="0px"
-    width="70"
-    height="70"
+    {width}
+    {height}
     viewBox="0 0 48 48"
 >
     <linearGradient
@@ -48,6 +53,7 @@
         d="M31,13v7c0,0.552,0.448,1,1,1h3.382c0.378,0,0.724,0.214,0.894,0.552l0.447,0.894	C36.892,22.786,37.239,23,37.618,23H41c0.552,0,1-0.448,1-1v-1.163l-2.578-7.488C39.145,12.542,38.385,12,37.531,12H32	C31.448,12,31,12.448,31,13z"
     ></path>
 </svg>
+
 <style>
     svg {
         filter: drop-shadow(0px 4px 4px rgb(0 0 0 / 0.25));

@@ -8,7 +8,7 @@
             autoplay: true,
             loop: true,
             rotate: '360deg',
-            easing: "linear"
+            easing: 'linear',
         })
     })
 </script>

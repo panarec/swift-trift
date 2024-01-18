@@ -25,7 +25,6 @@
     </div>
 </MenuContainer>
 
-
 <style>
     .loading-container {
         padding: 30px;

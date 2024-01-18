@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from "svelte"
+    import { createEventDispatcher } from 'svelte'
 
     /**
      * @type {string}
@@ -10,8 +10,8 @@
         dispatch('onClick', {})
     }
 
-    let clazz = '';
-	export {clazz as class}; 
+    let clazz = ''
+    export { clazz as class }
 </script>
 
 <button class={`btn ${clazz}`} on:click={onClick}>
@@ -23,7 +23,6 @@
     .btn {
         border-radius: 20px;
         font-weight: bold;
-        font-size: 1rem;
         cursor: pointer;
         position: relative;
         margin: auto;
@@ -35,7 +34,7 @@
         background: #ffcb13;
     }
     .btn.btn-secondary:before {
-        background: #FC5F3C;
+        background: #fc5f3c;
     }
     .btn:before {
         content: '';
@@ -51,14 +50,12 @@
     }
     .btn span {
         position: relative;
-        font-size: 16px;
+        font-size: min(1rem, 4vw);
         line-height: 18px;
         font-weight: 900;
         letter-spacing: 0.05rem;
         vertical-align: middle;
     }
-
-
 
     .btn:hover:before {
         width: 100%;
