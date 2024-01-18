@@ -93,7 +93,7 @@
         max-width: 800px;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px 30px;
+        gap: 40px 30px;
     }
 
     footer {

@@ -202,8 +202,12 @@ export const duelGameFinnished = async (
             'line-sort-key': 0,
         }
     )
+    const markersBounds = new mapboxgl.LngLatBounds()
 
     currentLobby.players.forEach((player, index) => {
+        player.routeCoordinates.forEach((coord) => {
+            markersBounds.extend([coord[0], coord[1]])
+        })
         generateRoute(
             player.routeCoordinates,
             index.toString(),
@@ -224,7 +228,6 @@ export const duelGameFinnished = async (
     })
 
     const routesIDs = map.getStyle().layers.map((layer) => layer.id)
-    const markersBounds = new mapboxgl.LngLatBounds()
     finalRoute.geometry.coordinates.forEach((coord) =>
         markersBounds.extend([coord[0], coord[1]])
     )

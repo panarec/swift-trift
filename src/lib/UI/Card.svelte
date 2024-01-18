@@ -30,4 +30,7 @@
     .card {
         position: relative;
     }
+    .overflow-visible {
+        overflow: visible;
+    }
 </style>

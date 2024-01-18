@@ -28,6 +28,7 @@
             height: ['40px', '0%'],
             autoplay: false,
             duration: 200,
+            easing: 'easeOutElastic(3, .8)'
         })
     })
 
@@ -75,7 +76,7 @@
     }
 </script>
 
-<Card class={`padding-1`}>
+<Card class={`padding-1 overflow-visible`}>
     <div class="player-card" style="--color: #{playerColor}">
         <span class="rank-number">
             {rankNumber}.
@@ -102,7 +103,7 @@
         </body>
 
     </div>
-    <div class="player-status" bind:this={playerStatusBar}>
+    <div class="player-status" style="--color: #{playerColor}" bind:this={playerStatusBar}>
         READY
     </div>
 </Card>
@@ -203,10 +204,11 @@
         display: none;
         position: absolute;
         top: 90%;
-        left: 0;
-        width: 100%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: 99%;
         height: 0px;
-        background-color: #0dc031;
+        background-color: #5eca0c ;
         border-radius: 0 0 15px 15px;
         z-index: -1;
         display: flex;
