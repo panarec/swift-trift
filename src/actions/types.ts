@@ -92,4 +92,5 @@ export type LobbyItem = {
 export type GameOptions = {
     timeLimit: number
     levelsPerGame: number
+    difficulty: "veryEasy" | "easy" | "normal" | "hard" | "extreme"
 }

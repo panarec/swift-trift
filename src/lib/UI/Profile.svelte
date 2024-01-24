@@ -1,8 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { getPlayerName } from '../../actions/localStorage'
     import { bestScore } from '../stores'
-    import GreenPersonIcon from './Icons/GreenPersonIcon.svelte'
 
     export let totalScore: number = 0
     let bestTotalScore: number = 0
@@ -47,7 +45,6 @@
                 nickname.length > 15
                     ? `${1 - nickname.length / nameFontMultiplier}rem`
                     : `${nameFontSize}rem`
-            console.log(name.style)
         }
         if (signature) {
             signature.style.fontSize =

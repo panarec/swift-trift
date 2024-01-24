@@ -43,7 +43,7 @@
     let lobbyItem: LobbyItem
     let ready: boolean = false
     let clientWidth: number
-    let iconSize: number 
+    let iconSize: number
 
     const goToLogin = async () => {
         if (levelSuccessful) {
@@ -74,7 +74,7 @@
 
     onMount(() => {
         clientWidth = document.body.clientWidth
-        if(clientWidth < 425){
+        if (clientWidth < 425) {
             iconSize = 25
         } else if (clientWidth < 554) {
             iconSize = 30
@@ -84,15 +84,15 @@
             iconSize = 50
         }
 
-        if(clientWidth < 1000) {
-            const resultsTable = document.querySelector('.results-table') as HTMLElement
+        if (clientWidth < 1000) {
+            const resultsTable = document.querySelector(
+                '.results-table'
+            ) as HTMLElement
             resultsTable.style.position = 'relative'
             resultsTable.style.left = '0'
             resultsTable.style.top = '0'
             resultsTable.style.maxWidth = '100%'
-
         }
-
 
         const card = document.querySelector('.card')
         const menuContainer = document.querySelector(
@@ -194,14 +194,16 @@
             lobbyItem = lobby
         })
 
-        const resultsTable = document.querySelector('.results-table') as HTMLElement
+        const resultsTable = document.querySelector(
+            '.results-table'
+        ) as HTMLElement
 
-        if(lobbyItem.players.length >= 4){
-            resultsTable.style.maxWidth = "100%"
-        } else if(lobbyItem.players.length >= 3) {
-            resultsTable.style.maxWidth = "939px"
-        } else if(lobbyItem.players.length >= 2) {
-            resultsTable.style.maxWidth = "660px"
+        if (lobbyItem.players.length >= 4) {
+            resultsTable.style.maxWidth = '100%'
+        } else if (lobbyItem.players.length >= 3) {
+            resultsTable.style.maxWidth = '939px'
+        } else if (lobbyItem.players.length >= 2) {
+            resultsTable.style.maxWidth = '660px'
         }
     })
 </script>
@@ -230,7 +232,9 @@
                         <RedMarkerIcon width={iconSize} height={iconSize} />
                     </div>
                     <div class="result-item">
-                        <div class="result-item-header">Your route distance:</div>
+                        <div class="result-item-header">
+                            Your route distance:
+                        </div>
                         <div
                             class={`result-number ${
                                 levelSuccessful ? 'positive' : 'negative'
@@ -285,7 +289,7 @@
                 />
             {/each}
         {/if}
-</div>
+    </div>
 </MenuContainer>
 <div class="backdrop"></div>
 
@@ -320,7 +324,7 @@
         max-width: 85%;
         margin: auto;
     }
-    .leaderboard{
+    .leaderboard {
         font-size: clamp(0.75rem, 4vw, 1.5rem);
         text-align: center;
         font-weight: 900;

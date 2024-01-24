@@ -78,3 +78,10 @@ export const readyUp = async (playerStatus: boolean) => {
 export const finnishLevel = async (routeCoordinates: [number, number][]) => {
     socket.emit('finnish-level', routeCoordinates)
 }
+
+export const changeLobbySettings = async (lobbySettings: {
+    levelsPerGame: number
+    timeLimit: number
+}) => {
+    socket.emit('change-lobby-options', lobbySettings)
+}

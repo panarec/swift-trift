@@ -28,7 +28,7 @@
             height: ['40px', '0%'],
             autoplay: false,
             duration: 200,
-            easing: 'easeOutElastic(3, .8)'
+            easing: 'easeOutElastic(3, .8)',
         })
     })
 
@@ -39,35 +39,32 @@
         let nameFontMultiplier = 40
         const card = document.querySelector('.player-card') as HTMLElement
 
-        if(playerStatus) {
+        if (playerStatus) {
             console.log('playerStatus', playerStatus)
-            if(readyAnimation)
-                readyAnimation.play()
+            if (readyAnimation) readyAnimation.play()
         } else {
-            if(unReadyAnimation)
-                unReadyAnimation.play()
+            if (unReadyAnimation) unReadyAnimation.play()
         }
-        
-        if(card){
+
+        if (card) {
             console.log(card.getBoundingClientRect().width)
             if (name) {
-                if(card.getBoundingClientRect().width < 600){
+                if (card.getBoundingClientRect().width < 600) {
                     nameFontSize = 1.5
-                    if(playerName.length > 15)
-                        nameFontMultiplier = 35
+                    if (playerName.length > 15) nameFontMultiplier = 35
                 }
-                if(card.getBoundingClientRect().width < 500){
+                if (card.getBoundingClientRect().width < 500) {
                     nameFontSize = 1.25
-                    if(playerName.length > 15)
-                        nameFontMultiplier = 20
+                    if (playerName.length > 15) nameFontMultiplier = 20
                 }
-                if(card.getBoundingClientRect().width < 420){
-                    if(playerName.length > 15)
-                        nameFontMultiplier = 17
+                if (card.getBoundingClientRect().width < 420) {
+                    if (playerName.length > 15) nameFontMultiplier = 17
                 }
 
-                if(playerName.length > 15) {
-                    name.style.fontSize = `${2 - playerName.length / nameFontMultiplier}rem`
+                if (playerName.length > 15) {
+                    name.style.fontSize = `${
+                        2 - playerName.length / nameFontMultiplier
+                    }rem`
                 } else {
                     name.style.fontSize = `${nameFontSize}rem`
                 }
@@ -101,9 +98,12 @@
                 </div>
             </div>
         </body>
-
     </div>
-    <div class="player-status" style="--color: #{playerColor}" bind:this={playerStatusBar}>
+    <div
+        class="player-status"
+        style="--color: #{playerColor}"
+        bind:this={playerStatusBar}
+    >
         READY
     </div>
 </Card>
@@ -208,7 +208,7 @@
         transform: translate(-50%, 0);
         width: 99%;
         height: 0px;
-        background-color: #5eca0c ;
+        background-color: #5eca0c;
         border-radius: 0 0 15px 15px;
         z-index: -1;
         display: flex;
@@ -218,7 +218,7 @@
         font-weight: 900;
         color: #ffffff;
         padding-bottom: 5px;
-        box-shadow: 1px 1px 8px 0px rgba(0,0,0,0.5) inset;
+        box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.5) inset;
         letter-spacing: 1px;
     }
     @media only screen and (max-width: 554px) {

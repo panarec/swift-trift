@@ -72,7 +72,7 @@
 
     onMount(() => {
         clientWidth = document.body.clientWidth
-        if(clientWidth < 425){
+        if (clientWidth < 425) {
             iconSize = 25
         } else if (clientWidth < 554) {
             iconSize = 30
@@ -208,7 +208,9 @@
                         <RedMarkerIcon width={iconSize} height={iconSize} />
                     </div>
                     <div class="result-item">
-                        <div class="result-item-header" >Your route distance:</div>
+                        <div class="result-item-header">
+                            Your route distance:
+                        </div>
                         <div class="result-number">
                             <strong>{userDistance}</strong>
                         </div>
