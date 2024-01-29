@@ -94,7 +94,6 @@
             mapContainer.style.pointerEvents = 'auto'
             menuContainer.style.position = 'absolute'
             menuPull.style.display = 'block'
-            appBody.style.overflow = 'hidden'
             anime({
                 targets: [menuContainer],
                 bottom: '-80%',
@@ -143,7 +142,6 @@
                 duration: 500,
             }).finished.then(() => {
                 menuContainer.style.position = 'relative'
-                appBody.style.overflow = 'auto'
             })
         })
 

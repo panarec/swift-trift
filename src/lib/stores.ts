@@ -1,6 +1,7 @@
 import { writable, type Writable } from 'svelte/store'
 import { getBestScore, getLevel, getTotalScore } from '../actions/localStorage'
 import type { LobbyItem } from '../actions/types'
+import Timer from 'easytimer.js'
 
 export const menuState = writable('intro')
 

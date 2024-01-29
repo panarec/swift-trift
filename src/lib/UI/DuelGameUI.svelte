@@ -2,6 +2,7 @@
     import { onMount } from 'svelte'
     import {
         bestScore,
+        lobby,
         menuState,
         modalNoCallback,
         modalYesCallback,
@@ -16,18 +17,22 @@
     import {
         generateGame,
         getGameParams,
-        loadingNextGame,
         resetGame,
         resetView,
     } from '../../actions/game'
     import anime from 'animejs'
     import { Timer } from "easytimer.js";
-
-    const timer = new Timer();
+    import type { LobbyItem } from '../../actions/types'
+    import { triggerFinnishLevel } from '../../actions/roadDetector'
+    import { gameTimer } from '../../actions/helper'
 
     let totalScoreSaved: number
     let totalBestSaved: number
     let gameMenuToggled: boolean = false
+    let lobbyItem: LobbyItem
+    let minutes: string
+    let seconds: string
+
     const goToLogin = async () => {
         modalNoCallback.set(() => menuState.set('gameUI'))
         modalYesCallback.set(() => {
@@ -95,9 +100,36 @@
             targets: gameMenuToggle,
             top: ['0', '-65px'],
         })
+        lobby.subscribe((lobby) => {
+            lobbyItem = lobby
+        })
+        seconds = (lobbyItem.game.gameOptions.timeLimit % 60).toString().padStart(2, '0')
+        minutes = Math.floor(lobbyItem.game.gameOptions.timeLimit / 60).toString().padStart(2, '0')
+
+        gameTimer.stop()
+        gameTimer.start({countdown: true, startValues: {seconds: lobbyItem.game.gameOptions.timeLimit}})
+
+        gameTimer.addEventListener('secondsUpdated', function (e) {
+            minutes = gameTimer.getTimeValues().minutes.toString().padStart(2, '0')
+            seconds = gameTimer.getTimeValues().seconds.toString().padStart(2, '0')
+            if(minutes === "00" && seconds === "00"){
+                triggerFinnishLevel()
+            }
+        })
     })
 </script>
 
+{#if lobbyItem}
+<div class="upper-menu">
+    <div class="time">
+        <img width="48" height="48" src="https://img.icons8.com/fluency/48/time--v1.png" alt="time--v1" class="time-icon"/>
+        <span id="minutes">{minutes}</span>:<span id="seconds">{seconds}</span>
+    </div>
+    <div class="level">
+        <img width="48" height="48" src="https://img.icons8.com/fluency/48/adventure.png" alt="adventure" class="map-icon"/>
+        <span>{`${lobbyItem.game.gameParams?.currentLevel}/${lobbyItem.game.gameOptions.levelsPerGame}`}</span>
+    </div>
+</div>
 <div class="card game-menu">
     <button id="game-menu-toggle" on:click={toggleGameMenu}>
         <img
@@ -109,7 +141,7 @@
         />
     </button>
     <header>
-        <h3>{`Level - ${getLevel()}`}</h3>
+        <h3>{`Level - ${lobbyItem.game.gameParams?.currentLevel}/${lobbyItem.game.gameOptions.levelsPerGame}`}</h3>
     </header>
     <body>
         <h3>Overall Statistics</h3>
@@ -127,21 +159,22 @@
     </body>
     <footer>
         <div class="button-wrapper">
-            <Button text="Menu" class="btn-primary" on:onClick={goToLogin}
+            <Button text="Leave" class="btn-primary" on:onClick={goToLogin}
             ></Button>
         </div>
         <div class="button-wrapper">
-            <Button text="New Game" class="btn-primary" on:onClick={runNewGame}
+            <Button text="Skip" class="btn-primary" on:onClick={runNewGame}
             ></Button>
         </div>
     </footer>
 </div>
+{/if}
 
 <style>
     #game-menu-toggle {
         width: auto;
         position: absolute;
-        top: -80px;
+        top: -67px;
         transform: translateX(-50%);
         box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.75);
         -webkit-box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.75);
@@ -200,5 +233,45 @@
     }
     .button-wrapper {
         width: 130px;
+    }
+
+    .upper-menu {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+       
+        z-index: 10;
+        width: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+    .upper-menu > div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: clamp(1rem, 5vw, 1.5rem);
+        font-weight: 900;
+        text-align: center;
+        box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.75);
+        -webkit-box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 0px 10px -4px rgba(0, 0, 0, 0.75);
+        border-radius: 0px 0px 5px 5px;
+        padding: min(15px, 3vw) min(20px, 5vw);
+        background-color: #ffffff;
+    }
+    .time {
+        width: min(120px, 28vw);
+    }
+    .time-icon{
+        width: min(30px, 7vw);
+        height: min(30px, 7vw);
+    }
+    .map-icon{
+        width: min(30px, 7vw);
+        height: min(30px, 7vw);
     }
 </style>

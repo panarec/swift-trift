@@ -52,6 +52,15 @@ export async function generateGame(
     gameParams: GameParams,
     playerColor?: string
 ) {
+    lobby.update((lobbyItem) => {
+        return {
+            ...lobbyItem,
+            game: {
+                gameOptions: lobbyItem.game.gameOptions,
+                gameParams,
+            },
+        }
+    })
     menuState.set('')
     await resetGame()
 
@@ -96,7 +105,7 @@ export async function generateGame(
     }).once('zoomend', async () => {
         mapContainer.style.pointerEvents = 'auto'
 
-        menuState.set('gameUI')
+        menuState.set('duelGameUI')
         startMarkerObj = startMarker().setLngLat(startMarkerPosition).addTo(map)
         finnishMarkerObj = finnishMarker()
             .setLngLat(finnishMarkerPosition)
@@ -203,8 +212,11 @@ export const duelGameFinnished = async (
         }
     )
     const markersBounds = new mapboxgl.LngLatBounds()
-
+    finalRoute.geometry.coordinates.forEach((coord) =>
+        markersBounds.extend([coord[0], coord[1]])
+    )
     currentLobby.players.forEach((player, index) => {
+        if (player.routeCoordinates.length === 0) return
         player.routeCoordinates.forEach((coord) => {
             markersBounds.extend([coord[0], coord[1]])
         })
@@ -228,9 +240,7 @@ export const duelGameFinnished = async (
     })
 
     const routesIDs = map.getStyle().layers.map((layer) => layer.id)
-    finalRoute.geometry.coordinates.forEach((coord) =>
-        markersBounds.extend([coord[0], coord[1]])
-    )
+
     map.fitBounds(markersBounds, {
         padding: 100,
         pitch: 0,
@@ -246,6 +256,7 @@ export const duelGameFinnished = async (
 
     await Promise.all(
         currentLobby.players.map(async (player, index) => {
+            if (player.routeCoordinates.length === 0) return
             await addCoordinatesToRoute(
                 player.routeCoordinates,
                 2000,

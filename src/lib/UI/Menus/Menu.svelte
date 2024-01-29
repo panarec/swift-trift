@@ -1,20 +1,15 @@
 <script lang="ts">
     import Loading from '../Loading.svelte'
     import Intro from '../Intro.svelte'
-    import MainMenu from './ModesMenu.svelte'
-    import MenuCard from './MenuCard.svelte'
-    import MenuHeader from './MenuHeader.svelte'
-    import MenuHeared from './MenuHeader.svelte'
     import SoloMenu from './SoloMenu.svelte'
     import Login from '../Login.svelte'
     import ModesMenu from './ModesMenu.svelte'
     import HowToPlay from '../HowToPlay.svelte'
     import LevelCompleted from '../LevelCompleted.svelte'
     import { menuState } from '../../stores'
-    import type { Writable } from 'svelte/store'
     import Modal from '../Modal.svelte'
     import GameUi from '../GameUI.svelte'
-    import { map } from 'lodash'
+    import DuelGameUI from '../DuelGameUI.svelte'
     import { onMount } from 'svelte'
     import DuelMenu from './DuelMenu.svelte'
     import DuelLobby from './DuelLobby.svelte'
@@ -36,6 +31,9 @@
 
 {#if state === 'gameUI'}
     <GameUi />
+
+{:else if state === 'duelGameUI'}
+    <DuelGameUI />
 {:else}
     <div class={`container `}>
         {#if state === 'intro'}

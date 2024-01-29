@@ -5,7 +5,6 @@ import { map } from '../lib/Map.svelte'
 import {
     addCoordinatesToRoute,
     generateRoute,
-    removeAllRoutes,
     removeCoordinatesFromRoute,
 } from './routes'
 import anime from 'animejs/lib/anime.es.js'
@@ -26,6 +25,7 @@ import {
 import { finnishGame, move } from './services'
 import type { NodeElement } from './types'
 import { finnishLevel } from './socket'
+import { gameTimer } from './helper'
 
 export let markers: Marker[] = []
 export let directionMarkers: Marker[] = []
@@ -159,7 +159,7 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
 
         if (gameMode === 'duel') {
             menuState.set('waitingForPlayers')
-            finnishLevel(checkpoints)
+            triggerFinnishLevel()
             return
         }
     }
@@ -167,6 +167,11 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
         spawnDirectionMarker(junction)
     )
     return
+}
+
+export const triggerFinnishLevel = async () => {
+    gameTimer.stop()
+    finnishLevel(checkpoints)
 }
 
 function removeDirectionMarkers() {

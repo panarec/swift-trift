@@ -1,15 +1,12 @@
 <script lang="ts">
     import MenuContainer from './MenuContainer.svelte'
-    import MenuHeader from './MenuHeader.svelte'
-    import { lobby, menuState } from '../../stores'
+    import { lobby } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
     import PlayerCard from '../PlayerCard.svelte'
-    import Button from '../Button.svelte'
     import { changeLobbySettings, leaveLobby, readyUp } from '../../../actions/socket'
     import CardButton from '../CardButton.svelte'
     import type { LobbyItem } from '../../../actions/types'
-    import Input from '../Input.svelte'
     import NumberInput from '../NumberInput.svelte'
     import ClipboardCopyButton from '../../ClipboardCopyButton.svelte'
     import ButtonGroup from '../ButtonGroup.svelte'
@@ -19,16 +16,10 @@
     let ready: boolean = false
     let body: HTMLElement
     let difficultyValue: string 
+
     onMount(() => {
-        // const card = document.querySelector('.card')
-        // inAnimation = anime({
-        //     targets: [card],
-        //     scale: [0, 1],
-        //     autoplay: false,
-        //     duration: 750,
-        // })
-        // inAnimation.play()
         lobbyNumber = sessionStorage.getItem('lobbyNumber')
+
 
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
@@ -56,7 +47,6 @@
             } else if (lobbyItem.players.length === 1) {
                 body.style.maxWidth = '400px'
             }
-            console.log(difficultyValue)
         }
     }
 </script>
@@ -100,7 +90,7 @@
                         <div class="settings-item-label">Difficulty:</div>
                         <div class="settings-item-value"
                             >
-                            <ButtonGroup userSelected={lobbyItem.game.gameOptions.difficulty} >
+                            <ButtonGroup userSelected={lobbyItem.game.gameOptions.difficulty} on:change={(event) => changeLobbySettings({...lobbyItem.game.gameOptions, difficulty: event.detail})} >
 
                             </ButtonGroup>
                             </div
@@ -199,6 +189,7 @@
     .settings-item-value {
         font-weight: 900;
     }
+
 
     @media only screen and (max-width: 400px) {
         body {

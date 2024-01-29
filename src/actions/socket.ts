@@ -1,7 +1,14 @@
 import io, { Socket } from 'socket.io-client'
 import { lobby, menuState } from '../lib/stores'
-import type { GameParams, LobbyItem, MatchObject, PlayerItem } from './types'
+import type {
+    GameOptions,
+    GameParams,
+    LobbyItem,
+    MatchObject,
+    PlayerItem,
+} from './types'
 import { duelGameFinnished, generateGame } from './game'
+import { lobbyTimer } from './helper'
 
 let socket: Socket
 
@@ -38,6 +45,7 @@ export const createSocketConnection = async () => {
         }
     )
     socket.on('all-ready', () => {
+        lobbyTimer.stop()
         menuState.set('loadingGame')
     })
 }
@@ -79,9 +87,7 @@ export const finnishLevel = async (routeCoordinates: [number, number][]) => {
     socket.emit('finnish-level', routeCoordinates)
 }
 
-export const changeLobbySettings = async (lobbySettings: {
-    levelsPerGame: number
-    timeLimit: number
-}) => {
+export const changeLobbySettings = async (lobbySettings: GameOptions) => {
+    console.log(lobbySettings)
     socket.emit('change-lobby-options', lobbySettings)
 }

@@ -1,14 +1,8 @@
 <script lang="ts">
-    import Card from './Card.svelte'
     import MenuContainer from './Menus/MenuContainer.svelte'
     import RedMarkerIcon from './Icons/RedMarkerIcon.svelte'
     import GreenMarkerIcon from './Icons/GreenMarkerIcon.svelte'
-    import Profile from './Profile.svelte'
-    import Button from './Button.svelte'
     import {
-        generateGame,
-        getGameParams,
-        loadingNextGame,
         resetGame,
         resetView,
     } from '../../actions/game'
@@ -24,16 +18,11 @@
     } from '../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import {
-        increaseLevel,
-        resetLevel,
-        resetTotalScore,
-    } from '../../actions/localStorage'
     import CardButton from './CardButton.svelte'
     import type { LobbyItem } from '../../actions/types'
     import PlayerCard from './PlayerCard.svelte'
     import { leaveLobby, readyUp } from '../../actions/socket'
-    let inAnimation: anime.AnimeInstance
+    import { lobbyTimer } from '../../actions/helper'
 
     let userDistance: number
     let correctDistance: number
@@ -44,6 +33,10 @@
     let ready: boolean = false
     let clientWidth: number
     let iconSize: number
+    let lobbyTime: number = 15
+
+    let timerValue: string = '15'
+    let readyButtonDisabled: boolean = false
 
     const goToLogin = async () => {
         if (levelSuccessful) {
@@ -73,6 +66,8 @@
     }
 
     onMount(() => {
+
+
         clientWidth = document.body.clientWidth
         if (clientWidth < 425) {
             iconSize = 25
@@ -83,6 +78,20 @@
         } else {
             iconSize = 50
         }
+
+        
+
+        lobbyTimer.start({countdown: true, startValues: {seconds: lobbyTime}})
+        lobbyTimer.addEventListener('secondsUpdated', () => {
+            timerValue = lobbyTimer.getTimeValues().seconds.toString()
+            if(+timerValue === 0){
+                lobbyTimer.stop()
+                if(ready) return
+                ready = true
+                readyButtonDisabled = true
+                readyUp(ready)
+            }
+        })
 
         if (clientWidth < 1000) {
             const resultsTable = document.querySelector(
@@ -102,13 +111,11 @@
         const mapContainer = document.querySelector('#map') as HTMLElement
         const container = document.querySelector('.container') as HTMLElement
         const menuPull = document.querySelector('.menu-pull') as HTMLElement
-        const appBody = document.querySelector('#app-body') as HTMLElement
 
         backdrop.addEventListener('click', () => {
             mapContainer.style.pointerEvents = 'auto'
             menuContainer.style.position = 'absolute'
             menuPull.style.display = 'block'
-            appBody.style.overflow = 'hidden'
             anime({
                 targets: [menuContainer],
                 bottom: '-100%',
@@ -157,7 +164,6 @@
                 duration: 500,
             }).finished.then(() => {
                 menuContainer.style.position = 'relative'
-                appBody.style.overflow = 'auto'
             })
         })
 
@@ -193,6 +199,7 @@
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
         })
+
 
         const resultsTable = document.querySelector(
             '.results-table'
@@ -265,15 +272,15 @@
             <CardButton class="btn-secondary" on:click={leaveGame}>
                 Leave
             </CardButton>
-            {#if ready}
-                <CardButton class="btn-disabled" on:click={changeReady}>
-                    Not ready
-                </CardButton>
-            {:else}
-                <CardButton class="btn-primary" on:click={changeReady}>
-                    Ready
-                </CardButton>
-            {/if}
+                {#if ready}
+                    <CardButton class="btn-disabled" disabled={readyButtonDisabled} on:click={changeReady}>
+                        Not ready
+                    </CardButton>
+                {:else}
+                    <CardButton class="btn-primary" disabled={readyButtonDisabled} on:click={changeReady}>
+                        Ready in {timerValue}
+                    </CardButton>
+                {/if}
         </footer>
     </body>
     <div class="results-table">
@@ -332,8 +339,6 @@
     }
     .results-table {
         position: relative;
-        /* left: calc(100% + 20px); */
-        /* top: 0; */
         width: 100%;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -395,5 +400,17 @@
     }
     .score-value {
         font-weight: 900;
+    }
+
+    .timer {
+        font-size: clamp(0.75rem, 3vw, 1.2rem);
+        font-weight: 900;
+        position: absolute;
+        top: 50%;
+        left: 70%;
+        transform: translate(-50%, -50%);
+    }
+    .timer-width {
+        width: 30px;
     }
 </style>

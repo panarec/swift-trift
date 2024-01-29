@@ -11,7 +11,7 @@
 
     const dispatch = createEventDispatcher()
 
-    const input = (event: any) => dispatch('change', event.target.value, {cancelable: true})
+    const input = (event: any) => dispatch('input', event.target.value, {cancelable: true})
 
     onMount(() => {
         buttons = Array.from(document.querySelectorAll('button'))

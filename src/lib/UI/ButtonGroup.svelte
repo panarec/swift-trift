@@ -3,6 +3,7 @@
 
     export let userSelected: string
 
+
     const difficultyColors: { [key: string]: string } = {
         veryEasy: "#3bc007",
         easy: "#aaf32b",
@@ -12,7 +13,7 @@
     }
 
     const dispatch = createEventDispatcher()
-    const change = (event: any) => dispatch('input', event.target.value, {cancelable: true})
+    const change = (event: any) => dispatch('change', event.target.value, {cancelable: true})
 
     onMount(() => {
         const labels = document.querySelectorAll("label")
@@ -25,7 +26,6 @@
     $: {
         const labels = document.querySelectorAll("label")
         if (userSelected && labels.length > 0) {
-            console.log(userSelected)
             labels.forEach((label) => {
                 label.style.background = "transparent"
             })
@@ -37,15 +37,15 @@
 </script>
 
 <div class="radio-group">
-    <input bind:group={userSelected}  type="radio" id="option-one" name="selector" value="veryEasy">
+    <input bind:group={userSelected}  type="radio" id="option-one" name="selector" value="veryEasy" on:change={change}>
     <label for="option-one">1</label>
-    <input bind:group={userSelected} type="radio" id="option-two" name="selector" value="easy">
+    <input bind:group={userSelected} type="radio" id="option-two" name="selector" value="easy" on:change={change}>
     <label for="option-two">2</label>
-    <input bind:group={userSelected} type="radio" id="option-three" name="selector" value="normal">
+    <input bind:group={userSelected} type="radio" id="option-three" name="selector" value="normal" on:change={change}>
     <label for="option-three">3</label>
-    <input bind:group={userSelected} type="radio" id="option-four" name="selector" value="hard">
+    <input bind:group={userSelected} type="radio" id="option-four" name="selector" value="hard" on:change={change}>
     <label for="option-four">4</label>
-    <input bind:group={userSelected} type="radio" id="option-five" name="selector" value="extreme">
+    <input bind:group={userSelected} type="radio" id="option-five" name="selector" value="extreme" on:change={change}>
     <label for="option-five">5</label>
     </div>
 

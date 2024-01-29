@@ -32,6 +32,7 @@ export type GameParams = {
     startMarkerNode: NodeElement
     finnishMarkerNode: NodeElement
     availableDirections: NodeElement[]
+    currentLevel: number
 }
 export type MoveResponse = {
     routeCoordinates: MatchObject
@@ -92,5 +93,5 @@ export type LobbyItem = {
 export type GameOptions = {
     timeLimit: number
     levelsPerGame: number
-    difficulty: "veryEasy" | "easy" | "normal" | "hard" | "extreme"
+    difficulty: 'veryEasy' | 'easy' | 'normal' | 'hard' | 'extreme'
 }

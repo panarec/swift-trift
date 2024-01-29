@@ -5,7 +5,9 @@ body {
     font-family: 'Inter', sans-serif;
     color: #2c2c2c;
 }
-
+#app-body {
+    overflow: hidden;
+}
 .card {
     background-color: #fff;
     border-radius: 15px;
