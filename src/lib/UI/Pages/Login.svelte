@@ -1,10 +1,9 @@
 <script lang="ts">
     import anime from 'animejs'
-    import { menuState } from '../stores'
-    import Button from './Button.svelte'
-    import Input from './Input.svelte'
-    import MenuContainer from './Menus/MenuContainer.svelte'
-    import Profile from './Profile.svelte'
+    import Button from '../Components/Button.svelte'
+    import Input from '../Components/Input.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import Profile from '../Components/Profile.svelte'
     import { onMount } from 'svelte'
     import { fade, scale } from 'svelte/transition'
     import {
@@ -12,7 +11,8 @@
         resetLevel,
         resetTotalScore,
         setPlayerName,
-    } from '../../actions/localStorage'
+    } from '../../../actions/localStorage'
+    import { menuState } from '../../stores'
 
     let inAnimation: anime.AnimeInstance
     let nickname: string

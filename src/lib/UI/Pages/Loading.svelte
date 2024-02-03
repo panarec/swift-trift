@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import SpinnerIcon from './Icons/SpinnerIcon.svelte'
+    import SpinnerIcon from '../Icons/SpinnerIcon.svelte'
     import anime from 'animejs'
-    import MenuContainer from './Menus/MenuContainer.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
 
     let inAnimation: anime.AnimeInstance
     export let text: string

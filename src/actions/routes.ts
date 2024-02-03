@@ -9,8 +9,8 @@ import anime from 'animejs/lib/anime.es.js'
 import { carObj } from './game'
 import _ from 'lodash'
 import { map } from '../lib/Map.svelte'
-import { menuState } from '../lib/stores'
 import type { NodeElement } from './types'
+import { menuState } from '../lib/stores'
 
 export async function generateRoute(
     startCoordinate: GeoJSON.Position[],

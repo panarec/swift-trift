@@ -1,16 +1,16 @@
 <script lang="ts">
     import CreateIcon from '../Icons/CreateIcon.svelte'
     import JoinIcon from '../Icons/JoinIcon.svelte'
-    import MenuCard from './MenuCard.svelte'
-    import MenuContainer from './MenuContainer.svelte'
-    import MenuHeader from './MenuHeader.svelte'
-    import { menuState } from '../../stores'
+    import MenuCard from '../Components/MenuCard.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import MenuHeader from '../Components/MenuHeader.svelte'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import BackButton from '../BackButton.svelte'
-    import { joinLobby } from '../../../actions/socket'
+    import BackButton from '../Components/BackButton.svelte'
+    import { createLobby, joinLobby } from '../../../actions/socket'
     import { v4 } from 'uuid'
     import { getPlayerName } from '../../../actions/localStorage'
+    import { menuState } from '../../stores'
 
     let inAnimation: anime.AnimeInstance
     let lobbyNumber: string
@@ -30,11 +30,10 @@
 
     const setCreateRoom = async () => {
         clientWidth = document.body.clientWidth
-        lobbyNumber = v4().split('-')[0]
         const playerName = getPlayerName()
         menuState.set('loading')
-        await joinLobby(lobbyNumber, playerName)
-        menuState.set('duelRoom')
+        await createLobby(playerName)
+        menuState.set('duelLobby')
     }
 
     const setJoinRoom = () => {

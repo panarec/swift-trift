@@ -1,6 +1,6 @@
 import mapboxgl, { LngLat, Marker } from 'mapbox-gl'
 import { map } from '../lib/Map.svelte'
-import _ from 'lodash'
+import _, { set } from 'lodash'
 import {
     addCoordinatesToRoute,
     generateRoute,

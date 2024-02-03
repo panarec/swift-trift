@@ -1,14 +1,14 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { menuState } from '../../stores'
     import BluePersonIcon from '../Icons/BluePersonIcon.svelte'
     import GreenPersonIcon from '../Icons/GreenPersonIcon.svelte'
     import RedPersonIcon from '../Icons/RedPersonIcon.svelte'
-    import MenuCard from './MenuCard.svelte'
-    import MenuContainer from './MenuContainer.svelte'
-    import MenuHeader from './MenuHeader.svelte'
+    import MenuCard from '../Components/MenuCard.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import MenuHeader from '../Components/MenuHeader.svelte'
     import anime from 'animejs'
-    import BackButton from '../BackButton.svelte'
+    import BackButton from '../Components/BackButton.svelte'
+    import { menuState } from '../../stores'
 
     let inAnimation: anime.AnimeInstance
     let clientWidth: number = document.body.clientWidth

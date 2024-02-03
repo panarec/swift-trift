@@ -3,12 +3,17 @@
 
     import Card from './Card.svelte'
     import anime from 'animejs'
+    import { menuState } from '../../stores'
     export let playerName: string
     export let rankNumber: number
-    export let score: number = 0
+    export let score: number = 99999
     export let playerStatus: boolean = false
     export let playerColor: string
     export let playersCount: number = 0
+    export let totalTime: number = 0
+    export let lastLevelScore: number = 0
+    export let lastLevelTime: number = 0
+    let currentMenuState: string = ''
 
     let name: HTMLElement
     let readyAnimation: anime.AnimeInstance
@@ -16,6 +21,9 @@
 
     let playerStatusBar: HTMLElement
     onMount(() => {
+        menuState.subscribe((state) => {
+            currentMenuState = state
+        })
         playerStatusBar.style.display = 'flex'
         readyAnimation = anime({
             targets: [playerStatusBar],
@@ -47,7 +55,6 @@
         }
 
         if (card) {
-            console.log(card.getBoundingClientRect().width)
             if (name) {
                 if (card.getBoundingClientRect().width < 600) {
                     nameFontSize = 1.5
@@ -82,21 +89,24 @@
             <div class="photo">
                 <div class="photo-placeholder"></div>
             </div>
-            <div class="driver-header">
+            <div class={`driver-header ${currentMenuState === "duelLobby" ? "row-span-2" : ""}`}>
                 <div class="name">
                     <h3 bind:this={name}>{playerName}</h3>
                 </div>
                 <div class="class-icon"></div>
             </div>
+            {#if currentMenuState !== "duelLobby"}
             <div class="details">
                 <span class="divider"></span>
                 <div class="stats">
                     <div class="stat-item">
                         <span class="stat-item-header">Score:</span>
                         <span class="stat-item-content">{score}</span>
+                        <span class="stat-item-content level-score {lastLevelScore > 0 ? "positive": "negative"}" >+{lastLevelScore}</span>
                     </div>
                 </div>
             </div>
+            {/if}
         </body>
     </div>
     <div
@@ -152,6 +162,7 @@
         background-color: #fff;
         border-radius: 5px;
         display: grid;
+        align-items: center;
         grid-template-columns: min(50px, 10vw) 1fr;
         column-gap: 10px;
     }
@@ -177,8 +188,8 @@
     }
     .stat-item {
         text-align: start;
-        display: grid;
-        grid-template-columns: 4rem 1fr;
+        display: flex;
+        gap: 10px;
         align-items: center;
         width: 100%;
     }

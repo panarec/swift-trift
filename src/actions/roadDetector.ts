@@ -15,6 +15,7 @@ import {
     userRouteDistance,
     totalScore,
     menuState,
+    lobby,
 } from '../lib/stores'
 import {
     addToTotalScore,
@@ -23,7 +24,7 @@ import {
     saveBestScore,
 } from './localStorage'
 import { finnishGame, move } from './services'
-import type { NodeElement } from './types'
+import type { LobbyItem, NodeElement } from './types'
 import { finnishLevel } from './socket'
 import { gameTimer } from './helper'
 
@@ -170,8 +171,11 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
 }
 
 export const triggerFinnishLevel = async () => {
+    const lobbyNumber = sessionStorage.getItem('lobbyNumber')
+    const time = gameTimer.getTimeValues().toString()
     gameTimer.stop()
-    finnishLevel(checkpoints)
+    // @ts-ignore
+    finnishLevel(lobbyNumber, checkpoints, time)
 }
 
 function removeDirectionMarkers() {

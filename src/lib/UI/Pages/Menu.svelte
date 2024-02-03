@@ -1,20 +1,21 @@
 <script lang="ts">
-    import Loading from '../Loading.svelte'
-    import Intro from '../Intro.svelte'
+    import Loading from './Loading.svelte'
+    import Intro from './Intro.svelte'
     import SoloMenu from './SoloMenu.svelte'
-    import Login from '../Login.svelte'
+    import Login from './Login.svelte'
     import ModesMenu from './ModesMenu.svelte'
-    import HowToPlay from '../HowToPlay.svelte'
-    import LevelCompleted from '../LevelCompleted.svelte'
+    import HowToPlay from './HowToPlay.svelte'
+    import LevelCompleted from './LevelCompleted.svelte'
     import { menuState } from '../../stores'
-    import Modal from '../Modal.svelte'
-    import GameUi from '../GameUI.svelte'
-    import DuelGameUI from '../DuelGameUI.svelte'
+    import Modal from '../Components/Modal.svelte'
+    import GameUi from './GameUI.svelte'
+    import DuelGameUI from './DuelGameUI.svelte'
     import { onMount } from 'svelte'
     import DuelMenu from './DuelMenu.svelte'
     import DuelLobby from './DuelLobby.svelte'
     import JoinRoom from './JoinRoom.svelte'
-    import LevelCompletedDuel from '../LevelCompletedDuel.svelte'
+    import LevelCompletedDuel from './LevelCompletedDuel.svelte'
+    import DuelResults from './DuelResults.svelte'
 
     let state: string
 
@@ -31,7 +32,6 @@
 
 {#if state === 'gameUI'}
     <GameUi />
-
 {:else if state === 'duelGameUI'}
     <DuelGameUI />
 {:else}
@@ -50,7 +50,7 @@
             <Loading text="Waiting for other players..." />
         {:else if state === 'duelMenu'}
             <DuelMenu />
-        {:else if state === 'duelRoom'}
+        {:else if state === 'duelLobby'}
             <DuelLobby />
         {:else if state === 'joinRoom'}
             <JoinRoom />
@@ -60,6 +60,8 @@
             <LevelCompletedDuel />
         {:else if state === 'levelCompleted'}
             <LevelCompleted />
+        {:else if state === 'duelResults'}
+            <DuelResults />
         {:else if state === 'menuModal'}
             <Modal>
                 <h3>Do you really want to go back to menu?</h3>

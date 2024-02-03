@@ -7,24 +7,24 @@
         modalNoCallback,
         modalYesCallback,
         totalScore,
-    } from '../stores'
-    import Button from './Button.svelte'
+    } from '../../stores'
+    import Button from '../Components/Button.svelte'
     import {
         getLevel,
         resetLevel,
         resetTotalScore,
-    } from '../../actions/localStorage'
+    } from '../../../actions/localStorage'
     import {
         generateGame,
         getGameParams,
         resetGame,
         resetView,
-    } from '../../actions/game'
+    } from '../../../actions/game'
     import anime from 'animejs'
-    import { Timer } from "easytimer.js";
-    import type { LobbyItem } from '../../actions/types'
-    import { triggerFinnishLevel } from '../../actions/roadDetector'
-    import { gameTimer } from '../../actions/helper'
+    import { Timer } from 'easytimer.js'
+    import type { LobbyItem } from '../../../actions/types'
+    import { triggerFinnishLevel } from '../../../actions/roadDetector'
+    import { gameTimer } from '../../../actions/helper'
 
     let totalScoreSaved: number
     let totalBestSaved: number
@@ -103,16 +103,29 @@
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
         })
-        seconds = (lobbyItem.game.gameOptions.timeLimit % 60).toString().padStart(2, '0')
-        minutes = Math.floor(lobbyItem.game.gameOptions.timeLimit / 60).toString().padStart(2, '0')
+        seconds = (lobbyItem.game.gameOptions.timeLimit % 60)
+            .toString()
+            .padStart(2, '0')
+        minutes = Math.floor(lobbyItem.game.gameOptions.timeLimit / 60)
+            .toString()
+            .padStart(2, '0')
 
         gameTimer.stop()
-        gameTimer.start({countdown: true, startValues: {seconds: lobbyItem.game.gameOptions.timeLimit}})
+        gameTimer.start({
+            countdown: true,
+            startValues: { seconds: lobbyItem.game.gameOptions.timeLimit },
+        })
 
         gameTimer.addEventListener('secondsUpdated', function (e) {
-            minutes = gameTimer.getTimeValues().minutes.toString().padStart(2, '0')
-            seconds = gameTimer.getTimeValues().seconds.toString().padStart(2, '0')
-            if(minutes === "00" && seconds === "00"){
+            minutes = gameTimer
+                .getTimeValues()
+                .minutes.toString()
+                .padStart(2, '0')
+            seconds = gameTimer
+                .getTimeValues()
+                .seconds.toString()
+                .padStart(2, '0')
+            if (minutes === '00' && seconds === '00') {
                 triggerFinnishLevel()
             }
         })
@@ -120,54 +133,72 @@
 </script>
 
 {#if lobbyItem}
-<div class="upper-menu">
-    <div class="time">
-        <img width="48" height="48" src="https://img.icons8.com/fluency/48/time--v1.png" alt="time--v1" class="time-icon"/>
-        <span id="minutes">{minutes}</span>:<span id="seconds">{seconds}</span>
-    </div>
-    <div class="level">
-        <img width="48" height="48" src="https://img.icons8.com/fluency/48/adventure.png" alt="adventure" class="map-icon"/>
-        <span>{`${lobbyItem.game.gameParams?.currentLevel}/${lobbyItem.game.gameOptions.levelsPerGame}`}</span>
-    </div>
-</div>
-<div class="card game-menu">
-    <button id="game-menu-toggle" on:click={toggleGameMenu}>
-        <img
-            id="double-arrow"
-            width="64"
-            height="64"
-            src="https://img.icons8.com/pastel-glyph/64/double-up.png"
-            alt="double-up"
-        />
-    </button>
-    <header>
-        <h3>{`Level - ${lobbyItem.game.gameParams?.currentLevel}/${lobbyItem.game.gameOptions.levelsPerGame}`}</h3>
-    </header>
-    <body>
-        <h3>Overall Statistics</h3>
-        <section class="statistics">
-            <div class="total-score">
-                <div>Current Score:</div>
-                <div class="score-value">{totalScoreSaved}</div>
-            </div>
-            <span class="separator"></span>
-            <div class="total-score">
-                <div>Best Score:</div>
-                <div class="score-value">{totalBestSaved}</div>
-            </div>
-        </section>
-    </body>
-    <footer>
-        <div class="button-wrapper">
-            <Button text="Leave" class="btn-primary" on:onClick={goToLogin}
-            ></Button>
+    <div class="upper-menu">
+        <div class="time">
+            <img
+                width="48"
+                height="48"
+                src="https://img.icons8.com/fluency/48/time--v1.png"
+                alt="time--v1"
+                class="time-icon"
+            />
+            <span id="minutes">{minutes}</span>:<span id="seconds"
+                >{seconds}</span
+            >
         </div>
-        <div class="button-wrapper">
-            <Button text="Skip" class="btn-primary" on:onClick={runNewGame}
-            ></Button>
+        <div class="level">
+            <img
+                width="48"
+                height="48"
+                src="https://img.icons8.com/fluency/48/adventure.png"
+                alt="adventure"
+                class="map-icon"
+            />
+            <span
+                >{`${lobbyItem.game.gameParams?.currentLevel}/${lobbyItem.game.gameOptions.levelsPerGame}`}</span
+            >
         </div>
-    </footer>
-</div>
+    </div>
+    <div class="card game-menu">
+        <button id="game-menu-toggle" on:click={toggleGameMenu}>
+            <img
+                id="double-arrow"
+                width="64"
+                height="64"
+                src="https://img.icons8.com/pastel-glyph/64/double-up.png"
+                alt="double-up"
+            />
+        </button>
+        <header>
+            <h3>
+                {`Level - ${lobbyItem.game.gameParams?.currentLevel}/${lobbyItem.game.gameOptions.levelsPerGame}`}
+            </h3>
+        </header>
+        <body>
+            <h3>Overall Statistics</h3>
+            <section class="statistics">
+                <div class="total-score">
+                    <div>Current Score:</div>
+                    <div class="score-value">{totalScoreSaved}</div>
+                </div>
+                <span class="separator"></span>
+                <div class="total-score">
+                    <div>Best Score:</div>
+                    <div class="score-value">{totalBestSaved}</div>
+                </div>
+            </section>
+        </body>
+        <footer>
+            <div class="button-wrapper">
+                <Button text="Leave" class="btn-primary" on:onClick={goToLogin}
+                ></Button>
+            </div>
+            <div class="button-wrapper">
+                <Button text="Skip" class="btn-primary" on:onClick={runNewGame}
+                ></Button>
+            </div>
+        </footer>
+    </div>
 {/if}
 
 <style>
@@ -240,7 +271,7 @@
         top: 0;
         left: 50%;
         transform: translate(-50%, 0);
-       
+
         z-index: 10;
         width: auto;
         display: flex;
@@ -266,11 +297,11 @@
     .time {
         width: min(120px, 28vw);
     }
-    .time-icon{
+    .time-icon {
         width: min(30px, 7vw);
         height: min(30px, 7vw);
     }
-    .map-icon{
+    .map-icon {
         width: min(30px, 7vw);
         height: min(30px, 7vw);
     }

@@ -1,11 +1,11 @@
 <script>
     import { getPlayerName } from '../../../actions/localStorage'
     import { joinLobby } from '../../../actions/socket'
-    import BackButton from '../BackButton.svelte'
-    import Button from '../Button.svelte'
-    import Card from '../Card.svelte'
-    import Input from '../Input.svelte'
-    import MenuContainer from './MenuContainer.svelte'
+    import BackButton from '../Components/BackButton.svelte'
+    import Button from '../Components/Button.svelte'
+    import Card from '../Components/Card.svelte'
+    import Input from '../Components/Input.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
 
     let valName = ''
     const joinGame = () => {

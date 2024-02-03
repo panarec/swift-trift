@@ -7,13 +7,13 @@
         getGameParams,
         loadingNextGame,
     } from '../../../actions/game'
-    import MenuCard from './MenuCard.svelte'
-    import MenuContainer from './MenuContainer.svelte'
-    import MenuHeader from './MenuHeader.svelte'
-    import { menuState } from '../../stores'
+    import MenuCard from '../Components/MenuCard.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import MenuHeader from '../Components/MenuHeader.svelte'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import BackButton from '../BackButton.svelte'
+    import BackButton from '../Components/BackButton.svelte'
+    import { menuState } from '../../stores'
     let inAnimation: anime.AnimeInstance
     let clientWidth: number = document.body.clientWidth
     let iconsWidth: number = 70

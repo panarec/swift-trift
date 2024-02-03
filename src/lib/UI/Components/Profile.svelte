@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { bestScore } from '../stores'
+    import { bestScore } from '../../stores'
 
     export let totalScore: number = 0
     let bestTotalScore: number = 0

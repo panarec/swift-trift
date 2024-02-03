@@ -49,45 +49,55 @@ export const createSocketConnection = async () => {
         menuState.set('loadingGame')
     })
 }
+export const createLobby = async (playerName: string) => {
+    if (!socket) await createSocketConnection()
+
+    const createLobbyCallback = (lobbyItem: LobbyItem) => {
+        menuState.set('duelLobby')
+        lobby.set(lobbyItem)
+    }
+
+    socket.emit('create-lobby', playerName, createLobbyCallback)
+}
 
 export const joinLobby = async (lobbyNumber: string, playerName: string) => {
-    sessionStorage.setItem('lobbyNumber', lobbyNumber)
-
     if (!socket) await createSocketConnection()
 
     const joinLobbyCallback = (lobbyItem: LobbyItem) => {
-        menuState.set('duelRoom')
-        lobby.set(lobbyItem)
+        if (lobbyItem) {
+            sessionStorage.setItem('lobbyNumber', lobbyNumber)
+            menuState.set('duelLobby')
+            lobby.set(lobbyItem)
+            return
+        } 
+        alert(`Lobby ${lobbyNumber} does not exist`)
     }
 
     socket.emit('join-lobby', lobbyNumber, playerName, joinLobbyCallback)
 }
 
-export const leaveLobby = async () => {
-    socket.emit('leave-lobby', () => {
+export const leaveLobby = async (lobbyNumber: string) => {
+    socket.emit('leave-lobby', lobbyNumber, () => {
+        sessionStorage.removeItem('lobbyNumber')
         menuState.set('duelMenu')
     })
 }
 
-export const readyUp = async (playerStatus: boolean) => {
-    const options = {
-        levelsPerGame: 2,
-        timeLimit: 60,
-    }
-
-    const gameReadyCallback = (lobbyItem: LobbyItem) => {
-        lobby.set(lobbyItem)
-        return lobbyItem
-    }
-
-    socket.emit('game-ready', playerStatus, options, gameReadyCallback)
+export const readyUp = async (playerStatus: boolean, lobbyNumber: string) => {
+    socket.emit('game-ready', playerStatus, lobbyNumber)
 }
 
-export const finnishLevel = async (routeCoordinates: [number, number][]) => {
-    socket.emit('finnish-level', routeCoordinates)
+export const finnishLevel = async (
+    lobbyNumber: string,
+    routeCoordinates: [number, number][],
+    time: number
+) => {
+    socket.emit('finnish-level', lobbyNumber, routeCoordinates, time)
 }
 
-export const changeLobbySettings = async (lobbySettings: GameOptions) => {
-    console.log(lobbySettings)
-    socket.emit('change-lobby-options', lobbySettings)
+export const changeLobbySettings = async (
+    lobbyNumber: string,
+    lobbySettings: GameOptions
+) => {
+    socket.emit('change-lobby-options', lobbyNumber, lobbySettings)
 }

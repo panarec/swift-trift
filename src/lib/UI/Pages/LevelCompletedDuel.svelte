@@ -1,28 +1,25 @@
 <script lang="ts">
-    import MenuContainer from './Menus/MenuContainer.svelte'
-    import RedMarkerIcon from './Icons/RedMarkerIcon.svelte'
-    import GreenMarkerIcon from './Icons/GreenMarkerIcon.svelte'
-    import {
-        resetGame,
-        resetView,
-    } from '../../actions/game'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import RedMarkerIcon from '../Icons/RedMarkerIcon.svelte'
+    import GreenMarkerIcon from '../Icons/GreenMarkerIcon.svelte'
+    import { resetGame, resetView } from '../../../actions/game'
     import {
         bestScore,
         correctRouteDistance,
-        menuState,
         userRouteDistance,
         totalScore,
         modalNoCallback,
         modalYesCallback,
         lobby,
-    } from '../stores'
+        menuState,
+    } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
-    import CardButton from './CardButton.svelte'
-    import type { LobbyItem } from '../../actions/types'
-    import PlayerCard from './PlayerCard.svelte'
-    import { leaveLobby, readyUp } from '../../actions/socket'
-    import { lobbyTimer } from '../../actions/helper'
+    import CardButton from '../Components/CardButton.svelte'
+    import type { LobbyItem } from '../../../actions/types'
+    import PlayerCard from '../Components/PlayerCard.svelte'
+    import { leaveLobby, readyUp } from '../../../actions/socket'
+    import { lobbyTimer } from '../../../actions/helper'
 
     let userDistance: number
     let correctDistance: number
@@ -55,19 +52,23 @@
         promises.push(resetView())
         await Promise.allSettled(promises)
     }
+    const showResults = () => {
+        menuState.set('duelResults')
+    }
 
     const leaveGame = async () => {
-        await leaveLobby()
+        await leaveLobby(lobbyItem.lobbyNumber)
     }
 
     const changeReady = async () => {
-        await readyUp(!ready)
+        await readyUp(!ready, lobbyItem.lobbyNumber)
         ready = !ready
     }
 
     onMount(() => {
-
-
+        lobby.subscribe((lobby) => {
+            lobbyItem = lobby
+        })
         clientWidth = document.body.clientWidth
         if (clientWidth < 425) {
             iconSize = 25
@@ -79,19 +80,23 @@
             iconSize = 50
         }
 
-        
-
-        lobbyTimer.start({countdown: true, startValues: {seconds: lobbyTime}})
-        lobbyTimer.addEventListener('secondsUpdated', () => {
+        lobbyTimer.start({
+            countdown: true,
+            startValues: { seconds: lobbyTime },
+        })
+        if( lobbyItem && lobbyItem.game.gameParams?.currentLevel !== lobbyItem.game.gameOptions?.levelsPerGame) {
+            lobbyTimer.addEventListener('secondsUpdated', () => {
             timerValue = lobbyTimer.getTimeValues().seconds.toString()
-            if(+timerValue === 0){
+            if (+timerValue === 0) {
                 lobbyTimer.stop()
-                if(ready) return
+                if (ready) return
                 ready = true
                 readyButtonDisabled = true
-                readyUp(ready)
+                readyUp(ready, lobbyItem.lobbyNumber)
             }
         })
+        }
+       
 
         if (clientWidth < 1000) {
             const resultsTable = document.querySelector(
@@ -196,10 +201,7 @@
         })
         levelSuccessful = userDistance === correctDistance
 
-        lobby.subscribe((lobby) => {
-            lobbyItem = lobby
-        })
-
+      
 
         const resultsTable = document.querySelector(
             '.results-table'
@@ -269,18 +271,33 @@
             </body>
         </div>
         <footer>
-            <CardButton class="btn-secondary" on:click={leaveGame}>
-                Leave
-            </CardButton>
+            {#if lobbyItem && lobbyItem.game.gameParams?.currentLevel !== lobbyItem.game.gameOptions?.levelsPerGame}
+                <CardButton class="btn-secondary" on:click={leaveGame}>
+                    Leave
+                </CardButton>
+
                 {#if ready}
-                    <CardButton class="btn-disabled" disabled={readyButtonDisabled} on:click={changeReady}>
+                    <CardButton
+                        class="btn-disabled"
+                        disabled={readyButtonDisabled}
+                        on:click={changeReady}
+                    >
                         Not ready
                     </CardButton>
                 {:else}
-                    <CardButton class="btn-primary" disabled={readyButtonDisabled} on:click={changeReady}>
+                    <CardButton
+                        class="btn-primary"
+                        disabled={readyButtonDisabled}
+                        on:click={changeReady}
+                    >
                         Ready in {timerValue}
                     </CardButton>
                 {/if}
+            {:else}
+                <CardButton class="btn-primary" on:click={showResults}>
+                    Results
+                </CardButton>
+            {/if}
         </footer>
     </body>
     <div class="results-table">
@@ -293,6 +310,8 @@
                     score={player.score}
                     playerStatus={player.ready}
                     playerColor={player.color}
+                    lastLevelScore={player.lastLevelscore}
+                    lastLevelTime={player.lastLevelTime}
                 />
             {/each}
         {/if}

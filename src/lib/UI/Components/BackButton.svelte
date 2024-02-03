@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import BackArrowIcon from './Icons/BackArrowIcon.svelte'
-    import { menuState } from '../stores'
+    import BackArrowIcon from '../Icons/BackArrowIcon.svelte'
     import anime from 'animejs'
+    import { menuState } from '../../stores'
     let inAnimation: anime.AnimeInstance
 
     /**

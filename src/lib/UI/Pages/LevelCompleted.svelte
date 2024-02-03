@@ -1,31 +1,31 @@
 <script lang="ts">
-    import MenuContainer from './Menus/MenuContainer.svelte'
-    import RedMarkerIcon from './Icons/RedMarkerIcon.svelte'
-    import GreenMarkerIcon from './Icons/GreenMarkerIcon.svelte'
-    import Button from './Button.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import RedMarkerIcon from '../Icons/RedMarkerIcon.svelte'
+    import GreenMarkerIcon from '../Icons/GreenMarkerIcon.svelte'
+    import Button from '../Components/Button.svelte'
     import {
         generateGame,
         getGameParams,
         resetGame,
         resetView,
-    } from '../../actions/game'
+    } from '../../../actions/game'
     import {
         bestScore,
         correctRouteDistance,
-        menuState,
         userRouteDistance,
         totalScore,
         modalNoCallback,
         modalYesCallback,
-    } from '../stores'
+        menuState,
+    } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
     import {
         increaseLevel,
         resetLevel,
         resetTotalScore,
-    } from '../../actions/localStorage'
-    import CardButton from './CardButton.svelte'
+    } from '../../../actions/localStorage'
+    import CardButton from '../Components/CardButton.svelte'
     let inAnimation: anime.AnimeInstance
 
     let userDistance: number

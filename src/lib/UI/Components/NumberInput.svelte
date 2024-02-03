@@ -7,11 +7,12 @@
     export let maxValue: number = 999
     export let minValue: number = 0
     export let step: number = 1
-    let buttons: HTMLElement[] = [] 
+    let buttons: HTMLElement[] = []
 
     const dispatch = createEventDispatcher()
 
-    const input = (event: any) => dispatch('input', event.target.value, {cancelable: true})
+    const input = (event: any) =>
+        dispatch('input', event.target.value, { cancelable: true })
 
     onMount(() => {
         buttons = Array.from(document.querySelectorAll('button'))
@@ -31,44 +32,36 @@
     const up = () => {
         if (value < maxValue) {
             value = +value + step
-            input({target: {value}})
+            input({ target: { value } })
         }
     }
 
     const down = () => {
         if (value > minValue) {
             value = +value - step
-            input({target: {value}})
+            input({ target: { value } })
         }
     }
-
 </script>
 
 <div class="input-container">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <button on:click={down} >
-        <span class="material-symbols-outlined">
-            remove
-            </span>
+    <button on:click={down}>
+        <span class="material-symbols-outlined"> remove </span>
     </button>
     <input
-    type="text"
-    {placeholder}
-    bind:value
-    on:input={input}
-    max={maxValue}
-    maxlength={maxValue.toString().length}
-    minlength={minValue.toString().length}
-    min={minValue}
-/>
+        type="text"
+        {placeholder}
+        bind:value
+        on:input={input}
+        max={maxValue}
+        maxlength={maxValue.toString().length}
+        minlength={minValue.toString().length}
+        min={minValue}
+    />
     <button on:click={up}>
-        <span class="material-symbols-outlined">
-            add
-            </span>
-    </button>  
-  </div>
-
+        <span class="material-symbols-outlined"> add </span>
+    </button>
+</div>
 
 <style>
     .input-container {
@@ -78,12 +71,12 @@
         gap: 5px;
         margin-block: 0.5rem;
     }
-    button{
+    button {
         border-radius: 5px;
         border: none;
         background-color: #ffcb13;
         color: #3b3b3b;
-        font-size: min(1.5rem,  5vw);
+        font-size: min(1.5rem, 5vw);
         font-weight: 500;
         cursor: pointer;
         padding: 0;
@@ -120,5 +113,4 @@
         font-size: min(1.5rem, 5vw);
         font-weight: 900;
     }
-
 </style>

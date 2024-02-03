@@ -11,7 +11,11 @@
     export { clazz as class }
 </script>
 
-<button class={`card card-hover cursor-pointer ${clazz}`} disabled={disabled} on:click={onClick}>
+<button
+    class={`card card-hover cursor-pointer ${clazz}`}
+    {disabled}
+    on:click={onClick}
+>
     <slot />
 </button>
 

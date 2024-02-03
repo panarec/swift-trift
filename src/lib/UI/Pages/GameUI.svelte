@@ -6,24 +6,24 @@
         modalNoCallback,
         modalYesCallback,
         totalScore,
-    } from '../stores'
-    import Button from './Button.svelte'
+    } from '../../stores'
+    import Button from '../Components/Button.svelte'
     import {
         getLevel,
         resetLevel,
         resetTotalScore,
-    } from '../../actions/localStorage'
+    } from '../../../actions/localStorage'
     import {
         generateGame,
         getGameParams,
         loadingNextGame,
         resetGame,
         resetView,
-    } from '../../actions/game'
+    } from '../../../actions/game'
     import anime from 'animejs'
-    import { Timer } from "easytimer.js";
+    import { Timer } from 'easytimer.js'
 
-    const timer = new Timer();
+    const timer = new Timer()
 
     let totalScoreSaved: number
     let totalBestSaved: number

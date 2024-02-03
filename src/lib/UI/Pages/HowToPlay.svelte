@@ -1,14 +1,12 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { generateGame, loadingNextGame } from '../../actions/game'
-    import { menuState } from '../stores'
-    import Button from './Button.svelte'
-    import Card from './Card.svelte'
-    import MenuCard from './Menus/MenuCard.svelte'
-    import MenuContainer from './Menus/MenuContainer.svelte'
-    import MenuHeader from './Menus/MenuHeader.svelte'
+    import { generateGame, loadingNextGame } from '../../../actions/game'
+    import Card from '../Components/Card.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
+    import MenuHeader from '../Components/MenuHeader.svelte'
     import anime from 'animejs'
-    import CardButton from './CardButton.svelte'
+    import CardButton from '../Components/CardButton.svelte'
+    import { menuState } from '../../stores'
     let inAnimation: anime.AnimeInstance
     let button: string | object | HTMLElement | SVGElement | NodeList | null
 

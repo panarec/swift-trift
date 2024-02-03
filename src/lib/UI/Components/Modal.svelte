@@ -3,10 +3,9 @@
     import anime from 'animejs'
     import Button from './Button.svelte'
     import Card from './Card.svelte'
-    import { menuState, modalNoCallback, modalYesCallback } from '../stores'
-    import { resetGame, resetView } from '../../actions/game'
-    import MenuContainer from './Menus/MenuContainer.svelte'
-    menuState
+    import { menuState, modalNoCallback, modalYesCallback } from '../../stores'
+    import { resetGame, resetView } from '../../../actions/game'
+    import MenuContainer from './MenuContainer.svelte'
     let inAnimation: anime.AnimeInstance
     let yesCallback: () => void
     let noCallback: () => void

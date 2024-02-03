@@ -95,7 +95,9 @@ body {
     -webkit-animation-iteration-count: infinite;
     opacity: 0;
 }
-
+.row-span-2 {
+    grid-row: span 2;
+}
 .col-span-2 {
     grid-column: span 2;
 }

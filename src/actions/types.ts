@@ -64,30 +64,27 @@ export type RoadElement = {
     tags: any
     type: string
 }
-export type PlayerItem = {
-    playerName: string
-    socketId: string
-    ready: boolean
-    score: number
-    color: string
-}
 
 export type LobbyItem = {
     lobbyNumber: string
-    players: {
-        playerName: string
-        socketId: string
-        ready: boolean
-        score: number
-        color: string
-        finished: boolean
-        routeCoordinates: number[][]
-        distance: number
-    }[]
+    players: PlayerItem[]
     game: {
         gameParams: GameParams | null
         gameOptions: GameOptions
     }
+}
+export type PlayerItem = {
+    playerName: string
+    socketId: string
+    ready: boolean
+    totalTime: number
+    score: number
+    color: string
+    finished: boolean
+    routeCoordinates: number[][]
+    distance: number
+    lastLevelscore: number
+    lastLevelTime: number
 }
 
 export type GameOptions = {

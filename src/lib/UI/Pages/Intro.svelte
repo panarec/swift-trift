@@ -1,12 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { menuState } from '../stores'
     import { fade, fly, scale } from 'svelte/transition'
-    import Button from './Button.svelte'
-    import MenuContainer from './Menus/MenuContainer.svelte'
+    import Button from '../Components/Button.svelte'
+    import MenuContainer from '../Components/MenuContainer.svelte'
     import anime from 'animejs'
-    import MapIcon from './Icons/MapIcon.svelte'
-    menuState
+    import MapIcon from '../Icons/MapIcon.svelte'
+    import { menuState } from '../../stores'
 
     let inAnimation: anime.AnimeInstance
 
