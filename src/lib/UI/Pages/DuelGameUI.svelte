@@ -25,6 +25,7 @@
     import type { LobbyItem } from '../../../actions/types'
     import { triggerFinnishLevel } from '../../../actions/roadDetector'
     import { gameTimer } from '../../../actions/helper'
+    import { leaveLobby } from '../../../actions/socket'
 
     let totalScoreSaved: number
     let totalBestSaved: number
@@ -37,6 +38,7 @@
         modalNoCallback.set(() => menuState.set('gameUI'))
         modalYesCallback.set(() => {
             menuState.set('login')
+            leaveLobby(lobbyItem.lobbyNumber)
             let promises: Promise<void>[] = []
             promises.push(resetGame())
             promises.push(resetView())
@@ -126,6 +128,7 @@
                 .seconds.toString()
                 .padStart(2, '0')
             if (minutes === '00' && seconds === '00') {
+                console.log('Time is up')
                 triggerFinnishLevel()
             }
         })

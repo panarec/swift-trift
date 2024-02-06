@@ -236,3 +236,26 @@ body {
 .gap-0 {
     gap: 0px !important;
 }
+
+.tooltip {
+    position: relative;
+    overflow: visible;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgb(77, 77, 77);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 0.75rem;
+    z-index: 1;
+    position: absolute;
+    transition: all 0.2s ease;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

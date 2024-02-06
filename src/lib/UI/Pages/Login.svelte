@@ -22,15 +22,15 @@
     }
 
     onMount(() => {
+     
         const container = document.querySelector('.container') as HTMLElement
         container.style.minHeight = '100vh'
         const card = document.querySelector('.card')
         inAnimation = anime({
             targets: [card],
-            height: ['0%', '100%'],
+            scale: [0, 1],
             autoplay: false,
-            easing: 'easeOutQuint',
-            duration: 500,
+            duration: 750,
         })
         inAnimation.play()
         resetTotalScore()

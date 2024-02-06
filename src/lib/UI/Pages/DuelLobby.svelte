@@ -14,18 +14,26 @@
     import NumberInput from '../Components/NumberInput.svelte'
     import ClipboardCopyButton from '../Components/ClipboardCopyButton.svelte'
     import ButtonGroup from '../Components/ButtonGroup.svelte'
+    import HowToPlay from './HowToPlay.svelte'
     let inAnimation: anime.AnimeInstance
     let lobbyNumber: string | null
     let lobbyItem: LobbyItem
     let ready: boolean = false
     let body: HTMLElement
     let difficultyValue: string
+    let outerBody: HTMLElement
 
     onMount(() => {
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
         })
-        console.log(lobbyItem)
+        if (!outerBody) return
+        anime({
+            targets: [outerBody],
+            scale: [0, 1],
+            autoplay: true,
+            duration: 750,
+        })
     })
 
     const leaveGame = async () => {
@@ -58,7 +66,7 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
         />
-        <div class="outer-body">
+        <div class="outer-body" bind:this={outerBody}>
             <div class="card">
                 <header>
                     <h2>
@@ -140,8 +148,11 @@
                     Not ready
                 </CardButton>
             {:else}
-                <CardButton class="btn-primary" on:click={changeReady}>
+                <CardButton class={lobbyItem.players.length < 2 ? "btn-disabled tooltip" : "btn-primary"} on:click={changeReady} disabled={lobbyItem.players.length < 2}>
                     Ready
+                    {#if lobbyItem.players.length < 2}
+                        <span class="tooltiptext">You must be at least 2 players to start</span>
+                    {/if}
                 </CardButton>
             {/if}
         </footer>

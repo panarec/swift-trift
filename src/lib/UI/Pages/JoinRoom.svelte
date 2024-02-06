@@ -8,8 +8,8 @@
     import MenuContainer from '../Components/MenuContainer.svelte'
 
     let valName = ''
-    const joinGame = () => {
-        joinLobby(valName, getPlayerName())
+    const joinGame = async () => {
+        await joinLobby(valName, getPlayerName())
     }
 </script>
 

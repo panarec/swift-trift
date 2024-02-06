@@ -1,5 +1,7 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte'
+    import { createEventDispatcher, onMount } from 'svelte'
+    import anime from 'animejs'
+    let inAnimation: anime.AnimeInstance
 
     const dispatch = createEventDispatcher()
     function onClick() {
@@ -7,12 +9,24 @@
     }
 
     let clazz = ''
+    let button: HTMLButtonElement
     export let disabled: boolean = false
     export { clazz as class }
+
+    onMount(() => {
+        if (!button) return
+        anime({
+            targets: [button],
+            scale: [0, 1],
+            autoplay: true,
+            duration: 750,
+        })
+    })
 </script>
 
 <button
-    class={`card card-hover cursor-pointer ${clazz}`}
+    class={`card card-hover cursor-pointer ${clazz}`} 
+    bind:this={button}
     {disabled}
     on:click={onClick}
 >

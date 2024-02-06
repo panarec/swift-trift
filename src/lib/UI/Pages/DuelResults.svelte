@@ -28,6 +28,7 @@
                     player.totalTime ===
                     Math.min(...lobbyItem.players.map((player) => player.totalTime))
             ) as PlayerItem
+            console.log(bestScorePlayerItem, bestTimeScorePlayerItem)
         }
     })
 

@@ -172,8 +172,11 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
 
 export const triggerFinnishLevel = async () => {
     const lobbyNumber = sessionStorage.getItem('lobbyNumber')
-    const time = gameTimer.getTimeValues().toString()
-    gameTimer.stop()
+    const time = gameTimer.getTotalTimeValues().seconds
+    if (time > 0) {
+        gameTimer.stop()
+    }
+    console.log(time)
     // @ts-ignore
     finnishLevel(lobbyNumber, checkpoints, time)
 }
