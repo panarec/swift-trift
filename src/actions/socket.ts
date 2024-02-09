@@ -13,11 +13,7 @@ import { gameTimer, lobbyTimer } from './helper'
 let socket: Socket | undefined
 
 export const createSocketConnection = async () => {
-    socket = io(
-        import.meta.env.VITE_SERVER_WS_URL +
-            ':' +
-            import.meta.env.VITE_SERVER_WS_PORT
-    )
+    socket = io(import.meta.env.VITE_SERVER_WS_URL || process.env.VITE_SERVER_WS_URL)
     socket.onAny((event) => {
         console.log(event)
     })
