@@ -2,7 +2,10 @@ export const sendPostRequest = async (body: object, uri: string) => {
     const headers = {
         'Content-Type': 'application/json',
     }
-    const response = await fetch(import.meta.env.VITE_SERVER_HTTP_URL + uri, {
+    const url = import.meta.env.VITE_SERVER_HTTP_URL
+    const httpPort = import.meta.env.VITE_SERVER_HTTP_PORT
+
+    const response = await fetch(url + ':' + httpPort + uri, {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(body),
