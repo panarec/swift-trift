@@ -1,8 +1,15 @@
-FROM node as build
+FROM node:21-alpine3.18 as build
 WORKDIR /app
-COPY . /app
+
+
+RUN npm install -g npm@10.4.0
+
+COPY package.json .
 
 RUN npm install
+
+COPY . .
+
 RUN npm run build
 
 FROM ubuntu
