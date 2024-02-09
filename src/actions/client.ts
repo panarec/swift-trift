@@ -2,7 +2,7 @@ export const sendPostRequest = async (body: object, uri: string) => {
     const headers = {
         'Content-Type': 'application/json',
     }
-    const url = process.env.VITE_SERVER_HTTP_URL
+    const url = process.env.HTTP_URL
 
     const response = await fetch(url + uri, {
         method: 'POST',
