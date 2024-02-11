@@ -2,7 +2,7 @@ export const sendPostRequest = async (body: object, uri: string) => {
     const headers = {
         'Content-Type': 'application/json',
     }
-    const url = process.env.HTTP_URL
+    const url = "http://mapbox-svelte-server-test.up.railway.app:3000"
 
     const response = await fetch(url + uri, {
         method: 'POST',
