@@ -90,6 +90,6 @@ export type PlayerItem = {
 export type GameOptions = {
     timeLimit: number
     levelsPerGame: number
-    difficulty: 'veryEasy' | 'easy' | 'normal' | 'hard' | 'extreme'
+    difficulty: 1 | 2 | 3 | 4 | 5
     gameStarted: boolean
 }

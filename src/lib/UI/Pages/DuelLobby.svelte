@@ -45,6 +45,22 @@
         ready = !ready
     }
 
+    const changeLevelsCount = (event: CustomEvent<any>) => {
+        if(event.detail !== lobbyItem.game.gameOptions.levelsPerGame) {
+        changeLobbySettings(lobbyItem.lobbyNumber ,{
+            ...lobbyItem.game.gameOptions,
+            levelsPerGame: event.detail,
+        })
+    }}
+
+    const changeLevelTime = (event: CustomEvent<any>) =>{
+        if(event.detail !== lobbyItem.game.gameOptions.timeLimit) {
+            changeLobbySettings(lobbyItem.lobbyNumber, {
+            ...lobbyItem.game.gameOptions,
+            timeLimit: event.detail,
+        })
+    }}
+
     $: {
         if (body && lobbyItem) {
             if (lobbyItem.players.length >= 4) {
@@ -83,11 +99,7 @@
                                     minValue={0}
                                     value={lobbyItem.game.gameOptions
                                         .levelsPerGame}
-                                    on:input={(event) =>
-                                        changeLobbySettings(lobbyItem.lobbyNumber ,{
-                                            ...lobbyItem.game.gameOptions,
-                                            levelsPerGame: event.detail,
-                                        })}
+                                    on:input={changeLevelsCount}
                                 />
                             </div>
                         </div>
@@ -98,11 +110,7 @@
                                     maxValue={999}
                                     minValue={0}
                                     value={lobbyItem.game.gameOptions.timeLimit}
-                                    on:input={(event) =>
-                                        changeLobbySettings(lobbyItem.lobbyNumber, {
-                                            ...lobbyItem.game.gameOptions,
-                                            timeLimit: event.detail,
-                                        })}
+                                    on:input={changeLevelTime}
                                     step={5}
                                 />
                             </div>
@@ -114,7 +122,7 @@
                                     userSelected={lobbyItem.game.gameOptions
                                         .difficulty}
                                     on:change={(event) =>
-                                        changeLobbySettings(lobbyItem.lobbyNumber, {
+                                            changeLobbySettings(lobbyItem.lobbyNumber, {
                                             ...lobbyItem.game.gameOptions,
                                             difficulty: event.detail,
                                         })}

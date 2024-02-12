@@ -13,7 +13,7 @@ import { gameTimer, lobbyTimer } from './helper'
 let socket: Socket | undefined
 
 export const createSocketConnection = async () => {
-    socket = io(process.env.WS_URL as string)
+    socket = io(import.meta.env.VITE_SERVER_WS_URL as string)
     socket.onAny((event) => {
         console.log(event)
     })
@@ -120,7 +120,6 @@ export const finnishLevel = async (
     routeCoordinates: [number, number][],
     time: number
 ) => {
-    console.log(socket)
     if (!socket) return
     socket.emit('finnish-level', lobbyNumber, routeCoordinates, time)
 }

@@ -1,26 +1,26 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from 'svelte'
+    import { map } from 'lodash'
 
-    export let userSelected: string
+    export let userSelected: number
 
-    const difficultyColors: { [key: string]: string } = {
-        veryEasy: '#3bc007',
-        easy: '#aaf32b',
-        normal: '#f5bb0ccf',
-        hard: '#f5710ccf',
-        extreme: '#f5140ccf',
-    }
+
+    const difficultyColors: Map<number, string> = new Map()
+    
+    difficultyColors.set(1, '#3bc007')
+    difficultyColors.set(2, '#aaf32b')
+    difficultyColors.set(3, '#f5bb0ccf')
+    difficultyColors.set(4, '#f5710ccf')
+    difficultyColors.set(5, '#f5140ccf')
 
     const dispatch = createEventDispatcher()
     const change = (event: any) =>
-        dispatch('change', event.target.value, { cancelable: true })
+            dispatch('change', event.target.value, { cancelable: true })
 
     onMount(() => {
         const labels = document.querySelectorAll('label')
         if (userSelected && labels) {
-            labels[
-                Object.keys(difficultyColors).indexOf(userSelected)
-            ].style.background = difficultyColors[userSelected]
+            labels[userSelected - 1].style.background = difficultyColors.get(+userSelected) ?? ''
         }
     })
 
@@ -30,9 +30,7 @@
             labels.forEach((label) => {
                 label.style.background = 'transparent'
             })
-            labels[
-                Object.keys(difficultyColors).indexOf(userSelected)
-            ].style.background = difficultyColors[userSelected]
+            labels[userSelected - 1].style.background = difficultyColors.get(+userSelected) ?? ''
         }
     }
 </script>
@@ -43,7 +41,7 @@
         type="radio"
         id="option-one"
         name="selector"
-        value="veryEasy"
+        value=1
         on:change={change}
     />
     <label for="option-one">1</label>
@@ -52,7 +50,7 @@
         type="radio"
         id="option-two"
         name="selector"
-        value="easy"
+        value=2
         on:change={change}
     />
     <label for="option-two">2</label>
@@ -61,7 +59,7 @@
         type="radio"
         id="option-three"
         name="selector"
-        value="normal"
+        value=3
         on:change={change}
     />
     <label for="option-three">3</label>
@@ -70,7 +68,7 @@
         type="radio"
         id="option-four"
         name="selector"
-        value="hard"
+        value=4
         on:change={change}
     />
     <label for="option-four">4</label>
@@ -79,7 +77,7 @@
         type="radio"
         id="option-five"
         name="selector"
-        value="extreme"
+        value=5
         on:change={change}
     />
     <label for="option-five">5</label>
