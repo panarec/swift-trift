@@ -13,12 +13,10 @@ import {
 import { carMarker, finnishMarker, startMarker } from './marker'
 import {
     bestDuelScore,
-    bestSoloScore,
     correctRouteDistance,
     lobby,
     menuState,
     totalDuelScore,
-    totalSoloScore,
     userRouteDistance,
 } from '../lib/stores'
 import {
@@ -27,6 +25,7 @@ import {
     getLevel,
     getPlayerName,
     getTotalDuelScore,
+    increaseDuelGamesPlayed,
     saveBestDuelScore,
 } from './localStorage'
 import { getGame } from './services'
@@ -178,6 +177,7 @@ export const duelGameFinnished = async (
     currentLobby: LobbyItem
 ) => {
     lobby.set(currentLobby)
+    increaseDuelGamesPlayed()
     const player = currentLobby.players.find(
         (player) => player.playerName === getPlayerName()
     )

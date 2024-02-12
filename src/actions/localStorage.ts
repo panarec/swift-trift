@@ -67,16 +67,52 @@ export const getBestDuelScore = () => {
     else return 0
 }
 
+export const getSoloBestLevel = () => {
+    const bestLevel = localStorage.getItem('bestLevel')
+    if (bestLevel) return +bestLevel
+    else return 0
+}
+
+export const saveBestLevel = (level: number) => {
+    localStorage.setItem('bestLevel', level.toString())
+}
+
 export const increaseLevel = () => {
     const currentLevel = localStorage.getItem('level')
+    const bestLevel = localStorage.getItem('bestLevel')
     if (currentLevel) {
         localStorage.setItem(
             'level',
             (parseInt(currentLevel, 10) + 1).toString()
         )
+        if (bestLevel && parseInt(bestLevel, 10) < parseInt(currentLevel, 10)) {
+            saveBestLevel(parseInt(currentLevel, 10))
+        }
     } else {
         localStorage.setItem('level', '1')
     }
+}
+
+export const getSoloGamesPlayed = () => {
+    const gamesPlayed = localStorage.getItem('soloGamesPlayed')
+    if (gamesPlayed) return +gamesPlayed
+    else return 0
+}
+
+export const increaseSoloGamesPlayed = () => {
+    const gamesPlayed = getSoloGamesPlayed()
+    localStorage.setItem('soloGamesPlayed', (gamesPlayed + 1).toString())
+}
+
+export const getDuelGamesPlayed = () => {
+    const gamesPlayed = localStorage.getItem('duelGamesPlayed')
+    if (gamesPlayed) return +gamesPlayed
+    else return 0
+}
+
+export const increaseDuelGamesPlayed = () => {
+    const gamesPlayed = getDuelGamesPlayed()
+    localStorage.setItem('duelGamesPlayed', (gamesPlayed + 1).toString())
 }
 
 export const getLevel = () => {

@@ -22,12 +22,11 @@
     import anime from 'animejs'
     import {
         increaseLevel,
+        increaseSoloGamesPlayed,
         resetLevel,
         resetTotalSoloScore,
     } from '../../../actions/localStorage'
     import CardButton from '../Components/CardButton.svelte'
-    let inAnimation: anime.AnimeInstance
-
     let userDistance: number
     let correctDistance: number
     let levelSuccessful: boolean
@@ -55,6 +54,7 @@
     }
 
     function runNextGame() {
+        increaseSoloGamesPlayed()
         increaseLevel()
         getGame()
     }
@@ -88,7 +88,6 @@
         const mapContainer = document.querySelector('#map') as HTMLElement
         const container = document.querySelector('.container') as HTMLElement
         const menuPull = document.querySelector('.menu-pull') as HTMLElement
-        const appBody = document.querySelector('#app-body') as HTMLElement
 
         backdrop.addEventListener('click', () => {
             mapContainer.style.pointerEvents = 'auto'
