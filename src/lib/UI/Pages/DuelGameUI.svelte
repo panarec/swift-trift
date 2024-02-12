@@ -1,22 +1,14 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import {
-        bestScore,
         lobby,
         menuState,
         modalNoCallback,
         modalYesCallback,
-        totalScore,
+        totalDuelScore,
     } from '../../stores'
     import Button from '../Components/Button.svelte'
     import {
-        getLevel,
-        resetLevel,
-        resetTotalScore,
-    } from '../../../actions/localStorage'
-    import {
-        generateGame,
-        getGameParams,
         resetGame,
         resetView,
     } from '../../../actions/game'
@@ -45,21 +37,6 @@
             Promise.allSettled(promises)
         })
         menuState.set('menuModal')
-    }
-
-    function runNewGame() {
-        modalNoCallback.set(() => menuState.set('gameUI'))
-        modalYesCallback.set(getNewGame)
-        menuState.set('newGameModal')
-    }
-
-    async function getNewGame() {
-        resetTotalScore()
-        resetLevel()
-        menuState.set('loadingGame')
-        const gameParams = await getGameParams()
-        generateGame(gameParams)
-        menuState.set('')
     }
 
     function toggleGameMenu() {
@@ -101,10 +78,9 @@
             lobbyItem = lobby
         })
         if (playerName && lobbyItem && lobbyItem.players.length > 0) {
-            currentScore =
-                lobbyItem.players.find(
-                    (player) => player.playerName === playerName
-                )?.score || 0
+            totalDuelScore.subscribe((totalDuelScore) => {
+                currentScore = totalDuelScore
+            })
             currentTime =
                 lobbyItem.players.find(
                     (player) => player.playerName === playerName
@@ -187,7 +163,7 @@
             <h3>Overall Statistics</h3>
             <section class="statistics">
                 <div class="total-score">
-                    <div>Score:</div>
+                    <div>Current Score:</div>
                     <div class="score-value">{currentScore}</div>
                 </div>
                 <span class="separator"></span>

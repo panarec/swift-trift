@@ -10,10 +10,10 @@
         resetView,
     } from '../../../actions/game'
     import {
-        bestScore,
+        bestSoloScore,
         correctRouteDistance,
         userRouteDistance,
-        totalScore,
+        totalSoloScore,
         modalNoCallback,
         modalYesCallback,
         menuState,
@@ -23,7 +23,7 @@
     import {
         increaseLevel,
         resetLevel,
-        resetTotalScore,
+        resetTotalSoloScore,
     } from '../../../actions/localStorage'
     import CardButton from '../Components/CardButton.svelte'
     let inAnimation: anime.AnimeInstance
@@ -61,7 +61,7 @@
 
     function runNewGame() {
         resetLevel()
-        resetTotalScore()
+        resetTotalSoloScore()
         getGame()
     }
 
@@ -159,11 +159,11 @@
         correctRouteDistance.subscribe((correctRouteDistance) => {
             correctDistance = correctRouteDistance
         })
-        totalScore.subscribe((totalScore) => {
-            totalScoreSaved = totalScore
+        totalSoloScore.subscribe((totalSoloScore) => {
+            totalScoreSaved = totalSoloScore
         })
-        bestScore.subscribe((bestScore) => {
-            totalBestSaved = bestScore
+        bestSoloScore.subscribe((bestSoloScore) => {
+            totalBestSaved = bestSoloScore
         })
         levelSuccessful = userDistance === correctDistance
     })

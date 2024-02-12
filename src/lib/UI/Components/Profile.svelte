@@ -1,11 +1,16 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { bestScore } from '../../stores'
+    import { bestDuelScore, bestSoloScore } from '../../stores'
+    import { tooltip } from '../../../actions/tooltip'
 
-    export let totalScore: number = 0
-    let bestTotalScore: number = 0
-    bestScore.subscribe((bestScore) => {
-        bestTotalScore = bestScore
+    let bestTotalSoloScore: number = 0
+    let bestTotalDuelScore: number = 0
+
+    bestSoloScore.subscribe((bestSoloScore) => {
+        bestTotalSoloScore = bestSoloScore
+    })
+    bestDuelScore.subscribe((bestDuelScore) => {
+        bestTotalDuelScore = bestDuelScore
     })
 
     export let nickname: string = 'Guest'
@@ -80,33 +85,25 @@
         <div class="details">
             <span class="divider"></span>
             <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-item-header">BS:</span>
-                    <span class="stat-item-content">{bestTotalScore}</span>
+                <div class="stat-item tooltip">
+                    <span class="stat-item-header" use:tooltip title="Solo Best Score">SBS:</span>
+                    <span class="stat-item-content">{bestTotalSoloScore}</span>
                 </div>
                 <div></div>
                 <div class="stat-item">
-                    <span class="stat-item-header">NLV:</span>
-                    <span class="stat-item-content">{999999}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-item-header">NLV:</span>
+                    <span class="stat-item-header" use:tooltip title="Solo Best Level" >SBL:</span>
                     <span class="stat-item-content">{999999}</span>
                 </div>
             </div>
             <span class="divider"></span>
             <div class="stats">
                 <div class="stat-item">
-                    <span class="stat-item-header">R:</span>
-                    <span class="stat-item-content">{999999}</span>
+                    <span class="stat-item-header" use:tooltip title="Duel Best Score">DBS:</span>
+                    <span class="stat-item-content">{bestTotalDuelScore}</span>
                 </div>
                 <div></div>
                 <div class="stat-item">
-                    <span class="stat-item-header">G:</span>
-                    <span class="stat-item-content">{999999}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-item-header">RGB:</span>
+                    <span class="stat-item-header" use:tooltip title="Duel Best Time">DBT:</span>
                     <span class="stat-item-content">{999999}</span>
                 </div>
             </div>

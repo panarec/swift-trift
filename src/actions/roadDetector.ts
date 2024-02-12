@@ -10,18 +10,18 @@ import {
 import anime from 'animejs/lib/anime.es.js'
 import { finnishMarkerNode, markersForShortestPath } from './game'
 import {
-    bestScore,
+    bestSoloScore,
     correctRouteDistance,
     userRouteDistance,
-    totalScore,
+    totalSoloScore,
     menuState,
     lobby,
 } from '../lib/stores'
 import {
-    addToTotalScore,
-    getBestScore,
-    getTotalScore,
-    saveBestScore,
+    addToTotalSoloScore,
+    getBestSoloScore,
+    getTotalSoloScore,
+    saveBestSoloScore,
 } from './localStorage'
 import { finnishGame, move } from './services'
 import type { LobbyItem, NodeElement } from './types'
@@ -129,16 +129,16 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
                 Math.round(finnishGameParams.userRouteDistance) ===
                 Math.round(finnishGameParams.correctRouteDistance)
             ) {
-                addToTotalScore(
+                addToTotalSoloScore(
                     Math.round(finnishGameParams.correctRouteDistance)
                 )
-                const savedTotalScore = getTotalScore()
-                totalScore.set(savedTotalScore)
+                const savedTotalScore = getTotalSoloScore()
+                totalSoloScore.set(savedTotalScore)
 
-                const bestTotalScore = getBestScore()
+                const bestTotalScore = getBestSoloScore()
                 if (!bestTotalScore || bestTotalScore < savedTotalScore) {
-                    bestScore.set(savedTotalScore)
-                    saveBestScore(savedTotalScore)
+                    bestSoloScore.set(savedTotalScore)
+                    saveBestSoloScore(savedTotalScore)
                 }
             }
 

@@ -9,7 +9,8 @@
     import {
         getPlayerName,
         resetLevel,
-        resetTotalScore,
+        resetTotalDuelScore,
+        resetTotalSoloScore,
         setPlayerName,
     } from '../../../actions/localStorage'
     import { menuState } from '../../stores'
@@ -32,7 +33,8 @@
             duration: 750,
         })
         inAnimation.play()
-        resetTotalScore()
+        resetTotalSoloScore()
+        resetTotalDuelScore()
         resetLevel()
         nickname = getPlayerName()
     })

@@ -14,7 +14,7 @@
     import NumberInput from '../Components/NumberInput.svelte'
     import ClipboardCopyButton from '../Components/ClipboardCopyButton.svelte'
     import ButtonGroup from '../Components/ButtonGroup.svelte'
-    import HowToPlay from './HowToPlay.svelte'
+    import Tooltip from '../Components/Tooltip.svelte'
     let inAnimation: anime.AnimeInstance
     let lobbyNumber: string | null
     let lobbyItem: LobbyItem
@@ -165,16 +165,15 @@
             {:else}
                 <CardButton
                     class={lobbyItem.players.length < 2
-                        ? 'btn-disabled tooltip'
+                        ? 'btn-disabled'
                         : 'btn-primary'}
                     disabled={lobbyItem.players.length < 2}
                     on:click={changeReady}
                 >
-                    Ready
-                    {#if lobbyItem.players.length < 2}
-                        <span class="tooltiptext"
-                            >You must be at least 2 players to start</span
-                        >
+                    Ready 
+                    {#if lobbyItem.players.length < 2} 
+                        <Tooltip title="Need at least 2 players to start" /> 
+                        TODO
                     {/if}
                 </CardButton>
             {/if}

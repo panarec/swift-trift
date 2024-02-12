@@ -4,14 +4,14 @@
     import GreenMarkerIcon from '../Icons/GreenMarkerIcon.svelte'
     import { resetGame, resetView } from '../../../actions/game'
     import {
-        bestScore,
         correctRouteDistance,
         userRouteDistance,
-        totalScore,
         modalNoCallback,
         modalYesCallback,
         lobby,
         menuState,
+        totalDuelScore,
+        bestDuelScore,
     } from '../../stores'
     import { onMount } from 'svelte'
     import anime from 'animejs'
@@ -24,8 +24,8 @@
     let userDistance: number
     let correctDistance: number
     let levelSuccessful: boolean
-    let totalScoreSaved: number
-    let totalBestSaved: number
+    let totalDuelScoreSaved: number
+    let totalDuelBestSaved: number
     let lobbyItem: LobbyItem
     let ready: boolean = false
     let clientWidth: number
@@ -196,11 +196,11 @@
         correctRouteDistance.subscribe((correctRouteDistance) => {
             correctDistance = correctRouteDistance
         })
-        totalScore.subscribe((totalScore) => {
-            totalScoreSaved = totalScore
+        totalDuelScore.subscribe((totalDuelScore) => {
+            totalDuelScoreSaved = totalDuelScore
         })
-        bestScore.subscribe((bestScore) => {
-            totalBestSaved = bestScore
+        bestDuelScore.subscribe((bestDuelScore) => {
+            totalDuelBestSaved = bestDuelScore
         })
         levelSuccessful = userDistance === correctDistance
 
@@ -260,12 +260,12 @@
                             {:else}
                                 <div>Final Score:</div>
                             {/if}
-                            <div class="score-value">{totalScoreSaved}</div>
+                            <div class="score-value">{totalDuelScoreSaved}</div>
                         </div>
                         <span class="separator"></span>
                         <div class="total-score">
-                            <div>Best Score:</div>
-                            <div class="score-value">{totalBestSaved}</div>
+                            <div>Best Duel Score:</div>
+                            <div class="score-value">{totalDuelBestSaved}</div>
                         </div>
                     </section>
                 </div>

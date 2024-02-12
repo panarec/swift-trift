@@ -1,12 +1,7 @@
 import mapboxgl, { LngLat, Marker } from 'mapbox-gl'
 import { map } from '../lib/Map.svelte'
 import _, { set } from 'lodash'
-import {
-    addCoordinatesToRoute,
-    generateRoute,
-    removeAllRoutes,
-    removeRoute,
-} from './routes'
+import { addCoordinatesToRoute, generateRoute, removeAllRoutes } from './routes'
 import {
     checkpoints,
     markers,
@@ -17,20 +12,22 @@ import {
 } from './roadDetector'
 import { carMarker, finnishMarker, startMarker } from './marker'
 import {
-    bestScore,
+    bestDuelScore,
+    bestSoloScore,
     correctRouteDistance,
     lobby,
     menuState,
-    totalScore,
+    totalDuelScore,
+    totalSoloScore,
     userRouteDistance,
 } from '../lib/stores'
 import {
-    addToTotalScore,
-    getBestScore,
+    addToTotalDuelScore,
+    getBestDuelScore,
     getLevel,
     getPlayerName,
-    getTotalScore,
-    saveBestScore,
+    getTotalDuelScore,
+    saveBestDuelScore,
 } from './localStorage'
 import { getGame } from './services'
 import type { GameParams, LobbyItem, MatchObject, NodeElement } from './types'
@@ -192,14 +189,14 @@ export const duelGameFinnished = async (
     correctRouteDistance.set(finalRouteDistance)
 
     if (playerDistance === finalRouteDistance) {
-        addToTotalScore(finalRouteDistance)
-        const savedTotalScore = getTotalScore()
-        totalScore.set(savedTotalScore)
+        addToTotalDuelScore(finalRouteDistance)
+        const savedTotalScore = getTotalDuelScore()
+        totalDuelScore.set(savedTotalScore)
 
-        const bestTotalScore = getBestScore()
+        const bestTotalScore = getBestDuelScore()
         if (!bestTotalScore || bestTotalScore < savedTotalScore) {
-            bestScore.set(savedTotalScore)
-            saveBestScore(savedTotalScore)
+            bestDuelScore.set(savedTotalScore)
+            saveBestDuelScore(savedTotalScore)
         }
     }
 
@@ -246,8 +243,6 @@ export const duelGameFinnished = async (
             }
         )
     })
-
-    const routesIDs = map.getStyle().layers.map((layer) => layer.id)
 
     map.fitBounds(markersBounds, {
         padding: 100,

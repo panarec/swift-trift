@@ -1,45 +1,68 @@
-import { level, totalScore } from '../lib/stores'
+import { level, totalSoloScore } from '../lib/stores'
 import { v4 } from 'uuid'
 
 const DEFAULT_PLAYER_NAME = 'Guest'
 
-export const getAnonymUserId = () => {
-    let anonymUserId = localStorage.getItem('anonymUserId')
-    if (!anonymUserId) {
-        anonymUserId = v4()
-        localStorage.setItem('anonymUserId', anonymUserId)
+export const addToTotalSoloScore = (score: number) => {
+    const totalScore = localStorage.getItem('totalSoloScore')
+    if (totalScore) {
+        localStorage.setItem(
+            'totalSoloScore',
+            (parseInt(totalScore, 10) + score).toString()
+        )
+    } else {
+        localStorage.setItem('totalSoloScore', score.toString())
     }
-    return anonymUserId
+}
+export const getTotalSoloScore = () => {
+    const totalScore = localStorage.getItem('totalSoloScore')
+    if (totalScore) return +totalScore
+    else return 0
 }
 
-export const addToTotalScore = (score: number) => {
-    const totalScore = localStorage.getItem('totalScore')
+export const resetTotalSoloScore = () => {
+    localStorage.setItem('totalSoloScore', '0')
+    totalSoloScore.set(0)
+}
+
+export const saveBestSoloScore = (score: number) => {
+    localStorage.setItem('bestSoloScore', score.toString())
+}
+
+export const getBestSoloScore = () => {
+    const bestScore = localStorage.getItem('bestSoloScore')
+    if (bestScore) return +bestScore
+    else return 0
+}
+
+export const addToTotalDuelScore = (score: number) => {
+    const totalScore = localStorage.getItem('totalDuelScore')
     if (totalScore) {
         localStorage.setItem(
             'totalScore',
             (parseInt(totalScore, 10) + score).toString()
         )
     } else {
-        localStorage.setItem('totalScore', score.toString())
+        localStorage.setItem('totalDuelScore', score.toString())
     }
 }
-export const getTotalScore = () => {
-    const totalScore = localStorage.getItem('totalScore')
+export const getTotalDuelScore = () => {
+    const totalScore = localStorage.getItem('totalDuelScore')
     if (totalScore) return +totalScore
     else return 0
 }
 
-export const resetTotalScore = () => {
-    localStorage.setItem('totalScore', '0')
-    totalScore.set(0)
+export const resetTotalDuelScore = () => {
+    localStorage.setItem('totalDuelScore', '0')
+    totalSoloScore.set(0)
 }
 
-export const saveBestScore = (score: number) => {
-    localStorage.setItem('bestScore', score.toString())
+export const saveBestDuelScore = (score: number) => {
+    localStorage.setItem('bestDuelScore', score.toString())
 }
 
-export const getBestScore = () => {
-    const bestScore = localStorage.getItem('bestScore')
+export const getBestDuelScore = () => {
+    const bestScore = localStorage.getItem('bestDuelScore')
     if (bestScore) return +bestScore
     else return 0
 }

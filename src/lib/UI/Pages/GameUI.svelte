@@ -1,17 +1,17 @@
 <script lang="ts">
     import { onMount } from 'svelte'
     import {
-        bestScore,
+        bestSoloScore,
         menuState,
         modalNoCallback,
         modalYesCallback,
-        totalScore,
+        totalSoloScore,
     } from '../../stores'
     import Button from '../Components/Button.svelte'
     import {
         getLevel,
         resetLevel,
-        resetTotalScore,
+        resetTotalSoloScore,
     } from '../../../actions/localStorage'
     import {
         generateGame,
@@ -47,7 +47,7 @@
     }
 
     async function getNewGame() {
-        resetTotalScore()
+        resetTotalSoloScore()
         resetLevel()
         menuState.set('loadingGame')
         const gameParams = await getGameParams()
@@ -85,11 +85,11 @@
 
     onMount(() => {
         const gameMenuToggle = document.querySelector('#game-menu-toggle')
-        totalScore.subscribe((totalScore) => {
-            totalScoreSaved = totalScore
+        totalSoloScore.subscribe((totalSoloScore) => {
+            totalScoreSaved = totalSoloScore
         })
-        bestScore.subscribe((bestScore) => {
-            totalBestSaved = bestScore
+        bestSoloScore.subscribe((bestSoloScore) => {
+            totalBestSaved = bestSoloScore
         })
         anime({
             targets: gameMenuToggle,
