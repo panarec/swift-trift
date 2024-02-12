@@ -89,23 +89,32 @@
             <div class="photo">
                 <div class="photo-placeholder"></div>
             </div>
-            <div class={`driver-header ${currentMenuState === "duelLobby" ? "row-span-2" : ""}`}>
+            <div
+                class={`driver-header ${
+                    currentMenuState === 'duelLobby' ? 'row-span-2' : ''
+                }`}
+            >
                 <div class="name">
                     <h3 bind:this={name}>{playerName}</h3>
                 </div>
                 <div class="class-icon"></div>
             </div>
-            {#if currentMenuState !== "duelLobby"}
-            <div class="details">
-                <span class="divider"></span>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-item-header">Score:</span>
-                        <span class="stat-item-content">{score}</span>
-                        <span class="stat-item-content level-score {lastLevelScore > 0 ? "positive": "negative"}" >+{lastLevelScore}</span>
+            {#if currentMenuState !== 'duelLobby'}
+                <div class="details">
+                    <span class="divider"></span>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-item-header">Score:</span>
+                            <span class="stat-item-content">{score}</span>
+                            <span
+                                class="stat-item-content level-score {lastLevelScore >
+                                0
+                                    ? 'positive'
+                                    : 'negative'}">+{lastLevelScore}</span
+                            >
+                        </div>
                     </div>
                 </div>
-            </div>
             {/if}
         </body>
     </div>

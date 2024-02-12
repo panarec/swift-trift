@@ -84,19 +84,22 @@
             countdown: true,
             startValues: { seconds: lobbyTime },
         })
-        if( lobbyItem && lobbyItem.game.gameParams?.currentLevel !== lobbyItem.game.gameOptions?.levelsPerGame) {
+        if (
+            lobbyItem &&
+            lobbyItem.game.gameParams?.currentLevel !==
+                lobbyItem.game.gameOptions?.levelsPerGame
+        ) {
             lobbyTimer.addEventListener('secondsUpdated', () => {
-            timerValue = lobbyTimer.getTimeValues().seconds.toString()
-            if (+timerValue === 0) {
-                lobbyTimer.stop()
-                if (ready) return
-                ready = true
-                readyButtonDisabled = true
-                readyUp(ready, lobbyItem.lobbyNumber)
-            }
-        })
+                timerValue = lobbyTimer.getTimeValues().seconds.toString()
+                if (+timerValue === 0) {
+                    lobbyTimer.stop()
+                    if (ready) return
+                    ready = true
+                    readyButtonDisabled = true
+                    readyUp(ready, lobbyItem.lobbyNumber)
+                }
+            })
         }
-       
 
         if (clientWidth < 1000) {
             const resultsTable = document.querySelector(
@@ -200,8 +203,6 @@
             totalBestSaved = bestScore
         })
         levelSuccessful = userDistance === correctDistance
-
-      
 
         const resultsTable = document.querySelector(
             '.results-table'

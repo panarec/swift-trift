@@ -4,7 +4,7 @@
     export let placeholder: any
     export let valueName: string = ''
     let clazz = ''
-    export {clazz as class}
+    export { clazz as class }
 
     const dispatch = createEventDispatcher()
 
@@ -13,7 +13,7 @@
 
 <input
     type="text"
-    class={clazz + ' input'} 
+    class={clazz + ' input'}
     {placeholder}
     bind:value={valueName}
     on:input={input}

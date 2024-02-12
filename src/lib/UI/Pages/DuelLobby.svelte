@@ -46,20 +46,22 @@
     }
 
     const changeLevelsCount = (event: CustomEvent<any>) => {
-        if(event.detail !== lobbyItem.game.gameOptions.levelsPerGame) {
-        changeLobbySettings(lobbyItem.lobbyNumber ,{
-            ...lobbyItem.game.gameOptions,
-            levelsPerGame: event.detail,
-        })
-    }}
-
-    const changeLevelTime = (event: CustomEvent<any>) =>{
-        if(event.detail !== lobbyItem.game.gameOptions.timeLimit) {
+        if (event.detail !== lobbyItem.game.gameOptions.levelsPerGame) {
             changeLobbySettings(lobbyItem.lobbyNumber, {
-            ...lobbyItem.game.gameOptions,
-            timeLimit: event.detail,
-        })
-    }}
+                ...lobbyItem.game.gameOptions,
+                levelsPerGame: event.detail,
+            })
+        }
+    }
+
+    const changeLevelTime = (event: CustomEvent<any>) => {
+        if (event.detail !== lobbyItem.game.gameOptions.timeLimit) {
+            changeLobbySettings(lobbyItem.lobbyNumber, {
+                ...lobbyItem.game.gameOptions,
+                timeLimit: event.detail,
+            })
+        }
+    }
 
     $: {
         if (body && lobbyItem) {
@@ -86,7 +88,9 @@
             <div class="card">
                 <header>
                     <h2>
-                        Lobby <ClipboardCopyButton text={lobbyItem.lobbyNumber} />
+                        Lobby <ClipboardCopyButton
+                            text={lobbyItem.lobbyNumber}
+                        />
                     </h2>
                 </header>
                 <body>
@@ -122,10 +126,13 @@
                                     userSelected={lobbyItem.game.gameOptions
                                         .difficulty}
                                     on:change={(event) =>
-                                            changeLobbySettings(lobbyItem.lobbyNumber, {
-                                            ...lobbyItem.game.gameOptions,
-                                            difficulty: event.detail,
-                                        })}
+                                        changeLobbySettings(
+                                            lobbyItem.lobbyNumber,
+                                            {
+                                                ...lobbyItem.game.gameOptions,
+                                                difficulty: event.detail,
+                                            }
+                                        )}
                                 ></ButtonGroup>
                             </div>
                         </div>
@@ -156,10 +163,18 @@
                     Not ready
                 </CardButton>
             {:else}
-                <CardButton class={lobbyItem.players.length < 2 ? "btn-disabled tooltip" : "btn-primary"} on:click={changeReady} disabled={lobbyItem.players.length < 2}>
+                <CardButton
+                    class={lobbyItem.players.length < 2
+                        ? 'btn-disabled tooltip'
+                        : 'btn-primary'}
+                    disabled={lobbyItem.players.length < 2}
+                    on:click={changeReady}
+                >
                     Ready
                     {#if lobbyItem.players.length < 2}
-                        <span class="tooltiptext">You must be at least 2 players to start</span>
+                        <span class="tooltiptext"
+                            >You must be at least 2 players to start</span
+                        >
                     {/if}
                 </CardButton>
             {/if}

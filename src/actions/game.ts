@@ -52,15 +52,19 @@ export async function generateGame(
     gameParams: GameParams,
     playerColor?: string
 ) {
-    lobby.update((lobbyItem) => {
-        return {
-            ...lobbyItem,
-            game: {
-                gameOptions: lobbyItem.game.gameOptions,
-                gameParams,
-            },
-        }
-    })
+    const gameMode = sessionStorage.getItem('gameMode')
+    if (gameMode === 'duel') {
+        lobby.update((lobbyItem) => {
+            return {
+                ...lobbyItem,
+                game: {
+                    gameOptions: lobbyItem.game.gameOptions,
+                    gameParams,
+                },
+            }
+        })
+    }
+
     menuState.set('')
     await resetGame()
 
@@ -105,7 +109,11 @@ export async function generateGame(
     }).once('zoomend', async () => {
         mapContainer.style.pointerEvents = 'auto'
 
-        menuState.set('duelGameUI')
+        if (gameMode === 'duel') {
+            menuState.set('duelGameUI')
+        } else {
+            menuState.set('gameUI')
+        }
         startMarkerObj = startMarker().setLngLat(startMarkerPosition).addTo(map)
         finnishMarkerObj = finnishMarker()
             .setLngLat(finnishMarkerPosition)

@@ -27,8 +27,8 @@
     import { gameTimer } from '../../../actions/helper'
     import { leaveLobby } from '../../../actions/socket'
 
-    let totalScoreSaved: number
-    let totalBestSaved: number
+    let currentScore: number
+    let currentTime: number
     let gameMenuToggled: boolean = false
     let lobbyItem: LobbyItem
     let minutes: string
@@ -92,19 +92,25 @@
 
     onMount(() => {
         const gameMenuToggle = document.querySelector('#game-menu-toggle')
-        totalScore.subscribe((totalScore) => {
-            totalScoreSaved = totalScore
-        })
-        bestScore.subscribe((bestScore) => {
-            totalBestSaved = bestScore
-        })
         anime({
             targets: gameMenuToggle,
             top: ['0', '-65px'],
         })
+        const playerName = localStorage.getItem('playerName')
         lobby.subscribe((lobby) => {
             lobbyItem = lobby
         })
+        if (playerName && lobbyItem && lobbyItem.players.length > 0) {
+            currentScore =
+                lobbyItem.players.find(
+                    (player) => player.playerName === playerName
+                )?.score || 0
+            currentTime =
+                lobbyItem.players.find(
+                    (player) => player.playerName === playerName
+                )?.totalTime || 0
+        }
+
         seconds = (lobbyItem.game.gameOptions.timeLimit % 60)
             .toString()
             .padStart(2, '0')
@@ -181,24 +187,25 @@
             <h3>Overall Statistics</h3>
             <section class="statistics">
                 <div class="total-score">
-                    <div>Current Score:</div>
-                    <div class="score-value">{totalScoreSaved}</div>
+                    <div>Score:</div>
+                    <div class="score-value">{currentScore}</div>
                 </div>
                 <span class="separator"></span>
                 <div class="total-score">
-                    <div>Best Score:</div>
-                    <div class="score-value">{totalBestSaved}</div>
+                    <div>Time:</div>
+                    <div class="score-value">
+                        {`${(currentTime % 60).toString().padStart(2, '0')}:${(
+                            currentTime % 60
+                        )
+                            .toString()
+                            .padStart(2, '0')}`}
+                    </div>
                 </div>
             </section>
         </body>
         <footer>
             <div class="button-wrapper">
-                <Button text="Leave" class="btn-primary" on:onClick={goToLogin}
-                ></Button>
-            </div>
-            <div class="button-wrapper">
-                <Button text="Skip" class="btn-primary" on:onClick={runNewGame}
-                ></Button>
+                <Button text="Leave" class="btn-primary" on:onClick={goToLogin} ></Button>
             </div>
         </footer>
     </div>
@@ -262,7 +269,7 @@
     footer {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center;
         margin-bottom: 20px;
     }
     .button-wrapper {

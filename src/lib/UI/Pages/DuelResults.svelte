@@ -26,7 +26,9 @@
             bestTimeScorePlayerItem = lobbyItem.players.find(
                 (player) =>
                     player.totalTime ===
-                    Math.min(...lobbyItem.players.map((player) => player.totalTime))
+                    Math.min(
+                        ...lobbyItem.players.map((player) => player.totalTime)
+                    )
             ) as PlayerItem
             console.log(bestScorePlayerItem, bestTimeScorePlayerItem)
         }
@@ -64,14 +66,18 @@
                             <div class="results-item-label">Best time:</div>
                             <div class="results-item-value">
                                 <div>{bestTimeScorePlayerItem.totalTime}</div>
-                                <div class="name">{bestTimeScorePlayerItem.playerName}</div>
+                                <div class="name">
+                                    {bestTimeScorePlayerItem.playerName}
+                                </div>
                             </div>
                         </li>
                         <li class="results-item">
                             <div class="results-item-label">Best score:</div>
                             <div class="results-item-value">
                                 <div>{bestScorePlayerItem.score}</div>
-                                <div class="name">{bestScorePlayerItem.playerName}</div>
+                                <div class="name">
+                                    {bestScorePlayerItem.playerName}
+                                </div>
                             </div>
                         </li>
                     </ul>

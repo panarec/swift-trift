@@ -22,7 +22,6 @@
     }
 
     onMount(() => {
-     
         const container = document.querySelector('.container') as HTMLElement
         container.style.minHeight = '100vh'
         const card = document.querySelector('.card')

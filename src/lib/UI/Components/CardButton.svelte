@@ -25,7 +25,7 @@
 </script>
 
 <button
-    class={`card card-hover cursor-pointer ${clazz}`} 
+    class={`card card-hover cursor-pointer ${clazz}`}
     bind:this={button}
     {disabled}
     on:click={onClick}

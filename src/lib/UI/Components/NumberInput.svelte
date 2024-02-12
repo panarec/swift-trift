@@ -12,10 +12,11 @@
     const dispatch = createEventDispatcher()
 
     const input = (event: any) => {
-            console.log(event.target.value)
-            const value = event.target.value = event.target.value.toString().replace(/[^0-9+]/g, '')
-            dispatch('input', value, { cancelable: true })
-        }
+        const value = (event.target.value = event.target.value
+            .toString()
+            .replace(/[^0-9+]/g, ''))
+        dispatch('input', value, { cancelable: true })
+    }
 
     onMount(() => {
         buttons = Array.from(document.querySelectorAll('button'))
