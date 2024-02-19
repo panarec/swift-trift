@@ -111,7 +111,7 @@ export async function addCoordinatesToRoute(
     }).finished.then(() => {
         const gameMode = sessionStorage.getItem('gameMode')
         anime({
-            targets: '.carMarker',
+            targets: '.userMarker',
             rotate: 0,
         })
         if (sourceId === 'userRoute' && lastCoord) {
@@ -155,7 +155,7 @@ export async function removeCoordinatesFromRoute(
     })
 
     anime({
-        targets: '.carMarker',
+        targets: '.userMarker',
         rotate: 0,
     })
     const geometry: GeoJSON.LineString = {

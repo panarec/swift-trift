@@ -14,9 +14,11 @@
         setPlayerName,
     } from '../../../actions/localStorage'
     import { menuState } from '../../stores'
+    import Card from '../Components/Card.svelte'
 
     let inAnimation: anime.AnimeInstance
     let nickname: string
+    let card: HTMLElement
 
     const setModesMenu = () => {
         menuState.set('modesMenu')
@@ -25,14 +27,11 @@
     onMount(() => {
         const container = document.querySelector('.container') as HTMLElement
         container.style.minHeight = '100vh'
-        const card = document.querySelector('.card')
-        inAnimation = anime({
+        anime({
             targets: [card],
             scale: [0, 1],
-            autoplay: false,
             duration: 750,
         })
-        inAnimation.play()
         resetTotalSoloScore()
         resetTotalDuelScore()
         resetLevel()
@@ -41,7 +40,7 @@
 </script>
 
 <MenuContainer>
-    <div class="card">
+    <div class="card" bind:this={card}>
         <header>
             <h1>Lorem Ipsum</h1>
         </header>

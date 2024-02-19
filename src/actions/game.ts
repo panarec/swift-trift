@@ -10,7 +10,16 @@ import {
     removeAllMarkers,
     spawnDirectionMarker,
 } from './roadDetector'
-import { carMarker, finnishMarker, startMarker } from './marker'
+import {
+    orangeScooterMarker,
+    finnishMarker,
+    startMarker,
+    orangeVanMarker,
+    blueVanMarker,
+    redVanMarker,
+    greenVanMarker,
+    purpleVanMarker,
+} from './marker'
 import {
     bestDuelScore,
     correctRouteDistance,
@@ -44,6 +53,14 @@ export let carObj: mapboxgl.Marker
 let startMarkerObj: Marker
 let finnishMarkerObj: Marker
 
+const vanColorMapper = new Map()
+
+vanColorMapper.set('FF9F1C', orangeVanMarker)
+vanColorMapper.set('3772FF', blueVanMarker)
+vanColorMapper.set('DF2935', redVanMarker)
+vanColorMapper.set('00BF63', greenVanMarker)
+vanColorMapper.set('CD38FF', purpleVanMarker)
+
 export async function generateGame(
     gameParams: GameParams,
     playerColor?: string
@@ -59,6 +76,9 @@ export async function generateGame(
                 },
             }
         })
+        carObj = vanColorMapper.get(playerColor ?? 'FF9F1C')()
+    } else {
+        carObj = orangeScooterMarker()
     }
 
     menuState.set('')
@@ -69,7 +89,6 @@ export async function generateGame(
     startMarkerNode = gameParams.startMarkerNode
     finnishMarkerNode = gameParams.finnishMarkerNode
 
-    carObj = carMarker()
     markers.push(carObj)
     const markersBounds = new mapboxgl.LngLatBounds()
 

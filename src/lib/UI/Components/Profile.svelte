@@ -2,7 +2,13 @@
     import { onMount } from 'svelte'
     import { bestDuelScore, bestSoloScore } from '../../stores'
     import { tooltip } from '../../../actions/tooltip'
-    import { getBestDuelScore, getBestSoloScore, getDuelGamesPlayed, getSoloBestLevel, getSoloGamesPlayed } from '../../../actions/localStorage'
+    import {
+        getBestDuelScore,
+        getBestSoloScore,
+        getDuelGamesPlayed,
+        getSoloBestLevel,
+        getSoloGamesPlayed,
+    } from '../../../actions/localStorage'
 
     export let nickname: string = 'Guest'
 
@@ -77,29 +83,51 @@
             <span class="divider"></span>
             <div class="stats">
                 <div class="stat-item tooltip">
-                    <span class="stat-item-header" use:tooltip title="Solo best score">SBS:</span>
+                    <span
+                        class="stat-item-header"
+                        use:tooltip
+                        title="Solo best score">SBS:</span
+                    >
                     <span class="stat-item-content">{getBestSoloScore()}</span>
                 </div>
                 <div></div>
                 <div class="stat-item">
-                    <span class="stat-item-header" use:tooltip title="Solo best level" >SBL:</span>
+                    <span
+                        class="stat-item-header"
+                        use:tooltip
+                        title="Solo best level">SBL:</span
+                    >
                     <span class="stat-item-content">{getSoloBestLevel()}</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-item-header" use:tooltip title="Solo games played" >SGP:</span>
-                    <span class="stat-item-content">{getSoloGamesPlayed()}</span>
+                    <span
+                        class="stat-item-header"
+                        use:tooltip
+                        title="Solo games played">SGP:</span
+                    >
+                    <span class="stat-item-content">{getSoloGamesPlayed()}</span
+                    >
                 </div>
             </div>
             <span class="divider"></span>
             <div class="stats">
                 <div class="stat-item">
-                    <span class="stat-item-header" use:tooltip title="Duel best score">DBS:</span>
+                    <span
+                        class="stat-item-header"
+                        use:tooltip
+                        title="Duel best score">DBS:</span
+                    >
                     <span class="stat-item-content">{getBestDuelScore()}</span>
                 </div>
                 <div></div>
                 <div class="stat-item">
-                    <span class="stat-item-header" use:tooltip title="Duel games played">DGP:</span>
-                    <span class="stat-item-content">{getDuelGamesPlayed()}</span>
+                    <span
+                        class="stat-item-header"
+                        use:tooltip
+                        title="Duel games played">DGP:</span
+                    >
+                    <span class="stat-item-content">{getDuelGamesPlayed()}</span
+                    >
                 </div>
             </div>
             <div class="signature-section">

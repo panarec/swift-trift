@@ -57,7 +57,7 @@
     <body>
         <MenuCard on:onClick={runGame} class="flex-column flex-align-center">
             <header class="card-header m-6">
-                <h3 class="h2">Chill</h3>
+                <h3 class="h2">Scooter</h3>
             </header>
             <div class="icon-container">
                 <ScooterIcon width={iconsWidth} height={iconsWidth} />
@@ -74,10 +74,11 @@
         <MenuCard
             inAnimationDelay={100}
             on:onClick={showTutorial}
+            disabled
             class="flex-column flex-align-center"
         >
             <header class="card-header m-6">
-                <h3 class="h2">Pro</h3>
+                <h3 class="h2">Van</h3>
             </header>
             <div class="icon-container">
                 <VanIcon width={iconsWidth} height={iconsWidth} />
@@ -92,6 +93,7 @@
             <footer class="card-footer"></footer>
         </MenuCard>
         <MenuCard
+            disabled
             on:onClick={runGame}
             inAnimationDelay={200}
             class={`flex-column flex-align-center ${
@@ -99,7 +101,7 @@
             }`}
         >
             <header class="card-header m-6">
-                <h3 class="h2">Extreme</h3>
+                <h3 class="h2">Truck</h3>
             </header>
             <div class="card-body">
                 <div class="icon-container">

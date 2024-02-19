@@ -49,12 +49,12 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
     )
     if (currentCoordPoint.x > nextCoordPoint.x) {
         anime({
-            targets: '.carMarker',
+            targets: '.userMarker',
             rotate: Math.min(45, distanceBetweenPoints / 4),
         })
     } else {
         anime({
-            targets: '.carMarker',
+            targets: '.userMarker',
             rotate: Math.min(45, distanceBetweenPoints / 4) * -1,
         })
     }
@@ -117,6 +117,7 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
             finnishGameParams.correctRoute.forEach((coord) =>
                 markersBounds.extend([coord[0], coord[1]])
             )
+            checkpoints.forEach((coord) => markersBounds.extend(coord))
 
             userRouteDistance.set(
                 Math.round(finnishGameParams.userRouteDistance)
@@ -149,7 +150,7 @@ export async function findNextCrossRoad(nodeElement: NodeElement) {
             }).once('zoomend', async () => {
                 await addCoordinatesToRoute(
                     finnishGameParams.correctRoute,
-                    2000,
+                    1000,
                     'correctRoute',
                     []
                 )

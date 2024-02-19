@@ -14,6 +14,7 @@
     export let lastLevelScore: number = 0
     export let lastLevelTime: number = 0
     let currentMenuState: string = ''
+    let playerCard: HTMLElement
 
     let name: HTMLElement
     let readyAnimation: anime.AnimeInstance
@@ -25,6 +26,13 @@
             currentMenuState = state
         })
         playerStatusBar.style.display = 'flex'
+        anime({
+            targets: [playerCard],
+            height: ['0%', '100%'],
+            autoplay: false,
+            duration: 100,
+            delay: 100 * rankNumber,
+        })
         readyAnimation = anime({
             targets: [playerStatusBar],
             height: ['0%', '40px'],
@@ -81,7 +89,11 @@
 </script>
 
 <Card class={`padding-1 overflow-visible`}>
-    <div class="player-card" style="--color: #{playerColor}">
+    <div
+        class="player-card"
+        style="--color: #{playerColor}"
+        bind:this={playerCard}
+    >
         <span class="rank-number">
             {rankNumber}.
         </span>

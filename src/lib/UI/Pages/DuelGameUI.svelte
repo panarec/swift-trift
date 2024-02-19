@@ -8,10 +8,7 @@
         totalDuelScore,
     } from '../../stores'
     import Button from '../Components/Button.svelte'
-    import {
-        resetGame,
-        resetView,
-    } from '../../../actions/game'
+    import { resetGame, resetView } from '../../../actions/game'
     import anime from 'animejs'
     import { Timer } from 'easytimer.js'
     import type { LobbyItem } from '../../../actions/types'
@@ -181,7 +178,8 @@
         </body>
         <footer>
             <div class="button-wrapper">
-                <Button text="Leave" class="btn-primary" on:onClick={goToLogin} ></Button>
+                <Button text="Leave" class="btn-primary" on:onClick={goToLogin}
+                ></Button>
             </div>
         </footer>
     </div>

@@ -19,7 +19,7 @@
             targets: [button],
             scale: [0, 1],
             autoplay: true,
-            duration: 750,
+            duration: 50,
         })
     })
 </script>

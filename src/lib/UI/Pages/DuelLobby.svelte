@@ -155,27 +155,32 @@
             {/if}
         </body>
         <footer>
-            <CardButton class="btn-secondary" on:click={leaveGame}>
-                Leave
-            </CardButton>
+            <div>
+                <CardButton class="btn-secondary" on:click={leaveGame}>
+                    Leave
+                </CardButton>
+            </div>
             {#if ready}
-                <CardButton class="btn-disabled" on:click={changeReady}>
-                    Not ready
-                </CardButton>
+                <div>
+                    <CardButton class="btn-disabled" on:click={changeReady}>
+                        Not ready
+                    </CardButton>
+                </div>
+            {:else if lobbyItem.players.length < 2}
+                <Tooltip title="Need at least 2 players to start">
+                    <CardButton
+                        class="btn-disabled"
+                        disabled={lobbyItem.players.length < 2}
+                    >
+                        Ready
+                    </CardButton>
+                </Tooltip>
             {:else}
-                <CardButton
-                    class={lobbyItem.players.length < 2
-                        ? 'btn-disabled'
-                        : 'btn-primary'}
-                    disabled={lobbyItem.players.length < 2}
-                    on:click={changeReady}
-                >
-                    Ready 
-                    {#if lobbyItem.players.length < 2} 
-                        <Tooltip title="Need at least 2 players to start" /> 
-                        TODO
-                    {/if}
-                </CardButton>
+                <div>
+                    <CardButton class="btn-primary" on:click={changeReady}>
+                        Ready
+                    </CardButton>
+                </div>
             {/if}
         </footer>
     </MenuContainer>
@@ -205,6 +210,7 @@
         gap: 30px;
         margin-top: 1rem;
         margin-bottom: 4rem;
+        justify-content: center;
     }
 
     .lobby-settings {
