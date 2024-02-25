@@ -9,7 +9,7 @@
     }
 
     let clazz = ''
-    let button: HTMLButtonElement
+    export let button:  HTMLElement | null = null
     export let disabled: boolean = false
     export { clazz as class }
 

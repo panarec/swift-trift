@@ -9,12 +9,14 @@
         getSoloBestLevel,
         getSoloGamesPlayed,
     } from '../../../actions/localStorage'
+    import GreenPersonIcon from '../Icons/GreenPersonIcon.svelte'
 
     export let nickname: string = 'Guest'
 
     let name: HTMLElement
     let signature: HTMLElement
     let clientWidth: number = 0
+    let iconSize: number = 150
 
     onMount(() => {
         name = document.querySelector('.name h3') as HTMLElement
@@ -27,20 +29,24 @@
         let nameFontMultiplier = 80
         let signatureMarginMultiplier = 3
         let signatureMargin = -11
+        iconSize = 150
 
         if (clientWidth < 510) {
             nameFontSize = 0.8
             nameFontMultiplier = 60
             signatureMarginMultiplier = 4
             signatureMargin = -6
+            iconSize = 120
         }
         if (clientWidth < 456) {
             nameFontSize = 0.7
             nameFontMultiplier = 50
+            iconSize = 100
         }
         if (clientWidth < 400) {
             nameFontSize = 0.6
             nameFontMultiplier = 45
+            iconSize = 80
         }
         if (name) {
             name.style.fontSize =
@@ -68,7 +74,9 @@
     <body>
         <div class="photo">
             <!-- <GreenPersonIcon /> -->
-            <div class="photo-placeholder"></div>
+            <div class="photo-placeholder" style="position: relative;"> 
+                <GreenPersonIcon width={iconSize} height={iconSize} style="position:absolute;left:50%;top:60%;transform:translate(-50%,-50%)" />
+            </div>
         </div>
         <div class="driver-header">
             <div class="name">

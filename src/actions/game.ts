@@ -65,6 +65,7 @@ export async function generateGame(
     gameParams: GameParams,
     playerColor?: string
 ) {
+    await resetGame()
     const gameMode = sessionStorage.getItem('gameMode')
     if (gameMode === 'duel') {
         lobby.update((lobbyItem) => {
@@ -82,7 +83,6 @@ export async function generateGame(
     }
 
     menuState.set('')
-    await resetGame()
 
     startMarkerPosition = gameParams.startMarkerPosition
     finnishMarkerPosition = gameParams.finnishMarkerPosition
@@ -268,23 +268,22 @@ export const duelGameFinnished = async (
         pitch: 0,
         bearing: 0,
     }).once('zoomend', async () => {
-        await addCoordinatesToRoute(
-            finalRoute.geometry.coordinates,
-            2000,
-            'correctRoute',
-            []
-        )
-    })
-
-    await Promise.all(
-        currentLobby.players.map(async (player, index) => {
-            if (player.routeCoordinates.length === 0) return
-            await addCoordinatesToRoute(
-                player.routeCoordinates,
+        await Promise.all([
+            currentLobby.players.map(async (player, index) => {
+                if (player.routeCoordinates.length === 0) return
+                await addCoordinatesToRoute(
+                    player.routeCoordinates,
+                    2000,
+                    index.toString(),
+                    []
+                )
+            }),
+            addCoordinatesToRoute(
+                finalRoute.geometry.coordinates,
                 2000,
-                index.toString(),
+                'correctRoute',
                 []
-            )
-        })
-    )
+            ),
+        ])
+    })
 }

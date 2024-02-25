@@ -4,6 +4,7 @@
     import Card from './Card.svelte'
     import anime from 'animejs'
     import { menuState } from '../../stores'
+    import GreenPersonIcon from '../Icons/GreenPersonIcon.svelte'
     export let playerName: string
     export let rankNumber: number
     export let score: number = 99999
@@ -13,6 +14,8 @@
     export let totalTime: number = 0
     export let lastLevelScore: number = 0
     export let lastLevelTime: number = 0
+
+    let iconSize: number = 60
     let currentMenuState: string = ''
     let playerCard: HTMLElement
 
@@ -56,7 +59,6 @@
         const card = document.querySelector('.player-card') as HTMLElement
 
         if (playerStatus) {
-            console.log('playerStatus', playerStatus)
             if (readyAnimation) readyAnimation.play()
         } else {
             if (unReadyAnimation) unReadyAnimation.play()
@@ -73,6 +75,7 @@
                     if (playerName.length > 15) nameFontMultiplier = 20
                 }
                 if (card.getBoundingClientRect().width < 420) {
+                    iconSize = 50
                     if (playerName.length > 15) nameFontMultiplier = 17
                 }
 
@@ -99,7 +102,9 @@
         </span>
         <body>
             <div class="photo">
-                <div class="photo-placeholder"></div>
+                <div class="photo-placeholder" style="position: relative;">
+                    <GreenPersonIcon height={iconSize} width={iconSize} style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)" />
+                </div>
             </div>
             <div
                 class={`driver-header ${
@@ -193,7 +198,7 @@
     .photo-placeholder {
         width: 100%;
         height: min(65px, 13vw);
-        background-color: rgb(234, 234, 234);
+        background-color: rgba(234, 234, 234, 0.496);
     }
     .name {
         text-align: start;

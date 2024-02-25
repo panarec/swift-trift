@@ -31,18 +31,29 @@
     let clientWidth: number
     let iconSize: number
     let lobbyTime: number = 15
+    let headerHTML: HTMLElement
+    let goalDistanceHTML: HTMLElement
+    let resultIconsHTML: HTMLElement
+    let userDistanceHTML: HTMLElement
+    let totalResultsHTML: HTMLElement
+    let finalScoreHTML: HTMLElement
+    let finalScoreValueHTML: HTMLElement
+    let bestScoreValueHTML: HTMLElement
+    let bestScoreHTML: HTMLElement
+    let nextButtonHtml: HTMLElement
 
     let timerValue: string = '15'
     let readyButtonDisabled: boolean = false
-
-    const goToLogin = async () => {
-        if (levelSuccessful) {
-            modalNoCallback.set(() => menuState.set('levelCompleted'))
-            modalYesCallback.set(goLogin)
-            menuState.set('menuModal')
-        } else {
-            goLogin()
-        }
+    let levelCompletedValues: {
+        userDistance: number
+        correctDistance: number
+        totalDuelScore: number
+        bestDuelScore: number
+    } = {
+        userDistance: 0,
+        correctDistance: 0,
+        totalDuelScore: 0,
+        bestDuelScore: 0,
     }
 
     async function goLogin() {
@@ -80,10 +91,7 @@
             iconSize = 50
         }
 
-        lobbyTimer.start({
-            countdown: true,
-            startValues: { seconds: lobbyTime },
-        })
+     
         if (
             lobbyItem &&
             lobbyItem.game.gameParams?.currentLevel !==
@@ -99,6 +107,8 @@
                     readyUp(ready, lobbyItem.lobbyNumber)
                 }
             })
+        } else {
+            lobbyTimer.stop()
         }
 
         if (clientWidth < 1000) {
@@ -189,8 +199,105 @@
             easing: 'easeOutQuint',
             duration: 500,
         })
+         // #1
+         anime({
+            targets: [headerHTML],
+            translateY: [-100, 0],
+            opacity: [0, 1],
+            duration: 500,
+        })
+        // #2
+        anime({
+            targets: [resultIconsHTML],
+            width: [0, '100%'],
+            easing: 'easeOutQuint',
+            duration: 500,
+            delay: 500,
+        })
+        // #3
+        anime({
+            targets: [".result-item"],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 500,
+            delay: 1000,
+        })
         userRouteDistance.subscribe((userRouteDistance) => {
             userDistance = userRouteDistance
+             // #4
+             anime({
+                    targets: [".result-number"],
+                    scale: [1, 1.5],
+                    easing: 'easeOutQuint',
+                    duration: 500,
+                    delay: 1500
+                })
+            // #5
+            anime({
+                targets: levelCompletedValues,
+                userDistance: userRouteDistance,
+                easing: 'easeOutQuint',
+                duration: 500,
+                delay: 2000,
+                round: 1,
+                update: () => {
+                    levelCompletedValues.userDistance = Math.round(
+                        levelCompletedValues.userDistance
+                    )
+                }
+            }).finished.then(() => {
+                //6
+                anime({
+                    targets: [".result-number"],
+                    scale: [1.5, 1],
+                    easing: 'easeOutQuint',
+                    duration: 1000,
+                })
+            })
+        })
+        anime({
+            targets: [".total-results"],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 4000,
+        })
+        anime({
+            targets: finalScoreHTML,
+            translateX: [-100, 0],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 4000,
+        })
+        anime({
+            targets: bestScoreHTML,
+            translateX: [100, 0],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 4000,
+        }).finished.then(() => {
+            // #8
+            anime({
+                targets: nextButtonHtml,
+                scale: [0.8, 1],
+                easing: 'easeOutQuint',
+                duration: 500,
+                loop: true,
+                direction: 'alternate',
+            })
+               lobbyTimer.start({
+            countdown: true,
+            startValues: { seconds: lobbyTime },
+        })
+        })
+        anime({
+            targets: [".results-table"],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 5000,
         })
 
         correctRouteDistance.subscribe((correctRouteDistance) => {
@@ -221,7 +328,7 @@
 <MenuContainer class="gap-0">
     <body class="outer-body">
         <div class="card">
-            <header>
+            <header bind:this={headerHTML}>
                 {#if levelSuccessful}
                     <h2>Level passed</h2>
                 {:else}
@@ -230,13 +337,13 @@
             </header>
             <body>
                 <div class="results">
-                    <div class="result-item">
+                    <div class="result-item" bind:this={goalDistanceHTML}>
                         <div class="result-item-header">Goal distance:</div>
                         <div class="result-number">
                             <strong>{correctDistance}</strong>
                         </div>
                     </div>
-                    <div class="result-icons">
+                    <div class="result-icons" bind:this={resultIconsHTML}>
                         <GreenMarkerIcon width={iconSize} height={iconSize} />
                         <span class="dashed-line"></span>
                         <RedMarkerIcon width={iconSize} height={iconSize} />
@@ -250,22 +357,23 @@
                                 levelSuccessful ? 'positive' : 'negative'
                             }`}
                         >
-                            <strong>{userDistance}</strong>
+                            <strong bind:this={userDistanceHTML}>{levelCompletedValues.userDistance}</strong>
                         </div>
                     </div>
-                    <section class="total-results">
-                        <div class="total-score">
-                            {#if levelSuccessful}
+                    <section class="total-results" bind:this={totalResultsHTML}>
+                        <div class="total-score" bind:this={finalScoreHTML}>
+                            {#if lobbyItem && lobbyItem.game.gameParams?.currentLevel !==
+                                lobbyItem.game.gameOptions?.levelsPerGame}
                                 <div>Current Score:</div>
                             {:else}
                                 <div>Final Score:</div>
                             {/if}
-                            <div class="score-value">{totalDuelScoreSaved}</div>
+                            <div class="score-value" bind:this={finalScoreValueHTML}>{totalDuelScoreSaved}</div>
                         </div>
                         <span class="separator"></span>
-                        <div class="total-score">
+                        <div class="total-score" bind:this={bestScoreHTML}>
                             <div>Best Duel Score:</div>
-                            <div class="score-value">{totalDuelBestSaved}</div>
+                            <div class="score-value" bind:this={bestScoreValueHTML}>{totalDuelBestSaved}</div>
                         </div>
                     </section>
                 </div>
@@ -290,6 +398,7 @@
                         class="btn-primary"
                         disabled={readyButtonDisabled}
                         on:click={changeReady}
+                        bind:button={nextButtonHtml}
                     >
                         Ready in {timerValue}
                     </CardButton>

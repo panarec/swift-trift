@@ -1,6 +1,7 @@
 <script lang="ts">
     export let width: number = 120
     export let height: number = 120
+    export let style: string = ''
 </script>
 
 <svg
@@ -9,8 +10,8 @@
     y="0px"
     {width}
     {height}
+    {style}
     viewBox="0,0,256,256"
-    style="fill:#000000;"
 >
     <defs
         ><linearGradient

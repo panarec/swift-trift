@@ -7,7 +7,7 @@ import {
 } from 'mapbox-gl'
 import anime from 'animejs/lib/anime.es.js'
 import { carObj } from './game'
-import _ from 'lodash'
+import _, { set } from 'lodash'
 import { map } from '../lib/Map.svelte'
 import type { NodeElement } from './types'
 import { menuState } from '../lib/stores'
@@ -118,10 +118,14 @@ export async function addCoordinatesToRoute(
             pathForMarkers.push([lastCoord.lon, lastCoord.lat])
         }
         if (sourceId === 'correctRoute' && gameMode === 'solo') {
-            menuState.set('levelCompleted')
+            setTimeout(() => {
+                menuState.set('levelCompleted')
+            }, 500)
         }
         if (sourceId === 'correctRoute' && gameMode === 'duel') {
-            menuState.set('levelCompletedDuel')
+            setTimeout(() => {
+                menuState.set('levelCompletedDuel')
+            }, 500)
         }
     })
 }

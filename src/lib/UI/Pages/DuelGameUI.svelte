@@ -95,9 +95,7 @@
         gameTimer.start({
             countdown: true,
             startValues: { seconds: lobbyItem.game.gameOptions.timeLimit },
-        })
-
-        gameTimer.addEventListener('secondsUpdated', function (e) {
+            callback: (e) => {
             minutes = gameTimer
                 .getTimeValues()
                 .minutes.toString()
@@ -107,10 +105,11 @@
                 .seconds.toString()
                 .padStart(2, '0')
             if (minutes === '00' && seconds === '00') {
-                console.log('Time is up')
                 triggerFinnishLevel()
             }
+        }
         })
+
     })
 </script>
 

@@ -29,18 +29,26 @@
 <MenuContainer class="">
     <div class="card">
         <header>
-            <h1>Lorem Ipsum</h1>
+            <h1>Swift-trift</h1>
         </header>
         <body>
             <section>
-                <MapIcon />
+                <img src="../../../../public/imgs/logo.png" id="logo" alt="">
             </section>
             <article>
                 <p>
-                    Even though using "lorem ipsum" often arouses curiosity due
-                    to its resemblance to classical Latin, it is not intended to
-                    have meaning. Where text is visible in a document, people
-                    tend to focus on the textual content rather.
+                    Ahoj!
+                    <br>
+                    Welcome to the Swift-trift. Navigate bustling streets, choose the most efficient routes, and deliver your packages on time to become the ultimate delivery champion!
+                    <br>
+                    <br>
+                    Please, note that this is a alpha version. Lot of bugs will most probably occur ;)
+                    <br>
+                    <br>
+                    <i>Enjoy the game!</i>
+                    <br>
+                    <br>
+                    <i><a href="https://www.youtube.com/channel/UChu9E6KNDxbyS8BiVRyFrYA" >- Paul Vee</a></i>
                 </p>
             </article>
         </body>
@@ -70,6 +78,9 @@
         transform: translateX(-5px);
         transition: all 0.3s ease;
     }
+    a {
+        color: #2c2c2c;
+    }
     .card {
         display: flex;
         gap: 10px;
@@ -84,9 +95,12 @@
     }
     section {
         flex: 1 1 30%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
     }
     article {
-        flex: 1 1 200px;
+        flex: 1 1 100px;
     }
     h1 {
         font-size: min(3em, 10vw);
@@ -94,7 +108,11 @@
     }
     p {
         text-align: start;
-        font-size: min(1em, 4vw);
+        font-size: min(1em, 3vw);
+    }
+    #logo {
+        width: min(250px, 35vw);
+        height: min(250px, 35vw);
     }
     footer {
         display: grid;

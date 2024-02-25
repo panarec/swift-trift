@@ -15,11 +15,9 @@ let socket: Socket | undefined
 export const createSocketConnection = async () => {
     socket = io(import.meta.env.VITE_SERVER_WS_URL as string)
     socket.onAny((event) => {
-        console.log(event)
     })
     socket.on('lobby-change', async (lobbyItem: LobbyItem) => {
         lobby.set(lobbyItem)
-        console.log(lobbyItem)
         if (
             lobbyItem.players.length === 1 &&
             lobbyItem.game.gameOptions.gameStarted
@@ -65,7 +63,6 @@ export const createSocketConnection = async () => {
         menuState.set('loadingGame')
     })
     socket.on('disconnect', (reason) => {
-        console.log(reason)
         socket = undefined
     })
 }

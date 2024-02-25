@@ -42,7 +42,7 @@
 <MenuContainer>
     <div class="card" bind:this={card}>
         <header>
-            <h1>Lorem Ipsum</h1>
+            <h1>Your profile</h1>
         </header>
         <body>
             <aside class="profile">

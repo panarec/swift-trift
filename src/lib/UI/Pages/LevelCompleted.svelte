@@ -1,4 +1,5 @@
 <script lang="ts">
+    import anime from 'animejs'
     import MenuContainer from '../Components/MenuContainer.svelte'
     import RedMarkerIcon from '../Icons/RedMarkerIcon.svelte'
     import GreenMarkerIcon from '../Icons/GreenMarkerIcon.svelte'
@@ -18,8 +19,7 @@
         modalYesCallback,
         menuState,
     } from '../../stores'
-    import { onMount } from 'svelte'
-    import anime from 'animejs'
+    import { afterUpdate, onMount } from 'svelte'
     import {
         increaseLevel,
         increaseSoloGamesPlayed,
@@ -27,13 +27,32 @@
         resetTotalSoloScore,
     } from '../../../actions/localStorage'
     import CardButton from '../Components/CardButton.svelte'
-    let userDistance: number
-    let correctDistance: number
     let levelSuccessful: boolean
-    let totalScoreSaved: number
-    let totalBestSaved: number
     let clientWidth: number
     let iconSize: number
+    let levelCompletedValues: {
+        userDistance: number
+        correctDistance: number 
+        totalScoreSaved: number
+        totalBestSaved: number
+    } = {
+        userDistance: 0,
+        correctDistance: 0,
+        totalScoreSaved: 0,
+        totalBestSaved: 0,
+    }
+    let headerHTML: HTMLElement
+    let userDistance: number
+    let userDistanceHTML: HTMLElement
+    let finalScoreHTML: HTMLElement
+    let finalScoreValueHTML: HTMLElement
+    let bestScoreHTML: HTMLElement
+    let bestScoreValueHTML: HTMLElement
+    let headerIcon: HTMLElement
+    let goalDistanceHTML: HTMLElement
+    let resultIconsHTML: HTMLElement
+    let totalResultsHTML: HTMLElement
+    let nextButtonHtml: HTMLElement
 
     const goToLogin = async () => {
         if (levelSuccessful) {
@@ -71,6 +90,7 @@
     }
 
     onMount(() => {
+
         clientWidth = document.body.clientWidth
         if (clientWidth < 425) {
             iconSize = 25
@@ -150,35 +170,132 @@
             easing: 'easeOutQuint',
             duration: 500,
         })
+        // #1
+        anime({
+            targets: [headerHTML],
+            translateY: [-100, 0],
+            opacity: [0, 1],
+            duration: 1000,
+        })
+        anime({
+            targets: [headerIcon],
+            rotate: 360,
+            opacity: [0, 1],
+            scale: [0, 1.5, 1],
+            easing: 'easeInOutSine',
+            duration: 1000,
+        })
+        // #2
+        anime({
+            targets: [resultIconsHTML],
+            width: [0, '100%'],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 1000,
+        })
+        // #3
+        anime({
+            targets: [".result-item"],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 1500,
+        })
 
         userRouteDistance.subscribe((userRouteDistance) => {
             userDistance = userRouteDistance
+            // #4
+            anime({
+                    targets: [".result-number"],
+                    scale: [1, 1.5],
+                    easing: 'easeOutQuint',
+                    duration: 1000,
+                    delay: 2000
+                })
+            // #5
+            anime({
+                targets: levelCompletedValues,
+                userDistance: userRouteDistance,
+                easing: 'easeOutQuint',
+                duration: 1000,
+                delay: 3000,
+                round: 1,
+                update: () => {
+                    levelCompletedValues.userDistance = Math.round(
+                        levelCompletedValues.userDistance
+                    )
+                }
+            }).finished.then(() => {
+                //6
+                anime({
+                    targets: [".result-number"],
+                    scale: [1.5, 1],
+                    easing: 'easeOutQuint',
+                    duration: 1000,
+                })
+            })
         })
 
+        // #7
+        anime({
+            targets: [".total-results"],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 4000,
+        })
+        anime({
+            targets: finalScoreHTML,
+            translateX: [-100, 0],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 4000,
+        })
+        anime({
+            targets: bestScoreHTML,
+            translateX: [100, 0],
+            opacity: [0, 1],
+            easing: 'easeOutQuint',
+            duration: 1000,
+            delay: 4000,
+        }).finished.then(() => {
+            // #8
+            anime({
+                targets: nextButtonHtml,
+                scale: [0.8, 1],
+                easing: 'easeOutQuint',
+                duration: 500,
+                loop: true,
+                direction: 'alternate',
+            })
+        })
         correctRouteDistance.subscribe((correctRouteDistance) => {
-            correctDistance = correctRouteDistance
+            levelCompletedValues.correctDistance = correctRouteDistance
         })
         totalSoloScore.subscribe((totalSoloScore) => {
-            totalScoreSaved = totalSoloScore
+            levelCompletedValues.totalScoreSaved = totalSoloScore
         })
         bestSoloScore.subscribe((bestSoloScore) => {
-            totalBestSaved = bestSoloScore
+            levelCompletedValues.totalBestSaved = bestSoloScore
         })
-        levelSuccessful = userDistance === correctDistance
+        levelSuccessful = userDistance === levelCompletedValues.correctDistance
     })
+
 </script>
 
 <MenuContainer>
     <body class="outer-body">
         <div class="card">
-            <header>
+            <header bind:this={headerHTML}>
                 {#if levelSuccessful}
                     <h2>Level completed</h2>
-                    <img
+                   <img
                         width={iconSize}
                         height={iconSize}
-                        src="https://img.icons8.com/fluency/50/ok--v1.png"
-                        alt="ok--v1"
+                        src="https://img.icons8.com/fluency/48/ok--v1.png"
+                        alt="success"
+                        bind:this={headerIcon}
                     />
                 {:else}
                     <h2>Level failed</h2>
@@ -187,19 +304,20 @@
                         width={iconSize}
                         height={iconSize}
                         src="https://img.icons8.com/fluency/50/cancel.png"
-                        alt="cancel"
+                        alt="fail"
+                        bind:this={headerIcon}
                     />
                 {/if}
             </header>
             <body>
                 <div class="results">
-                    <div class="result-item">
+                    <div class="result-item" bind:this={goalDistanceHTML}>
                         <div class="result-item-header">Goal distance:</div>
                         <div class="result-number">
-                            <strong>{correctDistance}</strong>
+                            <strong>{levelCompletedValues.correctDistance}</strong>
                         </div>
                     </div>
-                    <div class="result-icons">
+                    <div class="result-icons" bind:this={resultIconsHTML}>
                         <GreenMarkerIcon width={iconSize} height={iconSize} />
                         <span class="dashed-line"></span>
                         <RedMarkerIcon width={iconSize} height={iconSize} />
@@ -208,23 +326,27 @@
                         <div class="result-item-header">
                             Your route distance:
                         </div>
-                        <div class="result-number">
-                            <strong>{userDistance}</strong>
-                        </div>
+                        <div
+                        class={`result-number ${
+                            levelSuccessful ? 'positive' : 'negative'
+                        }`}
+                    >
+                        <strong bind:this={userDistanceHTML}>{levelCompletedValues.userDistance}</strong>
                     </div>
-                    <section class="total-results">
-                        <div class="total-score">
+                    </div>
+                    <section class="total-results" bind:this={totalResultsHTML}>
+                        <div class="total-score" bind:this={finalScoreHTML}>
                             {#if levelSuccessful}
                                 <div>Current Score:</div>
                             {:else}
                                 <div>Final Score:</div>
                             {/if}
-                            <div class="score-value">{totalScoreSaved}</div>
+                            <div class="score-value" bind:this={finalScoreValueHTML}>{levelCompletedValues.totalScoreSaved}</div>
                         </div>
                         <span class="separator"></span>
-                        <div class="total-score">
+                        <div class="total-score" bind:this={bestScoreHTML}>
                             <div>Best Score:</div>
-                            <div class="score-value">{totalBestSaved}</div>
+                            <div class="score-value" bind:this={bestScoreValueHTML}>{levelCompletedValues.totalBestSaved}</div>
                         </div>
                     </section>
                 </div>
@@ -235,11 +357,11 @@
                 Menu
             </CardButton>
             {#if levelSuccessful}
-                <CardButton class="btn-primary" on:click={runNextGame}>
+                <CardButton class="btn-primary" on:click={runNextGame} bind:button={nextButtonHtml}>
                     Next
                 </CardButton>
             {:else}
-                <CardButton class="btn-primary" on:click={runNewGame}>
+                <CardButton class="btn-primary" on:click={runNewGame} bind:button={nextButtonHtml}>
                     New Game
                 </CardButton>
             {/if}

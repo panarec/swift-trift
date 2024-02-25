@@ -177,7 +177,6 @@ export const triggerFinnishLevel = async () => {
     if (time > 0) {
         gameTimer.stop()
     }
-    console.log(time)
     // @ts-ignore
     finnishLevel(lobbyNumber, checkpoints, time)
 }

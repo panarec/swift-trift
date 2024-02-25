@@ -39,7 +39,7 @@ export const addToTotalDuelScore = (score: number) => {
     const totalScore = localStorage.getItem('totalDuelScore')
     if (totalScore) {
         localStorage.setItem(
-            'totalScore',
+            'totalDuelScore',
             (parseInt(totalScore, 10) + score).toString()
         )
     } else {
