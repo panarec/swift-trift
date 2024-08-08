@@ -1,0 +1,262 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    font-family: 'Inter', sans-serif;
+    color: #2c2c2c;
+}
+#app-body {
+    overflow: auto;
+}
+.card {
+    background-color: #fff;
+    border-radius: 15px;
+    padding-inline: min(2rem, 5vw);
+    box-sizing: border-box;
+    text-align: center;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0px 6px 15px -4px rgba(0, 0, 0, 0.75);
+}
+
+.card-hover:hover {
+    scale: 1.05;
+    transition: all 0.2s ease;
+}
+.card-hover {
+    scale: 1;
+    transition: all 0.2s ease;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.menu {
+    position: absolute;
+    z-index: 10;
+}
+.dirButton {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+.ring-container {
+    position: relative;
+    width: 15px;
+    height: 15px;
+    background-color: #62bd19;
+    border-radius: 50%;
+    position: absolute;
+    top: 23px;
+    left: 23px;
+}
+
+.customMarker {
+    width: 40px;
+}
+.startMarker {
+    width: 0px;
+    height: 0px;
+}
+.finnishMarker  {
+    width: 0px;
+    height: 0px;
+}
+.userMarker {
+    transform-origin: bottom center;
+    width: 150px;
+    height: 150px;
+}
+.circle {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    width: 0px;
+    height: 0px;
+    position: relative;
+    /* background-color: #ffbf69; */
+    border-radius: 50%;
+    border: 7px dashed #ff4d4d;
+}
+.centerDot {
+    /* border: 3px solid #ffa01c53; */
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    background-color: #ff4d4d;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+.row-span-2 {
+    grid-row: span 2;
+}
+.col-span-2 {
+    grid-column: span 2;
+}
+.col-span-3 {
+    grid-column: span 3;
+}
+.col-span-4 {
+    grid-column: span 4;
+}
+.col-span-5 {
+    grid-column: span 5;
+}
+.col-span-6 {
+    grid-column: span 6;
+}
+.col-span-7 {
+    grid-column: span 7;
+}
+.col-span-8 {
+    grid-column: span 8;
+}
+.col-span-9 {
+    grid-column: span 9;
+}
+.col-span-10 {
+    grid-column: span 10;
+}
+.col-span-11 {
+    grid-column: span 11;
+}
+.col-span-12 {
+    grid-column: span 12;
+}
+
+.col-start-1 {
+    grid-column-start: 1 !important;
+}
+.col-start-2 {
+    grid-column-start: 2 !important;
+}
+.col-start-3 {
+    grid-column-start: 3 !important;
+}
+.col-start-4 {
+    grid-column-start: 4 !important;
+}
+.col-start-5 {
+    grid-column-start: 5 !important;
+}
+.col-start-6 {
+    grid-column-start: 6 !important;
+}
+.col-start-7 {
+    grid-column-start: 7 !important;
+}
+.col-start-8 {
+    grid-column-start: 8 !important;
+}
+.col-start-9 {
+    grid-column-start: 9 !important;
+}
+.col-start-10 {
+    grid-column-start: 10 !important;
+}
+.col-start-11 {
+    grid-column-start: 11 !important;
+}
+.col-start-12 {
+    grid-column-start: 12 !important;
+}
+
+.col-end-1 {
+    grid-column-end: 1 !important;
+}
+.col-end-2 {
+    grid-column-end: 2 !important;
+}
+.col-end-3 {
+    grid-column-end: 3 !important;
+}
+.col-end-4 {
+    grid-column-end: 4 !important;
+}
+.col-end-5 {
+    grid-column-end: 5 !important;
+}
+.col-end-6 {
+    grid-column-end: 6 !important;
+}
+.col-end-7 {
+    grid-column-end: 7 !important;
+}
+.col-end-8 {
+    grid-column-end: 8 !important;
+}
+.col-end-9 {
+    grid-column-end: 9 !important;
+}
+.col-end-10 {
+    grid-column-end: 10 !important;
+}
+.col-end-11 {
+    grid-column-end: 11 !important;
+}
+.col-end-12 {
+    grid-column-end: 12 !important;
+}
+.col-end-13 {
+    grid-column-end: 13 !important;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row  {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-align-center {
+    align-items: center;
+}
+
+.col-md-2 {
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+}
+
+.positive {
+    color: #29b529;
+}
+.negative {
+    color: #ca3c3c;
+}
+
+.gap-0 {
+    gap: 0px !important;
+}
+
+.tooltip {
+    position: relative;
+    overflow: visible;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgb(77, 77, 77);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 0.75rem;
+    z-index: 1;
+    position: absolute;
+    transition: all 0.2s ease;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
